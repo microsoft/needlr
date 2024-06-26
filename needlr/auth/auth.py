@@ -10,6 +10,8 @@ from msal import PublicClientApplication, ConfidentialClientApplication, Seriali
 INTERACTIVE = "interactive"
 DEVICE_FLOW = "device"
 
+DEVELOPER_SIGN_ON_CLIENT_ID = "04b07795-8ddb-461a-bbee-02f9e1bf7b46"
+
 # Factory
 # interactive > InteractiveAuth
 # device > DeviceAuth
@@ -31,7 +33,7 @@ class FabricInteractiveAuth(_FabricAuthentication):
     redirect_uri=None
     domain_hint=None
     """
-    def __init__(self, client_id:str, scopes:List[str], authority:str=None, **interactive_auth_kwargs) -> None:
+    def __init__(self, scopes:List[str], client_id:str, authority:str=None, **interactive_auth_kwargs) -> None:
         super().__init__()
         _client_id = client_id
         _authority = authority or "https://login.microsoftonline.com/organizations"
@@ -67,12 +69,19 @@ class FabricInteractiveAuth(_FabricAuthentication):
                 **self._interactive_auth_kwargs
             )
         except Exception as e:
+            print(f"Silent failed: {e} \nTrying interactive...")
+            auth_json = self._app.acquire_token_interactive(
+                scopes=self._scopes,
+                **self._interactive_auth_kwargs
+            )
+        if auth_json is None:
+            print("Token not found in cache. Trying Interactive...")
             auth_json = self._app.acquire_token_interactive(
                 scopes=self._scopes,
                 **self._interactive_auth_kwargs
             )
         _requested_at = datetime.now()
-        if "error" in auth_json or auth_json is None:
+        if "error" in auth_json:
             error_str=json.dumps(auth_json)
             raise RuntimeError(f"001-Failed to get auth token: {error_str}")
         
