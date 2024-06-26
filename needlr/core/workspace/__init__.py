@@ -1,4 +1,4 @@
-from ..item import item
+from .. import item
 from ... import _http
 from ...auth.auth import _FabricAuthentication
 from .role import _Principal, _WorkspaceRoleClient
@@ -115,7 +115,7 @@ class _WorkspaceClient():
 
     def item_ls(self, workspace_id:str, type_name=None):
         if type_name:
-            return item._list_items_of_type(self._base_url, workspace_id,type_name, auth = self._auth)
+            return item._list_items_of_type(self._base_url, workspace_id, type_name, auth = self._auth)
         else:
             return item._list_items(self._base_url, workspace_id, auth = self._auth)
 

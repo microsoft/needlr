@@ -1,17 +1,34 @@
 
-
+import logging 
 from needlr import auth, FabricClient
 
 
-fr = FabricClient(auth=auth.FabricInteractiveAuth(client_id='04b07795-8ddb-461a-bbee-02f9e1bf7b46'
-                                                ,scopes=['https://api.fabric.microsoft.com/.default'])
+fr = FabricClient(auth=auth.FabricInteractiveAuth(scopes=['https://api.fabric.microsoft.com/.default'])
                 )
 
-print(fr.workspace.ls())
-for _ in fr.workspace.ls():
-    print(_)
+# print(fr.workspace.ls())
+# for _ in fr.workspace.ls():
+#     print(_)
 
 
+# print(fr.workspace.item_ls(workspace_id='9bbbcb66-a075-407e-b0a7-9052ed2840d0'))
+# for _ in fr.workspace.item_ls(workspace_id='9bbbcb66-a075-407e-b0a7-9052ed2840d0'):
+#     print(_)
 
+
+# for _ in fr.admin_workspace.ls():
+#     print(_)
+
+# print(fr.admin_workspace.get(workspace_id='5bd603ee-cfa8-48e3-8f7e-ceb3dc6dbfd5'))
+
+sh = logging.StreamHandler()
+logger_faburest = logging.getLogger('needler')
+logger_faburest.setLevel(logging.DEBUG)
+logger_faburest.addHandler(sh)
+
+# print(fr.admin_workspace.item_ls())
+print(len([_ for _ in fr.admin_workspace.item_ls()]))
+# for i, _ in enumerate(fr.admin_workspace.item_ls()):
+#     print(i, _)
 
 
