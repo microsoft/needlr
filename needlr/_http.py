@@ -4,6 +4,7 @@ from .auth.auth import _FabricAuthentication
 
 import json
 import logging
+from urllib.parse import unquote
 from typing import Callable, Generator, List, Union
 
 import requests
@@ -53,6 +54,12 @@ class FabricResponse():
                 raise FabricException(response.text)
             else:
                 raise requests.RequestException(response.text)
+            
+
+    def __str__(self) -> str:
+        return json.dumps(self.body, indent=2)
+        
+    
 
 class FabricPagedResponse(FabricResponse):
     items: List[dict]
@@ -156,14 +163,23 @@ def _get_http_paged(url: str, auth:_FabricAuthentication, params: dict = dict(),
 
         if params_local[continuationToken_request_name]:
             should_continue = True
+            params_local[continuationToken_request_name] = unquote(params_local[continuationToken_request_name])
         else:
             should_continue = False
+
+        
+        # module_logger.debug(f'{resp.json().get("continuationUri")=}')
+        module_logger.debug(f'{continuationToken_response_name=}')
+        module_logger.debug(f'{params_local[continuationToken_request_name]=}')
+        # next_url = url + params_local[continuationToken_request_name]
+        # url = params_local[continuationToken_request_name]
         
         paged_resp = FabricPagedResponse(resp, items_extract=items_extract)
 
         module_logger.debug(f"Get paged result for: {url} Next URL is: {next_url}")
 
         yield paged_resp
+
 
 def _post_http(url: str, auth:_FabricAuthentication, params: dict = None,
                 json: Union[list, dict] = None, files: dict = None,

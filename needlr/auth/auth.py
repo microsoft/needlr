@@ -33,7 +33,7 @@ class FabricInteractiveAuth(_FabricAuthentication):
     redirect_uri=None
     domain_hint=None
     """
-    def __init__(self, scopes:List[str], client_id:str, authority:str=None, **interactive_auth_kwargs) -> None:
+    def __init__(self, scopes:List[str], client_id:str=DEVELOPER_SIGN_ON_CLIENT_ID, authority:str=None, **interactive_auth_kwargs) -> None:
         super().__init__()
         _client_id = client_id
         _authority = authority or "https://login.microsoftonline.com/organizations"
