@@ -399,3 +399,4 @@ FodyWeavers.xsd
 /.venv
 .vscode/launch.json
 /scratch
+/samples/.needler
