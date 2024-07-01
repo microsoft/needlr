@@ -1,5 +1,5 @@
-from .core.workspace import _WorkspaceClient
-from .admin.workspace import _AdminWorkspaceClient
+from .core.workspace.workspace import _WorkspaceClient
+from .admin.workspace.adminworkspace import _AdminWorkspaceClient
 # from .admin.item import WarehouseItem, LakehouseItem, FabricItem
 
 

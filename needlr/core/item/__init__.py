@@ -75,11 +75,16 @@ def _list_items(base_url, workspace_id:str, auth:_FabricAuthentication, **kwargs
         for item in page.items:
             yield item
 
-def _list_items_of_type(base_url, workspace_id:str, type_name:str, auth:_FabricAuthentication, **kwargs):
+def _list_items_by_filter(base_url, workspace_id:str, auth:_FabricAuthentication, type:str=None, **kwargs):
     """
     List Items of a Specific Type
 
     [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/items/list-items?tabs=HTTP)
     """
     # Implement retry / error handling
-    yield from _list_items(base_url, workspace_id, auth, params={"type":type_name}, **kwargs)
+    params = {k:v for k,v in {'type': type
+                              ,'worspaceId': workspace_id
+                              }.items() 
+                              if v is not None and v != ""
+            }
+    yield from _list_items(base_url, workspace_id, auth, params=params, **kwargs)

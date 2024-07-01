@@ -4,7 +4,7 @@ import time
 from ...auth.auth import _FabricAuthentication
 from ... import _http
 from .item import FabricItem, LakehouseItem, WarehouseItem
-
+from . import types
 
 def _list_items(base_url:str, auth:_FabricAuthentication, **kwargs):
     """
@@ -23,14 +23,22 @@ def _list_items(base_url:str, auth:_FabricAuthentication, **kwargs):
         for item in page.items:
             yield item
 
-def _list_items_of_type(base_url, type_name:str, auth:_FabricAuthentication, **kwargs):
+def _list_items_by_filter(base_url, auth:_FabricAuthentication, type:str=None, capacity_id:str=None, state:str=None, workspace_id:str=None, **kwargs):
     """
     List Items of a Specific Type
 
     [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/admin/items/list-items?tabs=HTTP)
     """
     # Implement retry / error handling
-    yield from _list_items(base_url, auth, params={"type":type_name}, **kwargs)
+    params = {k:v for k,v in {'type': type
+                              ,'capacityId': capacity_id
+                              ,'state': state
+                              ,'worspaceId': workspace_id
+                              }.items() 
+                              if v is not None and v != ""
+            }
+    yield from _list_items(base_url, auth, params=params, **kwargs)
+
 
 
 

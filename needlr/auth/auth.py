@@ -61,7 +61,6 @@ class FabricInteractiveAuth(_FabricAuthentication):
         if len(_list_of_accounts) > 0:
             account_dict = _list_of_accounts[0]
         try:
-            print("Attempting Silent")
             auth_json = self._app.acquire_token_silent(
                 scopes=self._scopes,
                 account = account_dict,
