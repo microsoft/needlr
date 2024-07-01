@@ -17,6 +17,7 @@ class LakehouseItem(FabricItem):
     def __init__(self, display_name: str, definition: dict = None, description: str = None) -> None:
         super().__init__(display_name, "Lakehouse", definition, description)
 
+
 class WarehouseItem(FabricItem):
     def __init__(self, display_name: str, definition: dict = None, description: str = None) -> None:
         super().__init__(display_name, "Warehouse", definition, description)
