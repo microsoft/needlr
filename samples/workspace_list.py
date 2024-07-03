@@ -38,7 +38,7 @@ fr = FabricClient(auth=auth.FabricInteractiveAuth(scopes=['https://api.fabric.mi
 #for _ in fr.workspace.item_ls(workspace_id='558B0068-C465-4249-895E-A3985CBE841C', type='Lakehouse'):
 #    print(_)
 
-wsname = 'test9'
+wsname = 'test4'
 
 ws = fr.workspace.create(display_name=wsname, capacity_id='558B0068-C465-4249-895E-A3985CBE841C', description='test')
 print(ws)

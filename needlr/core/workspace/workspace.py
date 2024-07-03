@@ -2,6 +2,7 @@
 
 from collections.abc import Iterator
 from needlr.core import item
+from needlr.core.item.item import _ItemClient
 from needlr._http import FabricResponse
 from needlr import _http
 from needlr.auth.auth import _FabricAuthentication
@@ -32,9 +33,8 @@ class _WorkspaceClient():
     def __init__(self, auth:_FabricAuthentication, base_url):
         self._auth = auth
         self._base_url = base_url
+        self.item = _ItemClient()
         self.role = _WorkspaceRoleClient(auth, base_url)
-        
-    
     # Alternative assign_to_capacity
     def capacity_assign(self, workspace_id:str, capacity_id:str) -> FabricResponse:
         """
@@ -119,7 +119,7 @@ class _WorkspaceClient():
         return workspace
 
     def item_ls(self, workspace_id:str, item_type:ItemType=None) -> Iterator[Item]:
-        return item._list_items_by_filter(base_url=self._base_url, item_type=item_type, workspace_id=workspace_id, auth=self._auth)
+        return self.item.list_items_by_filter(base_url=self._base_url, item_type=item_type, workspace_id=workspace_id, auth=self._auth)
 
     def ls(self, **kwargs) -> Iterator[Workspace]:
         """
