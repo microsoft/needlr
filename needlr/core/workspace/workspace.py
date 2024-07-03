@@ -1,8 +1,13 @@
-from .. import item
-from ... import _http
-from ...auth.auth import _FabricAuthentication
-from .role import _Principal, _WorkspaceRoleClient
+"""Module providing a Core Workspace functions."""
 
+from collections.abc import Iterator
+from needlr.core import item
+from needlr._http import FabricResponse
+from needlr import _http
+from needlr.auth.auth import _FabricAuthentication
+from needlr.core.workspace.role import _WorkspaceRoleClient
+from needlr.models.workspace import Workspace
+from needlr.models.item import Item, ItemType
 
 class _WorkspaceClient():
     """
@@ -31,7 +36,7 @@ class _WorkspaceClient():
         
     
     # Alternative assign_to_capacity
-    def capacity_assign(self, workspace_id:str, capacity_id:str):
+    def capacity_assign(self, workspace_id:str, capacity_id:str) -> FabricResponse:
         """
         Assign a Workspace to a Capacity
 
@@ -51,7 +56,7 @@ class _WorkspaceClient():
         return resp
 
     # Alternative assign_to_capacity
-    def capacity_unassign(self, workspace_id:str):
+    def capacity_unassign(self, workspace_id:str) -> FabricResponse:
         """
         Unassign a Workspace to a Capacity
 
@@ -66,7 +71,7 @@ class _WorkspaceClient():
         )
         return resp
 
-    def create(self, display_name:str, capacity_id:str, description:str=None):
+    def create(self, display_name:str, capacity_id:str, description:str=None) -> Workspace:
         """
         Create Workspace
 
@@ -84,9 +89,9 @@ class _WorkspaceClient():
             auth=self._auth,
             json=body
         )
-        return resp
+        return Workspace(**resp.body)
 
-    def delete(self, workspace_id:str):
+    def delete(self, workspace_id:str) -> FabricResponse:
         """
         Delete Workspace
 
@@ -98,11 +103,11 @@ class _WorkspaceClient():
         )
         return resp
     
-    def get(self, workspace_id:str=None, workspace_name:str=None, workspace_region:str=None):
+    def get(self, workspace_id:str=None) -> Workspace:
         """
         Get Workspaces
 
-        Workspace name and region or workpsace id (guid) make it unique.
+        Workspace name and region or workspace id (guid) make it unique.
 
         [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/workspaces/get-workspace?tabs=HTTP#workspaceinfo)
         """
@@ -110,14 +115,13 @@ class _WorkspaceClient():
             url = self._base_url+f"workspaces/{workspace_id}",
             auth=self._auth
         )
-        return resp
+        workspace = Workspace(**resp.body)
+        return workspace
 
+    def item_ls(self, workspace_id:str, item_type:ItemType=None) -> Iterator[Item]:
+        return item._list_items_by_filter(base_url=self._base_url, item_type=item_type, workspace_id=workspace_id, auth=self._auth)
 
-    def item_ls(self, workspace_id:str, type:str=None):
-        return item._list_items_by_filter(base_url=self._base_url, type=type, workspace_id=workspace_id, auth=self._auth)
-    
-
-    def ls(self, **kwargs):
+    def ls(self, **kwargs) -> Iterator[Workspace]:
         """
         List Workspaces
 
@@ -132,9 +136,9 @@ class _WorkspaceClient():
         )
         for page in resp:
             for item in page.items:
-                yield item
-    
-    def update(self, workspace_id:str, display_name:str=None, description:str=None):
+                yield Workspace(**item)
+
+    def update(self, workspace_id:str, display_name:str=None, description:str=None) -> Workspace:
         """
         Update a Principal's Role Assignment
 
@@ -144,7 +148,7 @@ class _WorkspaceClient():
         """
         if ((display_name is None) and (description is None)):
             raise ValueError("display_name or description must be provided")
-        
+
         body = dict()
         if display_name is not None:
             body["displayName"] = display_name
@@ -156,4 +160,5 @@ class _WorkspaceClient():
             auth=self._auth,
             json=body
         )
-        return resp
+        workspace = Workspace(**resp.body)
+        return workspace

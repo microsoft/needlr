@@ -1,22 +1,23 @@
 import json
 import time
+from collections.abc import Iterator
 
-from ...auth.auth import _FabricAuthentication
-from ... import _http
-from .item import FabricItem, LakehouseItem, WarehouseItem
+from needlr.auth.auth import _FabricAuthentication
+from needlr import _http
+from needlr.models.item import Item, ItemType
+#from needlr.core.item import FabricItem
 
-def _create_item(base_url,workspace_id:str, fabric_item:FabricItem, auth:_FabricAuthentication, wait_for_success=False, retry_attempts=5):
+def _create_item(base_url,workspace_id:str, fabric_item:Item, auth:_FabricAuthentication, wait_for_success=False, retry_attempts=5):
     """
     Create Item
 
     [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/items/create-item?tabs=HTTP)
     [Operation State Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/long-running-operations/get-operation-state?tabs=HTTP#operationstate)
     """
-
     create_op = _http._post_http(
         url = base_url+f"workspaces/{workspace_id}/items",
         auth=auth,
-        json=fabric_item.to_json()
+        json=fabric_item.model_dump()
     )
     if not wait_for_success:
         return create_op
@@ -58,7 +59,7 @@ def _create_item(base_url,workspace_id:str, fabric_item:FabricItem, auth:_Fabric
         else:
             raise _http.NeedlerRetriesExceeded(json.dumps({"Location":create_op.next_location, "error":"010-needler failed to retrieve object status in set retries"}))
 
-def _list_items(base_url, workspace_id:str, auth:_FabricAuthentication, **kwargs):
+def _list_items(base_url, workspace_id:str, auth:_FabricAuthentication, **kwargs)  -> Iterator[Item]:
     """
     List Items
 
@@ -73,17 +74,17 @@ def _list_items(base_url, workspace_id:str, auth:_FabricAuthentication, **kwargs
     )
     for page in resp:
         for item in page.items:
-            yield item
+            yield Item(**item)
 
-def _list_items_by_filter(base_url, workspace_id:str, auth:_FabricAuthentication, type:str=None, **kwargs):
+def _list_items_by_filter(base_url, workspace_id:str, auth:_FabricAuthentication, item_type:ItemType, **kwargs) -> Iterator[Item]:
     """
     List Items of a Specific Type
 
     [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/items/list-items?tabs=HTTP)
     """
     # Implement retry / error handling
-    params = {k:v for k,v in {'type': type
-                              ,'worspaceId': workspace_id
+    params = {k:v for k,v in {'type': item_type
+                              ,'workspaceId': workspace_id
                               }.items() 
                               if v is not None and v != ""
             }
