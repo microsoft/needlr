@@ -38,12 +38,13 @@ fr = FabricClient(auth=auth.FabricInteractiveAuth(scopes=['https://api.fabric.mi
 #for _ in fr.workspace.item_ls(workspace_id='558B0068-C465-4249-895E-A3985CBE841C', type='Lakehouse'):
 #    print(_)
 
-wsname = 'test4'
+wsname = ''
 
 ws = fr.workspace.create(display_name=wsname, capacity_id='558B0068-C465-4249-895E-A3985CBE841C', description='test')
 print(ws)
 print(type(ws))
 
+"""
 ws2 = fr.workspace.update(workspace_id=ws.id, display_name='New'+wsname)
 print(ws2)
 print(type(ws2))
@@ -70,3 +71,4 @@ for il in fr.workspace.item_ls(workspace_id="e951d4bf-eb6b-4973-8b38-560d91ba57d
 
 
 print((fr.workspace.delete(workspace_id=ws.id)).is_successful)
+"""
