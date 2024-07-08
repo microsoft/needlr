@@ -180,7 +180,6 @@ def _get_http_paged(url: str, auth:_FabricAuthentication, params: dict = dict(),
 
         yield paged_resp
 
-
 def _post_http(url: str, auth:_FabricAuthentication, params: dict = None,
                 json: Union[list, dict] = None, files: dict = None,
                 **kwargs) -> FabricResponse:
@@ -285,7 +284,6 @@ def _post_http_paged(url: str, auth:_FabricAuthentication, params: dict = dict()
         module_logger.debug(f"Get paged result for: {url} Next URL is: {next_url}")
 
         yield paged_resp
-
 
 def _delete_http(url: str, auth:_FabricAuthentication, params: dict = None, json: Union[list, dict] = None, **kwargs) -> FabricResponse:
     """

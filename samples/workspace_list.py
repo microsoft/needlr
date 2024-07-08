@@ -38,11 +38,16 @@ fr = FabricClient(auth=auth.FabricInteractiveAuth(scopes=['https://api.fabric.mi
 #for _ in fr.workspace.item_ls(workspace_id='558B0068-C465-4249-895E-A3985CBE841C', type='Lakehouse'):
 #    print(_)
 
-wsname = ''
+wsname = 'TONIO_WS_TEST_1'
 
 ws = fr.workspace.create(display_name=wsname, capacity_id='558B0068-C465-4249-895E-A3985CBE841C', description='test')
 print(ws)
 print(type(ws))
+wh = fr.warehouse.create(display_name='wh1', workspace_id=ws.id, description='wh1')
+print(wh)
+print(type(wh))
+
+
 
 """
 ws2 = fr.workspace.update(workspace_id=ws.id, display_name='New'+wsname)
