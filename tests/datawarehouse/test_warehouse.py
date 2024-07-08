@@ -12,7 +12,7 @@ class TestWarehouseLifeCycle:
         assert len(list(whs)) == 1
 
     @pytest.mark.skip(reason="waiting for long-running warehouse.create implementation")
-    def test_warehouse_update(self, fc: FabricClient, workspace_test: Workspace, warehouse_test:Warehouse, , testParameters: dict[str, str]):
+    def test_warehouse_update(self, fc: FabricClient, workspace_test: Workspace, warehouse_test:Warehouse, testParameters: dict[str, str]):
         wh = fc.warehouse.update(workspace_id=workspace_test.id, warehouse_id=warehouse_test.id, display_name='New'+ testParameters['warehouse_name'])
         assert wh.name == 'New'+ testParameters['warehouse_name']
 
