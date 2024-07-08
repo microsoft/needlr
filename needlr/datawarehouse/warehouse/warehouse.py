@@ -50,55 +50,51 @@ class _WarehouseClient():
         )
         return Warehouse(**resp.body)
 
-    def delete(self, workspace_id:str) -> FabricResponse:
+    def delete(self, workspace_id:uuid.UUID, warehouse_id:uuid.UUID) -> FabricResponse:
         """
-        Delete Workspace
+        Delete Warehouse
 
-        [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/workspaces/delete-workspace?tabs=HTTP)
+        [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/warehouse/items/delete-warehouse?tabs=HTTP)
         """
         resp = _http._delete_http(
-            url = self._base_url+f"workspaces/{workspace_id}",
+            url = f"{self._base_url}workspaces/{workspace_id}/warehouses/{warehouse_id}",
             auth=self._auth
         )
         return resp
     
-    def get(self, workspace_id:str=None) -> Warehouse:
+    def get(self, workspace_id:uuid.UUID, warehouse_id:uuid.UUID) -> Warehouse:
         """
-        Get Workspaces
+        Get Warehouses
 
-        Workspace name and region or workspace id (guid) make it unique.
-
-        [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/workspaces/get-workspace?tabs=HTTP#workspaceinfo)
+        [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/warehouse/items/get-warehouse?tabs=HTTP)
         """
         resp = _http._get_http(
-            url = self._base_url+f"workspaces/{workspace_id}",
+            url = f"{self._base_url}workspaces/{workspace_id}/warehouses/{warehouse_id}",
             auth=self._auth
         )
         warehouse = Warehouse(**resp.body)
         return warehouse
 
-    def ls(self, **kwargs) -> Iterator[Warehouse]:
+    def ls(self, workspace_id:uuid.UUID) -> Iterator[Warehouse]:
         """
-        List Workspaces
+        List Warehouses
 
-        [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/workspaces/list-workspaces?tabs=HTTP)
+        [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/warehouse/items/list-warehouses?tabs=HTTP)
         """
-        # Implement retry / error handling / continuation token
         resp = _http._get_http_paged(
-            url = self._base_url+"workspaces",
+            url = f"{self._base_url}workspaces/{workspace_id}/warehouses",
             auth=self._auth,
-            items_extract=lambda x:x["value"],
-            **kwargs
+            items_extract=lambda x:x["value"]
         )
         for page in resp:
             for item in page.items:
                 yield Warehouse(**item)
 
-    def update(self, workspace_id:str, display_name:str=None, description:str=None) -> Warehouse:
+    def update(self, workspace_id:uuid.UUID, warehouse_id:uuid.UUID, display_name:str=None, description:str=None) -> Warehouse:
         """
-        Update a Principal's Role Assignment
+        Updates the properties of the specified warehouse
 
-        [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/workspaces/update-workspace-role-assignment?tabs=HTTP)
+        [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/warehouse/items/update-warehouse?tabs=HTTP)
 
         Raises ValueError if display_name and description are left blank
         """
@@ -112,7 +108,7 @@ class _WarehouseClient():
             body["description"] = description
 
         resp = _http._patch_http(
-            url = self._base_url+f"workspaces/{workspace_id}",
+            url = f"{self._base_url}workspaces/{workspace_id}/warehouses/{warehouse_id}",
             auth=self._auth,
             json=body
         )

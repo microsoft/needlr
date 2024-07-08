@@ -16,6 +16,6 @@ def fc() -> FabricClient:
     return FabricClient(auth=auth.FabricInteractiveAuth(scopes=['https://api.fabric.microsoft.com/.default']))
 
 @pytest.fixture(scope='session')
-def workspace(fc: FabricClient, testParameters) -> Workspace:
+def workspace_test(fc: FabricClient, testParameters) -> Workspace:
     ws = fc.workspace.create(display_name=testParameters['workspace_name'], capacity_id=testParameters['capacity_id'], description=testParameters['description'])
     yield ws

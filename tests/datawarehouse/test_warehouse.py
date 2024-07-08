@@ -1,9 +1,27 @@
 from needlr import FabricClient
 from needlr.models.workspace import Workspace
 from needlr.models.warehouse import Warehouse
-from needlr.models.item import ItemType
+
+import pytest
 
 class TestWarehouseLifeCycle:
-    def test_workspace_create(self, fc: FabricClient, workspace: Workspace, testParameters: dict[str, str]):
-        wh = fc.warehouse.create(display_name=testParameters['warehouse_name'], workspace_id=workspace.id, description=testParameters['warehouse_description'])
-        assert wh.name == testParameters['warehouse_name']
+
+    @pytest.mark.skip(reason="waiting for long-running warehouse.create implementation")
+    def test_warehouse_ls(self, fc: FabricClient, workspace_test: Workspace):
+        whs = fc.warehouse.ls(workspace_id=workspace_test.id)
+        assert len(list(whs)) == 1
+
+    @pytest.mark.skip(reason="waiting for long-running warehouse.create implementation")
+    def test_warehouse_update(self, fc: FabricClient, workspace_test: Workspace, warehouse_test:Warehouse, , testParameters: dict[str, str]):
+        wh = fc.warehouse.update(workspace_id=workspace_test.id, warehouse_id=warehouse_test.id, display_name='New'+ testParameters['warehouse_name'])
+        assert wh.name == 'New'+ testParameters['warehouse_name']
+
+    @pytest.mark.skip(reason="waiting for long-running warehouse.create implementation")
+    def test_warehouse_get(self, fc: FabricClient, workspace_test: Workspace, warehouse_test:Warehouse , testParameters: dict[str, str]):
+        wh = fc.warehouse.get(workspace_id=workspace_test.id, warehouse_id=warehouse_test.id)
+        assert wh.id == warehouse_test.id and wh.name == 'New'+ testParameters['warehouse_name']
+
+    @pytest.mark.skip(reason="waiting for long-running warehouse.create implementation")
+    def test_warehouse_delete(self, fc: FabricClient, workspace_test: Workspace, warehouse_test:Warehouse):
+        resp = fc.warehouse.delete(workspace_id=workspace_test.id, warehouse_id=warehouse_test.id)
+        assert resp.is_successful is True
