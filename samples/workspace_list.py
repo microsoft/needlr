@@ -39,25 +39,31 @@ fr = FabricClient(auth=auth.FabricInteractiveAuth(scopes=['https://api.fabric.mi
 #    print(_)
 
 wsname = 'TONIO_WS_TEST_1'
+mirrored_ws_id ="27018a3b-d0ad-4925-9757-b09132484480"
 
-pr = GroupPrincipal(id="d93322d5-ba1e-4af6-8778-784c0944dd8b")
-print(pr)
+a = fr.mirroredwarehouse.ls(workspace_id=mirrored_ws_id)
+print(type(a))
+for i in a:
+    print(type(i))  
 
-ws = fr.workspace.create(display_name=wsname, capacity_id='558B0068-C465-4249-895E-A3985CBE841C', description='test')
-print(ws)
-print(type(ws))
+#pr = GroupPrincipal(id="d93322d5-ba1e-4af6-8778-784c0944dd8b")
+#print(pr)
 
-res = fr.workspace.role.assign(workspace_id=ws.id, principal=GroupPrincipal(id="d93322d5-ba1e-4af6-8778-784c0944dd8b"), role=WorkspaceRole.Contributor)
-print(res.is_successful)
+#ws = fr.workspace.create(display_name=wsname, capacity_id='558B0068-C465-4249-895E-A3985CBE841C', description='test')
+#print(ws)
+#print(type(ws))
 
-res = fr.workspace.role.ls(workspace_id=ws.id)
-print(list(res))
+#res = fr.workspace.role.assign(workspace_id=ws.id, principal=GroupPrincipal(id="d93322d5-ba1e-4af6-8778-784c0944dd8b"), role=WorkspaceRole.Contributor)
+#print(res.is_successful)
 
-res = fr.workspace.role.update(workspace_id=ws.id, principal=GroupPrincipal(id="d93322d5-ba1e-4af6-8778-784c0944dd8b"), role=WorkspaceRole.Member)
-print(res.is_successful)
+#res = fr.workspace.role.ls(workspace_id=ws.id)
+#print(list(res))
 
-res = fr.workspace.role.delete(workspace_id=ws.id, principal=GroupPrincipal(id="d93322d5-ba1e-4af6-8778-784c0944dd8b"))
-print(res.is_successful)
+#res = fr.workspace.role.update(workspace_id=ws.id, principal=GroupPrincipal(id="d93322d5-ba1e-4af6-8778-784c0944dd8b"), role=WorkspaceRole.Member)
+#print(res.is_successful)
+
+#res = fr.workspace.role.delete(workspace_id=ws.id, principal=GroupPrincipal(id="d93322d5-ba1e-4af6-8778-784c0944dd8b"))
+#print(res.is_successful)
 
 
 #wh = fr.warehouse.create(display_name='wh1', workspace_id=ws.id, description='wh1')
