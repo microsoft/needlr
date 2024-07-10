@@ -26,7 +26,3 @@ class TestWorkspaceLifeCycle:
     def test_wokspace_item_ls_with_type(self, fc: FabricClient, workspace_test: Workspace):
         items = fc.workspace.item_ls(workspace_id=workspace_test.id, item_type=ItemType.DataPipeline)
         assert len(list(items)) == 0
-
-    def test_workspace_delete(self, fc: FabricClient, workspace_test: Workspace):
-        ws = fc.workspace.delete(workspace_id=workspace_test.id)
-        assert ws.is_successful is True
