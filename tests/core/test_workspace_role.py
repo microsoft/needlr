@@ -1,6 +1,5 @@
 from needlr import FabricClient
 from needlr.models.workspace import Workspace, WorkspaceRole, GroupPrincipal
-from needlr.models.item import ItemType
 
 class TestWorkspaceRoleAssignment:
     def test_workspace_role_assign(self, fc: FabricClient, workspace_test: Workspace, testParameters: dict[str, str]):
