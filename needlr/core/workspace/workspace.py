@@ -1,7 +1,6 @@
 """Module providing a Core Workspace functions."""
 
 from collections.abc import Iterator
-from needlr.core import item
 from needlr.core.item.item import _ItemClient
 from needlr._http import FabricResponse
 from needlr import _http

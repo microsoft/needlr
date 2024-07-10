@@ -1,15 +1,13 @@
 """Module providing Core Warehouse functions."""
 
 from collections.abc import Iterator
-from needlr.core.item.item import _ItemClient
+import uuid
+
 from needlr._http import FabricResponse
 from needlr import _http
 from needlr.auth.auth import _FabricAuthentication
-from needlr.core.workspace.role import _WorkspaceRoleClient
 from needlr.models.warehouse import Warehouse
-from needlr.models.item import Item, ItemType
 
-import uuid
 
 
 class _WarehouseClient():

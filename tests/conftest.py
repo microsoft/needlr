@@ -9,7 +9,8 @@ def testParameters():
         'capacity_id': '558B0068-C465-4249-895E-A3985CBE841C',
         'description': 'Workspace created by PyTest',
         'warehouse_name': 'my_test_warehouse',
-        'warehouse_description': 'Warehouse created by PyTest'
+        'warehouse_description': 'Warehouse created by PyTest',
+        'principal_id': 'd93322d5-ba1e-4af6-8778-784c0944dd8b'
     }
 @pytest.fixture(scope='session')
 def fc() -> FabricClient:

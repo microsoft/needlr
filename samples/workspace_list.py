@@ -1,7 +1,7 @@
 
 from needlr import auth, FabricClient
 from needlr.models.item import Item, ItemType
-
+from needlr.core.workspace.role import GroupPrincipal, WorkspaceRole
 
 fr = FabricClient(auth=auth.FabricInteractiveAuth(scopes=['https://api.fabric.microsoft.com/.default'])
                 )
@@ -40,12 +40,29 @@ fr = FabricClient(auth=auth.FabricInteractiveAuth(scopes=['https://api.fabric.mi
 
 wsname = 'TONIO_WS_TEST_1'
 
+pr = GroupPrincipal(id="d93322d5-ba1e-4af6-8778-784c0944dd8b")
+print(pr)
+
 ws = fr.workspace.create(display_name=wsname, capacity_id='558B0068-C465-4249-895E-A3985CBE841C', description='test')
 print(ws)
 print(type(ws))
-wh = fr.warehouse.create(display_name='wh1', workspace_id=ws.id, description='wh1')
-print(wh)
-print(type(wh))
+
+res = fr.workspace.role.assign(workspace_id=ws.id, principal=GroupPrincipal(id="d93322d5-ba1e-4af6-8778-784c0944dd8b"), role=WorkspaceRole.Contributor)
+print(res.is_successful)
+
+res = fr.workspace.role.ls(workspace_id=ws.id)
+print(list(res))
+
+res = fr.workspace.role.update(workspace_id=ws.id, principal=GroupPrincipal(id="d93322d5-ba1e-4af6-8778-784c0944dd8b"), role=WorkspaceRole.Member)
+print(res.is_successful)
+
+res = fr.workspace.role.delete(workspace_id=ws.id, principal=GroupPrincipal(id="d93322d5-ba1e-4af6-8778-784c0944dd8b"))
+print(res.is_successful)
+
+
+#wh = fr.warehouse.create(display_name='wh1', workspace_id=ws.id, description='wh1')
+#print(wh)
+#print(type(wh))
 
 
 
