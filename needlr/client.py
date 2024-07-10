@@ -2,7 +2,7 @@ from .core.workspace.workspace import _WorkspaceClient
 from .admin.workspace.adminworkspace import _AdminWorkspaceClient
 from needlr.datawarehouse.warehouse.mirroredwarehouse import _MirroredWarehouseClient
 from needlr.datawarehouse.warehouse.warehouse import _WarehouseClient
-
+from needlr.powerbi.semanticmodel import _SemanticModelClient
 
 
 
@@ -14,6 +14,7 @@ class FabricClient():
         self.admin_workspace = _AdminWorkspaceClient(auth=auth, base_url=self._base_url)
         self.warehouse = _WarehouseClient(auth=auth, base_url=self._base_url)
         self.mirroredwarehouse = _MirroredWarehouseClient(auth=auth, base_url=self._base_url)
+        self.semanticmodel = _SemanticModelClient(auth=auth, base_url=self._base_url)
         
         
     

@@ -27,7 +27,6 @@ class _WarehouseClient():
     def __init__(self, auth:_FabricAuthentication, base_url):
         self._auth = auth
         self._base_url = base_url
-        #self.item = _ItemClient()
 
     def create(self, display_name:str, workspace_id:uuid.UUID, description:str=None) -> Warehouse:
         """

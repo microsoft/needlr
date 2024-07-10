@@ -40,11 +40,23 @@ fr = FabricClient(auth=auth.FabricInteractiveAuth(scopes=['https://api.fabric.mi
 
 wsname = 'TONIO_WS_TEST_1'
 mirrored_ws_id ="27018a3b-d0ad-4925-9757-b09132484480"
+semantic_model_ws_id = "e951d4bf-eb6b-4973-8b38-560d91ba57db"
+semantic_model_to_delete_id = "d3735118-8aa6-4a76-8033-ea37966e0879"
 
-a = fr.mirroredwarehouse.ls(workspace_id=mirrored_ws_id)
+r = fr.semanticmodel.delete(workspace_id=semantic_model_ws_id, semanticmodel_id=semantic_model_to_delete_id)
+print(r.is_successful)
+
+a = fr.semanticmodel.ls(workspace_id=semantic_model_ws_id)
 print(type(a))
 for i in a:
-    print(type(i))  
+    print(type(i)) 
+    print(i)
+    a2 = fr.semanticmodel.get(workspace_id=semantic_model_ws_id, semanticmodel_id=i.id) 
+    print(a2)
+    print(type(a2))
+    a3 = fr.semanticmodel.get_definition(workspace_id=semantic_model_ws_id, semanticmodel_id=i.id) 
+    print(a3)
+    print(type(a3))
 
 #pr = GroupPrincipal(id="d93322d5-ba1e-4af6-8778-784c0944dd8b")
 #print(pr)
