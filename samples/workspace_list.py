@@ -43,6 +43,14 @@ mirrored_ws_id ="27018a3b-d0ad-4925-9757-b09132484480"
 semantic_model_ws_id = "e951d4bf-eb6b-4973-8b38-560d91ba57db"
 semantic_model_to_delete_id = "d3735118-8aa6-4a76-8033-ea37966e0879"
 
+ws = fr.workspace.create(display_name=wsname, capacity_id='558B0068-C465-4249-895E-A3985CBE841C', description='test')
+print(ws)
+print(type(ws))
+
+wh = fr.warehouse.create(display_name='wh1', workspace_id=ws.id, description='wh1')
+print(wh)
+print(type(wh))
+
 r = fr.semanticmodel.delete(workspace_id=semantic_model_ws_id, semanticmodel_id=semantic_model_to_delete_id)
 print(r.is_successful)
 

@@ -4,6 +4,7 @@ from enum import Enum
 import uuid, json
 from typing import Literal
 from pydantic import BaseModel, Field, AliasChoices
+from needlr.models.item import Item, ItemType
 
 
 class WorkspaceRole(str, Enum):
@@ -58,10 +59,8 @@ class CapacityAssignmentProgress(str, Enum):
     Failed = 'Failed'
     InProgress = 'InProgress'
 
-class Workspace(BaseModel):
-    id: uuid.UUID
+class Workspace(Item):
     name: str = Field(validation_alias=AliasChoices('displayName'))
-    description: str
     type: WorkspaceType = None
     capacityId: uuid.UUID = None
     capacityAssignmentProgress: CapacityAssignmentProgress = None

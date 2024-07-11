@@ -21,4 +21,4 @@ def fc() -> FabricClient:
 def workspace_test(fc: FabricClient, testParameters) -> Workspace:
     ws = fc.workspace.create(display_name=testParameters['workspace_name'], capacity_id=testParameters['capacity_id'], description=testParameters['description'])
     yield ws
-    #fc.workspace.delete(workspace_id=ws.id)
+    fc.workspace.delete(workspace_id=ws.id)

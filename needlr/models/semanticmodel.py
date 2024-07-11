@@ -4,12 +4,9 @@ import uuid
 
 from pydantic import AliasChoices, BaseModel, Field
 
-from needlr.models.item import ItemType
+from needlr.models.item import Item, ItemType
 
 
-class SemanticModel(BaseModel):
-    id: uuid.UUID
+class SemanticModel(Item):
     name: str = Field(validation_alias=AliasChoices('displayName'))
-    description: str = None
-    type: ItemType = None
-    workspaceId: uuid.UUID = None
+    type: ItemType = ItemType.SemanticModel
