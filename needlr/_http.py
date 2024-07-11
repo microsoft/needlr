@@ -329,7 +329,7 @@ def _post_http_long_running(url: str, auth:_FabricAuthentication, item: Item,
             )
             # If it's a non-terminal state, keep going
             if op_status.body["status"] in ["NotStarted", "Running", "Undefined"]:
-                _retry_after = op_status.retry_after
+                _retry_after = int(op_status.retry_after)
                 continue
             # Successful state, get the response from the Location header
             elif op_status.body["status"] == "Succeeded":
