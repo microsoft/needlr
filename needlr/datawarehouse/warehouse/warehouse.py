@@ -40,7 +40,7 @@ class _WarehouseClient():
         if description:
             body["description"] = description
 
-        resp = _http._post_http(
+        resp = _http._post_http_long_running(
             url = f"{self._base_url}workspaces/{workspace_id}/warehouses",
             auth=self._auth,
             json=body
