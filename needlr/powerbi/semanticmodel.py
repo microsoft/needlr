@@ -81,3 +81,33 @@ class _SemanticModelClient():
             auth=self._auth
         )
         return resp.body
+
+    #TODO: Update to use long running operations so I always receive a Semantic Model instead of a response
+    def create(self, workspace_id:uuid.UUID, semanticmodel:SemanticModel) -> SemanticModel:
+        """
+        Create Semantic Model
+
+        [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/semanticmodel/items/create-semantic-model?tabs=HTTP)
+        """
+        resp = _http._post_http(
+            url = f"{self._base_url}workspaces/{workspace_id}/semanticModels",
+            auth=self._auth,
+            json=semanticmodel.to_dict()
+        )
+        semanticmodel = SemanticModel(**resp.body)
+        return semanticmodel
+
+    #TODO: Update to use long running operations so I always receive a Semantic Model instead of a response
+    def update(self, workspace_id:uuid.UUID, semanticmodel_id:uuid.UUID, semanticmodel:SemanticModel) -> SemanticModel:
+        """
+        Update Semantic Model
+
+        [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/semanticmodel/items/update-semantic-model?tabs=HTTP)
+        """
+        resp = _http._patch_http(
+            url = f"{self._base_url}workspaces/{workspace_id}/semanticModels/{semanticmodel_id}",
+            auth=self._auth,
+            json=semanticmodel.to_dict()
+        )
+        semanticmodel = SemanticModel(**resp.body)
+        return semanticmodel
