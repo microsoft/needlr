@@ -1,7 +1,7 @@
 from . import __version__
 from .utils.util import FabricException
 from .auth.auth import _FabricAuthentication
-from .core.item.item import FabricItem
+from .models.item import Item
 
 import json
 import logging
@@ -288,7 +288,7 @@ def _post_http_paged(url: str, auth:_FabricAuthentication, params: dict = dict()
         yield paged_resp
 
 
-def _post_http_long_running(url: str, auth:_FabricAuthentication, fabric_item: FabricItem,
+def _post_http_long_running(url: str, auth:_FabricAuthentication, item: Item,
                     params: dict = dict(), files: dict = None,
                     wait_for_success:bool = True, 
                     retry_attempts:int = 5,
@@ -307,7 +307,7 @@ def _post_http_long_running(url: str, auth:_FabricAuthentication, fabric_item: F
         url = url,
         auth=auth,
         params=params,
-        json=fabric_item.to_json(),
+        json=item.to_json(),
         file=files
     )
 

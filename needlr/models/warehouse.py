@@ -3,12 +3,12 @@ import uuid
 
 from pydantic import AliasChoices, BaseModel, Field
 
-from needlr.models.item import ItemType
+from needlr.models.item import ItemType, Item
 
 
-class Warehouse(BaseModel):
+class Warehouse(Item):
     id: uuid.UUID
     name: str = Field(validation_alias=AliasChoices('displayName'))
     description: str = None
-    type: ItemType = None
+    type: ItemType = ItemType.Warehouse
     workspaceId: uuid.UUID = None
