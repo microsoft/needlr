@@ -307,7 +307,7 @@ def _post_http_long_running(url: str, auth:_FabricAuthentication, item: Item,
         url = url,
         auth=auth,
         params=params,
-        json=item.to_json(),
+        json=item.model_dump(),
         file=files
     )
 
@@ -319,7 +319,7 @@ def _post_http_long_running(url: str, auth:_FabricAuthentication, item: Item,
     
     if create_op.is_accepted and wait_for_success:
         _completed = False
-        _retry_after = create_op.retry_after
+        _retry_after = int(create_op.retry_after)
         _result = {}
         for _ in range(retry_attempts):
             time.sleep(_retry_after)
