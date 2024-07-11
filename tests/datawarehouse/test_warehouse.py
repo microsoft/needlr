@@ -6,8 +6,8 @@ import pytest
 
 class TestWarehouseLifeCycle:
 
-    @pytest.mark.skip(reason="waiting for long-running warehouse.create implementation")
-    def test_warehouse_ls(self, fc: FabricClient, workspace_test: Workspace):
+    def test_warehouse_ls(self, fc: FabricClient, workspace_test: Workspace, warehouse_test: Warehouse):
+        t = warehouse_test
         whs = fc.warehouse.ls(workspace_id=workspace_test.id)
         assert len(list(whs)) == 1
 
