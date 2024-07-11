@@ -1,9 +1,11 @@
 from . import __version__
 from .utils.util import FabricException
 from .auth.auth import _FabricAuthentication
+from .core.item.item import FabricItem
 
 import json
 import logging
+import time
 from urllib.parse import unquote
 from typing import Callable, Generator, List, Union
 
@@ -12,8 +14,7 @@ import requests
 module_logger = logging.getLogger('needler')
 
 class FabricResponse():
-    # I don't like this, maybe we should have a .json and a .body
-    body: Union[dict, bytes]
+    # body: Union[dict, bytes]
     """
     Interface for a response from Fabric.  Consists of a:
 
@@ -31,6 +32,7 @@ class FabricResponse():
     """
 
     def __init__(self, response:requests.Response, **kwargs):
+        super().__init__()
         self.body = None
         self.status_code = response.status_code
         self.method = response.request.method
@@ -59,7 +61,7 @@ class FabricResponse():
     def __str__(self) -> str:
         return json.dumps(self.body, indent=2)
         
-    
+        
 
 class FabricPagedResponse(FabricResponse):
     items: List[dict]
@@ -284,6 +286,72 @@ def _post_http_paged(url: str, auth:_FabricAuthentication, params: dict = dict()
         module_logger.debug(f"Get paged result for: {url} Next URL is: {next_url}")
 
         yield paged_resp
+
+
+def _post_http_long_running(url: str, auth:_FabricAuthentication, fabric_item: FabricItem,
+                    params: dict = dict(), files: dict = None,
+                    wait_for_success:bool = True, 
+                    retry_attempts:int = 5,
+                    **kwargs) -> FabricResponse:
+    """
+    * `url: str` the URL to call and append additional paging parameters
+    * `auth:_FabricAuthentication` the authentication object to get Access Tokens
+    * `params: dict = dict()` a set of parameters to pass to the URL
+    * `files: dict = None` a dictionary of files to upload
+    * `fabric_item:FabricItem = FabricItem()` the FabricItem to upload
+    * `wait_for_success:bool = True` True if the function should wait for the operation to complete
+    * `retry_attempts:int = 5` the number of times to retry the operation before failing
+    """
+    
+    create_op = _post_http(
+        url = url,
+        auth=auth,
+        params=params,
+        json=fabric_item.to_json(),
+        file=files
+    )
+
+    if not wait_for_success:
+        return create_op
+
+    if create_op.is_created:
+        return create_op
+    
+    if create_op.is_accepted and wait_for_success:
+        _completed = False
+        _retry_after = create_op.retry_after
+        _result = {}
+        for _ in range(retry_attempts):
+            time.sleep(_retry_after)
+            op_status = _get_http(
+                url=create_op.next_location,
+                auth=auth
+            )
+            # If it's a non-terminal state, keep going
+            if op_status.body["status"] in ["NotStarted", "Running", "Undefined"]:
+                _retry_after = op_status.retry_after
+                continue
+            # Successful state, get the response from the Location header
+            elif op_status.body["status"] == "Succeeded":
+                _completed = True
+                # Get Operation Results?
+                op_results = _get_http(
+                    url=op_status.next_location,
+                    auth=auth
+                )
+                _result = op_results
+                break
+            # Unhandled but terminal state
+            else:
+                _completed = True
+                _result = op_status
+                break
+        # Fall through
+        if _completed:
+            return _result
+        else:
+            raise NeedlerRetriesExceeded(json.dumps({"Location":create_op.next_location, "error":"010-needler failed to retrieve object status in set retries"}))
+
 
 def _delete_http(url: str, auth:_FabricAuthentication, params: dict = None, json: Union[list, dict] = None, **kwargs) -> FabricResponse:
     """
