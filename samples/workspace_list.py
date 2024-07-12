@@ -2,6 +2,7 @@
 from needlr import auth, FabricClient
 from needlr.models.item import Item, ItemType
 from needlr.core.workspace.role import GroupPrincipal, WorkspaceRole
+import pickle
 
 fr = FabricClient(auth=auth.FabricInteractiveAuth(scopes=['https://api.fabric.microsoft.com/.default'])
                 )
@@ -57,20 +58,13 @@ semantic_model_to_delete_id = "d3735118-8aa6-4a76-8033-ea37966e0879"
 a = fr.semanticmodel.ls(workspace_id=semantic_model_ws_id)
 print(type(a))
 for i in a:
-    print(type(i)) 
-    print(i)
     a2 = fr.semanticmodel.get(workspace_id=semantic_model_ws_id, semanticmodel_id=i.id, include_defintion=True)
-    import pickle
-    f = open('../tests/powerbi/semantic_model_definition.pkl', 'rb')
-    a2.definition = pickle.load(f)
-    f.close()
+    with open('../tests/powerbi/semantic_model_definition.pkl', 'rb') as f:
+        a2.definition = pickle.load(f)
     a3 = fr.semanticmodel.create(workspace_id=semantic_model_ws_id, display_name='New_Sales2', definition=a2.definition, description='test')
     resp = fr.semanticmodel.update_definition(workspace_id=semantic_model_ws_id, semanticmodel_id=a3.id, definition=a3.definition)
-    print(a2)
-    print(type(a2))
     a3 = fr.semanticmodel.get_definition(workspace_id=semantic_model_ws_id, semanticmodel_id=i.id) 
-    print(a3)
-    print(type(a3))
+    break
 
 #pr = GroupPrincipal(id="d93322d5-ba1e-4af6-8778-784c0944dd8b")
 #print(pr)
