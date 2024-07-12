@@ -334,12 +334,15 @@ def _post_http_long_running(url: str, auth:_FabricAuthentication, item: Item = N
             # Successful state, get the response from the Location header
             elif op_status.body["status"] == "Succeeded":
                 _completed = True
-                # Get Operation Results?
-                op_results = _get_http(
-                    url=op_status.next_location,
-                    auth=auth
-                )
-                _result = op_results
+                # If the operation is complete, but there is no location provided, then return the last requested payload.
+                if op_status.next_location is None:
+                    _result = op_status
+                else:
+                    op_results = _get_http(
+                        url=op_status.next_location,
+                        auth=auth
+                    )
+                    _result = op_results
                 break
             # Unhandled but terminal state
             else:
