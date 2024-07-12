@@ -288,7 +288,7 @@ def _post_http_paged(url: str, auth:_FabricAuthentication, params: dict = dict()
         yield paged_resp
 
 
-def _post_http_long_running(url: str, auth:_FabricAuthentication, item: Item,
+def _post_http_long_running(url: str, auth:_FabricAuthentication, item: Item = None,
                     params: dict = dict(), files: dict = None,
                     wait_for_success:bool = True, 
                     retry_attempts:int = 5,
@@ -307,7 +307,7 @@ def _post_http_long_running(url: str, auth:_FabricAuthentication, item: Item,
         url = url,
         auth=auth,
         params=params,
-        json=item.model_dump(),
+        json=item.model_dump() if item else None,
         file=files
     )
 

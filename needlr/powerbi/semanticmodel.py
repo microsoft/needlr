@@ -7,6 +7,7 @@ from needlr._http import FabricResponse
 from needlr import _http
 from needlr.auth.auth import _FabricAuthentication
 from needlr.models.semanticmodel import SemanticModel
+from needlr.models.item import Item
 
 
 
@@ -22,46 +23,90 @@ class _SemanticModelClient():
     * Get Semantic Model > get()
     * Get Semantic Model Definition > get_definition()
     * List Semantic Model > ls()
-    * Update Semantic Model > update()
+    * Update Semantic Model Definition > update_definition()
 
     """
     def __init__(self, auth:_FabricAuthentication, base_url):
+        """
+        Initializes a SemanticModel object.
+
+        Args:
+            auth (_FabricAuthentication): The authentication object used for authentication.
+            base_url (str): The base URL for the SemanticModel.
+
+        Returns:
+            None
+        """
         self._auth = auth
         self._base_url = base_url
 
     def ls(self, workspace_id:uuid.UUID) -> Iterator[SemanticModel]:
-        """
-        List Semantic Models
+            """
+            List Semantic Models
 
-        [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/semanticmodel/items/list-semantic-models?tabs=HTTP)
-        """
-        resp = _http._get_http_paged(
-            url = f"{self._base_url}workspaces/{workspace_id}/semanticModels",
-            auth=self._auth,
-            items_extract=lambda x:x["value"]
-        )
-        for page in resp:
-            for item in page.items:
-                yield SemanticModel(**item)
+            Retrieves a list of semantic models associated with the specified workspace ID.
 
-    def get(self, workspace_id:uuid.UUID, semanticmodel_id:uuid.UUID) -> SemanticModel:
+            Args:
+                workspace_id (uuid.UUID): The ID of the workspace.
+
+            Yields:
+                Iterator[SemanticModel]: An iterator of SemanticModel objects.
+
+            Reference:
+                [List Semantic Models](https://learn.microsoft.com/en-us/rest/api/fabric/semanticmodel/items/list-semantic-models?tabs=HTTP)
+            """
+            resp = _http._get_http_paged(
+                url = f"{self._base_url}workspaces/{workspace_id}/semanticModels",
+                auth=self._auth,
+                items_extract=lambda x:x["value"]
+            )
+            for page in resp:
+                for item in page.items:
+                    yield SemanticModel(**item)
+
+    def get(self, workspace_id:uuid.UUID, semanticmodel_id:uuid.UUID, include_defintion:bool = False) -> SemanticModel:
         """
         Get Semantic Model
 
-        [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/semanticmodel/items/get-semantic-model?tabs=HTTP)
+        Retrieves a semantic model from the specified workspace.
+
+        Args:
+            workspace_id (uuid.UUID): The ID of the workspace containing the semantic model.
+            semanticmodel_id (uuid.UUID): The ID of the semantic model to retrieve.
+            include_defintion (bool, optional): Specifies whether to include the definition of the semantic model. 
+                Defaults to False.
+
+        Returns:
+            SemanticModel: The retrieved semantic model.
+
+        References:
+            - [Get Semantic Model](https://learn.microsoft.com/en-us/rest/api/fabric/semanticmodel/items/get-semantic-model?tabs=HTTP)
         """
         resp = _http._get_http(
             url = f"{self._base_url}workspaces/{workspace_id}/semanticModels/{semanticmodel_id}",
             auth=self._auth
         )
         semanticmodel = SemanticModel(**resp.body)
+        if include_defintion:
+            definition = self.get_definition(workspace_id, semanticmodel_id)
+            semanticmodel.definition = definition
         return semanticmodel
 
     def delete(self, workspace_id:uuid.UUID, semanticmodel_id:uuid.UUID) -> FabricResponse:
         """
-        Delete Warehouse
+        Delete Semantic Model
 
-        [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/warehouse/items/delete-warehouse?tabs=HTTP)
+        Deletes a semantic model from a workspace.
+
+        Args:
+            workspace_id (uuid.UUID): The ID of the workspace.
+            semanticmodel_id (uuid.UUID): The ID of the semantic model.
+
+        Returns:
+            FabricResponse: The response from the delete request.
+
+        Reference:
+            [Delete Semantic Model](https://learn.microsoft.com/en-us/rest/api/fabric/semanticmodel/items/delete-semantic-model?tabs=HTTP)
         """
         resp = _http._delete_http(
             url = f"{self._base_url}workspaces/{workspace_id}/semanticModels/{semanticmodel_id}",
@@ -69,45 +114,90 @@ class _SemanticModelClient():
         )
         return resp
     
-    #TODO: It does not work
-    def get_definition(self, workspace_id:uuid.UUID, semanticmodel_id:uuid.UUID):
+    def get_definition(self, workspace_id:uuid.UUID, semanticmodel_id:uuid.UUID) -> dict:
         """
         Get Semantic Model Definition
 
-        [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/semanticmodel/items/get-semantic-model-definition?tabs=HTTP)
+        Retrieves the definition of a semantic model for a given workspace and semantic model ID.
+
+        Args:
+            workspace_id (uuid.UUID): The ID of the workspace.
+            semanticmodel_id (uuid.UUID): The ID of the semantic model.
+
+        Returns:
+            dict: The definition of the semantic model.
+
+        Raises:
+            SomeException: If there is an error retrieving the semantic model definition.
+
+        Reference:
+        - [Get Semantic Model Definition](https://learn.microsoft.com/en-us/rest/api/fabric/semanticmodel/items/get-semantic-model-definition?tabs=HTTP)
         """
-        resp = _http._get_http(
+        resp = _http._post_http_long_running(
             url = f"{self._base_url}workspaces/{workspace_id}/semanticModels/{semanticmodel_id}/getDefinition",
             auth=self._auth
         )
-        return resp.body
+        return resp.body['definition']
 
-    #TODO: Update to use long running operations so I always receive a Semantic Model instead of a response
-    def create(self, workspace_id:uuid.UUID, semanticmodel:SemanticModel) -> SemanticModel:
+    def create(self, workspace_id:uuid.UUID, display_name:str, definition:dict, description:str=None) -> SemanticModel:
         """
         Create Semantic Model
 
-        [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/semanticmodel/items/create-semantic-model?tabs=HTTP)
+        This method creates a semantic model in the specified workspace.
+
+        Args:
+            workspace_id (uuid.UUID): The ID of the workspace where the semantic model will be created.
+            display_name (str): The display name of the semantic model.
+            definition (dict): The definition of the semantic model.
+            description (str, optional): The description of the semantic model. Defaults to None.
+
+        Returns:
+            SemanticModel: The created semantic model.
+
+        Reference:
+        [Create Semantic Model](https://learn.microsoft.com/en-us/rest/api/fabric/semanticmodel/items/create-semantic-model?tabs=HTTP)
         """
-        resp = _http._post_http(
+        body = {
+            "displayName":display_name,
+            "definition":definition
+        }
+        if description:
+            body["description"] = description
+
+        resp = _http._post_http_long_running(
             url = f"{self._base_url}workspaces/{workspace_id}/semanticModels",
             auth=self._auth,
-            json=semanticmodel.to_dict()
+            item=SemanticModel(**body)
         )
         semanticmodel = SemanticModel(**resp.body)
+        semanticmodel.definition = definition
         return semanticmodel
 
-    #TODO: Update to use long running operations so I always receive a Semantic Model instead of a response
-    def update(self, workspace_id:uuid.UUID, semanticmodel_id:uuid.UUID, semanticmodel:SemanticModel) -> SemanticModel:
+    def update_definition(self, workspace_id:uuid.UUID, semanticmodel_id:uuid.UUID, definition:dict):
         """
         Update Semantic Model
 
-        [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/semanticmodel/items/update-semantic-model?tabs=HTTP)
+        This method updates the definition of a semantic model in Power BI.
+
+        Args:
+            workspace_id (uuid.UUID): The ID of the workspace where the semantic model is located.
+            semanticmodel_id (uuid.UUID): The ID of the semantic model to update.
+            definition (dict): The updated definition of the semantic model.
+
+        Returns:
+            SemanticModel: The updated semantic model object.
+
+        Reference:
+        - [Update Semantic Model Definition](https://learn.microsoft.com/en-us/rest/api/fabric/semanticmodel/items/update-semantic-model-definition?tabs=HTTP)
         """
-        resp = _http._patch_http(
-            url = f"{self._base_url}workspaces/{workspace_id}/semanticModels/{semanticmodel_id}",
+        body = {
+            "displayName":"N/A",
+            "definition":definition
+        }
+
+        resp = _http._post_http_long_running(
+            url = f"{self._base_url}workspaces/{workspace_id}/semanticModels/{semanticmodel_id}/updateDefinition",
             auth=self._auth,
-            json=semanticmodel.to_dict()
+            item=Item(**body)
         )
-        semanticmodel = SemanticModel(**resp.body)
-        return semanticmodel
+        return resp

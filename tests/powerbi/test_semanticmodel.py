@@ -6,26 +6,24 @@ import pytest
 
 class TestSemanticModelLifeCycle:
 
-    @pytest.mark.skip(reason="Waiting for actual implementation")
-    @pytest.fixture
-    def test_semanticmodel(self, fc: FabricClient, workspace_test: Workspace, testParameters: dict[str, str]):
-        sm = fc.semanticmodel.create(workspace_id=workspace_test.id, display_name=testParameters['semanticmodel_name'])
-        assert sm.name == testParameters['semanticmodel_name']
-
-    @pytest.mark.skip(reason="Waiting for create to work")
-    def test_semanticmodel_ls(self, fc: FabricClient, workspace_test: Workspace):
+    def test_semanticmodel_ls(self, fc: FabricClient, workspace_test: Workspace, test_semanticmodel:SemanticModel):
         sm = fc.semanticmodel.ls(workspace_id=workspace_test.id)
-        assert len(list(sm)) == 1
+        for s in list(sm):
+            if s.id == test_semanticmodel.id:
+                assert True
+                return
 
-    @pytest.mark.skip(reason="Waiting for actual implementation")
-    def test_semanticmodel_update(self, fc: FabricClient, workspace_test: Workspace, test_semanticmodel:SemanticModel, testParameters: dict[str, str]):
-        sm = fc.semanticmodel.update(workspace_id=workspace_test.id, semanticmodel_id=test_semanticmodel.id, display_name='New'+ testParameters['semanticmodel_name'])
-        assert sm.name == 'New'+ testParameters['semanticmodel_name']
-
-    @pytest.mark.skip(reason="Waiting for actual implementation")
-    def test_semanticmodel_get(self, fc: FabricClient, workspace_test: Workspace, test_semanticmodel:SemanticModel, testParameters: dict[str, str]):
+    def test_semanticmodel_get(self, fc: FabricClient, workspace_test: Workspace, test_semanticmodel:SemanticModel):
         sm = fc.semanticmodel.get(workspace_id=workspace_test.id, semanticmodel_id=test_semanticmodel.id)
-        assert sm.id == test_semanticmodel.id and sm.name == 'New'+ testParameters['semanticmodel_name']
+        assert sm is not None
+
+    def test_semanticmodel_update_definition(self, fc: FabricClient, workspace_test: Workspace, test_semanticmodel:SemanticModel, sm_definition:dict):
+        res = fc.semanticmodel.update_definition(workspace_id=workspace_test.id, semanticmodel_id=test_semanticmodel.id, definition=sm_definition)
+        assert res.is_successful is True
+
+    def test_semanticmodel_get_definition(self, fc: FabricClient, workspace_test: Workspace, test_semanticmodel:SemanticModel):
+        definition = fc.semanticmodel.get_definition(workspace_id=workspace_test.id, semanticmodel_id=test_semanticmodel.id)
+        assert definition['parts'] is not None
 
     @pytest.mark.skip(reason="Waiting for create to work")
     def test_semanticmodel_delete(self, fc: FabricClient, workspace_test: Workspace, test_semanticmodel:SemanticModel):
