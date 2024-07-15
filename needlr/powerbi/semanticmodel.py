@@ -201,3 +201,21 @@ class _SemanticModelClient():
             item=Item(**body)
         )
         return resp
+
+    def clone(self, workspace_id: uuid.UUID, semanticmodel_id: uuid.UUID, clone_name: str) -> SemanticModel:
+        """
+        Clones a semantic model.
+
+        Args:
+            workspace_id (uuid.UUID): The ID of the workspace.
+            semanticmodel_id (uuid.UUID): The ID of the semantic model to clone.
+            clone_name (str): The name of the cloned semantic model.
+
+        Returns:
+            SemanticModel: The cloned semantic model.
+        """
+        source_semantic_model = self.get(workspace_id, semanticmodel_id, include_defintion=True)
+        return self.create(workspace_id, display_name=clone_name, definition=source_semantic_model.definition, description=source_semantic_model.description)
+
+    def update_parameters(self, workspace_id:uuid.UUID, semanticmodel_id:uuid.UUID, paramerters:dict) -> FabricResponse:
+        pass

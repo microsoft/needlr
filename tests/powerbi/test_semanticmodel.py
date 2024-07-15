@@ -25,6 +25,15 @@ class TestSemanticModelLifeCycle:
         definition = fc.semanticmodel.get_definition(workspace_id=workspace_test.id, semanticmodel_id=test_semanticmodel.id)
         assert definition['parts'] is not None
 
+    def test_semantic_model_clone(self, fc: FabricClient, workspace_test: Workspace, test_semanticmodel:SemanticModel):
+        cloned = fc.semanticmodel.clone(workspace_id=workspace_test.id, semanticmodel_id=test_semanticmodel.id, clone_name=f'{test_semanticmodel.name}_cloned')
+        assert cloned is not None
+        if cloned is not None:
+            fc.semanticmodel.delete(workspace_id=workspace_test.id, semanticmodel_id=cloned.id)    
+
     def test_semanticmodel_delete(self, fc: FabricClient, workspace_test: Workspace, test_semanticmodel:SemanticModel):
         resp = fc.semanticmodel.delete(workspace_id=workspace_test.id, semanticmodel_id=test_semanticmodel.id)
         assert resp.is_successful is True
+        
+        
+    
