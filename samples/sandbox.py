@@ -43,43 +43,49 @@ wsname = 'TONIO_WS_TEST_1'
 mirrored_ws_id ="27018a3b-d0ad-4925-9757-b09132484480"
 semantic_model_ws_id = "e951d4bf-eb6b-4973-8b38-560d91ba57db"
 semantic_model_to_delete_id = "d3735118-8aa6-4a76-8033-ea37966e0879"
+sample_ws_id = "75609229-8f61-41f5-8b35-69a9e6188935"
 
-ws = fr.workspace.create(display_name=wsname, capacity_id='558B0068-C465-4249-895E-A3985CBE841C', description='test')
-print(ws)
-print(type(ws))
+# ws = fr.workspace.create(display_name=wsname, capacity_id='558B0068-C465-4249-895E-A3985CBE841C', description='test')
+# print(ws)
+# print(type(ws))
 
-wh = fr.warehouse.create(display_name='wh1', workspace_id=ws.id, description='wh1')
-print(wh)
-print(type(wh))
+# wh = fr.warehouse.create(display_name='wh1', workspace_id=ws.id, description='wh1')
+# print(wh)
+# print(type(wh))
 
 # sqlep = fr.sqlendpoint.ls(workspace_id="3b2191b6-9fe9-4fc8-8939-f069976d0aee")
 # for s in sqlep:
 #     b= s
 #     print(s)
 
-pgl = fr.paginatedreportclient.ls(workspace_id=ws.id)
-for p in pgl:
-    print(p)
+# pgl = fr.paginatedreportclient.ls(workspace_id=ws.id)
+# for p in pgl:
+#     print(p)
 
-dbs = fr.dashboardclient.ls(workspace_id=ws.id)
-for d in dbs:
-    print(d)
+# dbs = fr.dashboardclient.ls(workspace_id=ws.id)
+# for d in dbs:
+#     print(d)
 
 
+a = fr.report.ls(workspace_id=sample_ws_id)
+for i in a:
+    print(i)
+    a2 = fr.report.get(workspace_id=sample_ws_id, report_id=str(i.id), include_defintion=True)
+    pickle.dump(a2.definition, open('../tests/powerbi/report_definition.pkl', 'wb'))
 
 # r = fr.semanticmodel.delete(workspace_id=semantic_model_ws_id, semanticmodel_id=semantic_model_to_delete_id)
 # print(r.is_successful)
 
-a = fr.semanticmodel.ls(workspace_id=semantic_model_ws_id)
-print(type(a))
-for i in a:
-    a2 = fr.semanticmodel.get(workspace_id=semantic_model_ws_id, semanticmodel_id=i.id, include_defintion=True)
-    with open('../tests/powerbi/semantic_model_definition.pkl', 'rb') as f:
-        a2.definition = pickle.load(f)
-    a3 = fr.semanticmodel.create(workspace_id=semantic_model_ws_id, display_name='New_Sales2', definition=a2.definition, description='test')
-    resp = fr.semanticmodel.update_definition(workspace_id=semantic_model_ws_id, semanticmodel_id=a3.id, definition=a3.definition)
-    a3 = fr.semanticmodel.get_definition(workspace_id=semantic_model_ws_id, semanticmodel_id=i.id) 
-    break
+# a = fr.semanticmodel.ls(workspace_id=semantic_model_ws_id)
+# print(type(a))
+# for i in a:
+#     a2 = fr.semanticmodel.get(workspace_id=semantic_model_ws_id, semanticmodel_id=i.id, include_defintion=True)
+#     with open('../tests/powerbi/semantic_model_definition.pkl', 'rb') as f:
+#         a2.definition = pickle.load(f)
+#     a3 = fr.semanticmodel.create(workspace_id=semantic_model_ws_id, display_name='New_Sales2', definition=a2.definition, description='test')
+#     resp = fr.semanticmodel.update_definition(workspace_id=semantic_model_ws_id, semanticmodel_id=a3.id, definition=a3.definition)
+#     a3 = fr.semanticmodel.get_definition(workspace_id=semantic_model_ws_id, semanticmodel_id=i.id) 
+#     break
 
 #pr = GroupPrincipal(id="d93322d5-ba1e-4af6-8778-784c0944dd8b")
 #print(pr)

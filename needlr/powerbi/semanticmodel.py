@@ -24,6 +24,7 @@ class _SemanticModelClient():
     * Get Semantic Model Definition > get_definition()
     * List Semantic Model > ls()
     * Update Semantic Model Definition > update_definition()
+    * Clone Semantic Model > clone()
 
     """
     def __init__(self, auth:_FabricAuthentication, base_url):
@@ -217,5 +218,3 @@ class _SemanticModelClient():
         source_semantic_model = self.get(workspace_id, semanticmodel_id, include_defintion=True)
         return self.create(workspace_id, display_name=clone_name, definition=source_semantic_model.definition, description=source_semantic_model.description)
 
-    def update_parameters(self, workspace_id:uuid.UUID, semanticmodel_id:uuid.UUID, paramerters:dict) -> FabricResponse:
-        pass
