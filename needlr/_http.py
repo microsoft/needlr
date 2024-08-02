@@ -1,7 +1,7 @@
 from . import __version__
 from .utils.util import FabricException
 from .auth.auth import _FabricAuthentication
-from .core.item.item import FabricItem
+from .models.item import Item
 
 import json
 import logging
@@ -182,7 +182,6 @@ def _get_http_paged(url: str, auth:_FabricAuthentication, params: dict = dict(),
 
         yield paged_resp
 
-
 def _post_http(url: str, auth:_FabricAuthentication, params: dict = None,
                 json: Union[list, dict] = None, files: dict = None,
                 **kwargs) -> FabricResponse:
@@ -289,7 +288,7 @@ def _post_http_paged(url: str, auth:_FabricAuthentication, params: dict = dict()
         yield paged_resp
 
 
-def _post_http_long_running(url: str, auth:_FabricAuthentication, fabric_item: FabricItem,
+def _post_http_long_running(url: str, auth:_FabricAuthentication, item: Item = None,
                     params: dict = dict(), files: dict = None,
                     wait_for_success:bool = True, 
                     retry_attempts:int = 5,
@@ -308,7 +307,7 @@ def _post_http_long_running(url: str, auth:_FabricAuthentication, fabric_item: F
         url = url,
         auth=auth,
         params=params,
-        json=fabric_item.to_json(),
+        json=item.model_dump() if item else None,
         file=files
     )
 
@@ -318,9 +317,12 @@ def _post_http_long_running(url: str, auth:_FabricAuthentication, fabric_item: F
     if create_op.is_created:
         return create_op
     
+    if create_op.is_successful and create_op.status_code == 200:
+        return create_op
+
     if create_op.is_accepted and wait_for_success:
         _completed = False
-        _retry_after = create_op.retry_after
+        _retry_after = int(create_op.retry_after)
         _result = {}
         for _ in range(retry_attempts):
             time.sleep(_retry_after)
@@ -330,17 +332,20 @@ def _post_http_long_running(url: str, auth:_FabricAuthentication, fabric_item: F
             )
             # If it's a non-terminal state, keep going
             if op_status.body["status"] in ["NotStarted", "Running", "Undefined"]:
-                _retry_after = op_status.retry_after
+                _retry_after = int(op_status.retry_after)
                 continue
             # Successful state, get the response from the Location header
             elif op_status.body["status"] == "Succeeded":
                 _completed = True
-                # Get Operation Results?
-                op_results = _get_http(
-                    url=op_status.next_location,
-                    auth=auth
-                )
-                _result = op_results
+                # If the operation is complete, but there is no location provided, then return the last requested payload.
+                if op_status.next_location is None:
+                    _result = op_status
+                else:
+                    op_results = _get_http(
+                        url=op_status.next_location,
+                        auth=auth
+                    )
+                    _result = op_results
                 break
             # Unhandled but terminal state
             else:

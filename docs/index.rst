@@ -1,15 +1,16 @@
-.. Needlr documentation master file, created by
-   sphinx-quickstart on Wed Jun 19 15:19:18 2024.
+.. needlr documentation master file, created by
+   sphinx-quickstart on Sun Jul 14 22:23:10 2024.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Needlr's documentation!
+Welcome to needlr's documentation!
 ==================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 6
    :caption: Contents:
 
+   needlr
 
 
 Indices and tables
