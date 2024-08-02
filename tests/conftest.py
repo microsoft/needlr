@@ -12,6 +12,8 @@ def testParameters():
         'warehouse_description': 'Warehouse created by PyTest',
         'principal_id': 'd93322d5-ba1e-4af6-8778-784c0944dd8b',
         'semanticmodel_name': 'SalesModel',
+        'paginatedReport_name': 'SalesReportPaginatedReportNewName',
+        'paginatedReport_description': 'SalesReportPaginatedReport Description',
     }
 @pytest.fixture(scope='session')
 def fc() -> FabricClient:
@@ -21,4 +23,4 @@ def fc() -> FabricClient:
 def workspace_test(fc: FabricClient, testParameters) -> Workspace:
     ws = fc.workspace.create(display_name=testParameters['workspace_name'], capacity_id=testParameters['capacity_id'], description=testParameters['description'])
     yield ws
-    #fc.workspace.delete(workspace_id=ws.id)
+    fc.workspace.delete(workspace_id=ws.id)
