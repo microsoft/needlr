@@ -207,7 +207,7 @@ class _ReportClient():
         )
         return resp
 
-    def update_definition(self, workspace_id:uuid.UUID, report_id:uuid.UUID, definition:dict) -> Report:
+    def update_definition(self, workspace_id:uuid.UUID, report_id:uuid.UUID, definition:dict) -> FabricResponse:
         """
         Update Report Definition
 
@@ -224,14 +224,17 @@ class _ReportClient():
         Reference:
         - [Update Report Definition](https://learn.microsoft.com/en-us/rest/api/fabric/report/items/update-report-definition?tabs=HTTP)
         """
+
+        body = {
+            "displayName":"N/A",
+            "definition":definition
+        }
         resp = _http._post_http_long_running(
             url = f"{self._base_url}workspaces/{workspace_id}/reports/{report_id}/updateDefinition",
             auth=self._auth,
-            item=Item(**definition)
+            item=Item(**body)
         )
-        report = Report(**resp.body)
-        report.definition = definition
-        return report
+        return resp
     
     def clone(self, workspace_id: uuid.UUID, report_id: uuid.UUID, clone_name: str) -> Report:
         """

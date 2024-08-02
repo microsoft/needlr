@@ -317,6 +317,9 @@ def _post_http_long_running(url: str, auth:_FabricAuthentication, item: Item = N
     if create_op.is_created:
         return create_op
     
+    if create_op.is_successful and create_op.status_code == 200:
+        return create_op
+
     if create_op.is_accepted and wait_for_success:
         _completed = False
         _retry_after = int(create_op.retry_after)

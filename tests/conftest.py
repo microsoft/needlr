@@ -14,6 +14,7 @@ def testParameters():
         'semanticmodel_name': 'SalesModel',
         'paginatedReport_name': 'SalesReportPaginatedReportNewName',
         'paginatedReport_description': 'SalesReportPaginatedReport Description',
+        'report_name': 'SalesReport',
     }
 @pytest.fixture(scope='session')
 def fc() -> FabricClient:

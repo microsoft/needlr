@@ -174,7 +174,7 @@ class _SemanticModelClient():
         semanticmodel.definition = definition
         return semanticmodel
 
-    def update_definition(self, workspace_id:uuid.UUID, semanticmodel_id:uuid.UUID, definition:dict):
+    def update_definition(self, workspace_id:uuid.UUID, semanticmodel_id:uuid.UUID, definition:dict) -> FabricResponse:
         """
         Update Semantic Model
 

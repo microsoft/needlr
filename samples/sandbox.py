@@ -45,6 +45,14 @@ semantic_model_ws_id = "e951d4bf-eb6b-4973-8b38-560d91ba57db"
 semantic_model_to_delete_id = "d3735118-8aa6-4a76-8033-ea37966e0879"
 sample_ws_id = "75609229-8f61-41f5-8b35-69a9e6188935"
 
+sms = fr.semanticmodel.ls(workspace_id=sample_ws_id)
+for sm in sms:
+    with open('../tests/powerbi/semantic_model_definition.pkl', 'rb') as sample_semantic_model_definition:
+            definition = pickle.load(sample_semantic_model_definition)
+            nsm = fr.semanticmodel.create(workspace_id=sample_ws_id, definition=definition, display_name='New_Sales2')
+            print(type(nsm))
+
+
 # ws = fr.workspace.create(display_name=wsname, capacity_id='558B0068-C465-4249-895E-A3985CBE841C', description='test')
 # print(ws)
 # print(type(ws))
@@ -66,12 +74,19 @@ sample_ws_id = "75609229-8f61-41f5-8b35-69a9e6188935"
 # for d in dbs:
 #     print(d)
 
+# a = fr.report.ls(workspace_id=sample_ws_id)
+# for i in a:
+#     print(i)
+#     a2 = fr.report.get(workspace_id=sample_ws_id, report_id=str(i.id), include_defintion=True)
+#     a4 = fr.report.clone(workspace_id=sample_ws_id, report_id=str(i.id), clone_name='cloned_'+i.name)
+#     a5 = fr.report.update_definition(workspace_id=sample_ws_id, report_id=a4.id, definition=a2.definition)
+#     a = a5
 
-a = fr.report.ls(workspace_id=sample_ws_id)
-for i in a:
-    print(i)
-    a2 = fr.report.get(workspace_id=sample_ws_id, report_id=str(i.id), include_defintion=True)
-    pickle.dump(a2.definition, open('../tests/powerbi/report_definition.pkl', 'wb'))
+# a = fr.report.ls(workspace_id=sample_ws_id)
+# for i in a:
+#     print(i)
+#     a2 = fr.report.get(workspace_id=sample_ws_id, report_id=str(i.id), include_defintion=True)
+#     pickle.dump(a2.definition, open('../tests/powerbi/report_definition.pkl', 'wb'))
 
 # r = fr.semanticmodel.delete(workspace_id=semantic_model_ws_id, semanticmodel_id=semantic_model_to_delete_id)
 # print(r.is_successful)
