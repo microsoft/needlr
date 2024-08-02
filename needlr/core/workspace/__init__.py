@@ -1,6 +1,6 @@
-from .. import item
-from ... import _http
-from ...auth.auth import _FabricAuthentication
+from needlr.core import item
+from needlr import _http
+from needlr.auth.auth import _FabricAuthentication
 from .role import _Principal, _WorkspaceRoleClient
 
 # Intentionally blank to avoid any import coming from here
