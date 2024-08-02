@@ -15,6 +15,10 @@ def testParameters():
         'paginatedReport_name': 'SalesReportPaginatedReportNewName',
         'paginatedReport_description': 'SalesReportPaginatedReport Description',
         'report_name': 'SalesReport',
+        'eventhouse_name': 'TestEventhouse',
+        'eventhouse_description': 'Test Eventhouse Description',
+        'eventstream_name': 'TestEventstream',
+        'eventstream_description': 'Test Eventstream Description',
     }
 @pytest.fixture(scope='session')
 def fc() -> FabricClient:

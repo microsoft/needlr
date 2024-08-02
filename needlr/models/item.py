@@ -33,3 +33,4 @@ class Item(BaseModel):
     description: str = None
     definition:dict = None
     workspaceId: uuid.UUID = None
+    properties: dict = None

@@ -56,14 +56,26 @@ sample_ws_id = "75609229-8f61-41f5-8b35-69a9e6188935"
 
 
 ws = fr.workspace.create(display_name=wsname, capacity_id='558B0068-C465-4249-895E-A3985CBE841C', description='test')
-rpts = fr.report.ls(workspace_id=sample_ws_id)
-for rpt in rpts:
-    #r = fr.report.get(workspace_id=sample_ws_id, report_id='c177ec3f-c011-4096-94a2-193cbb4ea5e8/b562f9c8ce86df85cc37')
-    cloned_rpt = fr.report.clone(source_workspace_id=rpt.workspaceId, 
-                                 report_id=rpt.id, 
-                                 clone_name='cloned_'+rpt.name, 
-                                 target_workspace_id=ws.id)
-    a = cloned_rpt.id
+a = fr.eventstream.create(workspace_id=sample_ws_id, display_name='eventstream1', description='eventstream1')
+b = a
+# rpts = fr.report.ls(workspace_id=sample_ws_id)
+# for rpt in rpts:
+#     #r = fr.report.get(workspace_id=sample_ws_id, report_id='c177ec3f-c011-4096-94a2-193cbb4ea5e8/b562f9c8ce86df85cc37')
+#     cloned_rpt = fr.report.clone(source_workspace_id=rpt.workspaceId, 
+#                                  report_id=rpt.id, 
+#                                  clone_name='cloned_'+rpt.name, 
+#                                  target_workspace_id=ws.id)
+#     a = cloned_rpt.id
+
+e = fr.eventhouse.create(workspace_id=sample_ws_id, display_name='eventhouse1', description='eventhouse1')
+elh = fr.eventhouse.ls(workspace_id=sample_ws_id)
+for e in elh: 
+    ed = fr.eventhouse.get(workspace_id=sample_ws_id, eventhouse_id=e.id)
+    cloned_e = fr.eventhouse.clone(source_workspace_id=e.workspaceId, 
+                                   eventhouse_id=e.id, 
+                                   clone_name='cloned_'+e.name, 
+                                   target_workspace_id=sample_ws_id)
+    a = cloned_e.id
 
 # wh = fr.warehouse.create(display_name='wh1', workspace_id=ws.id, description='wh1')
 # print(wh)

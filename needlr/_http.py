@@ -378,7 +378,7 @@ def _delete_http(url: str, auth:_FabricAuthentication, params: dict = None, json
         **_requests_args
     ))
 
-def _patch_http(url: str, auth:_FabricAuthentication, params: dict = None, json: Union[list, dict] = None, **kwargs) -> FabricResponse:
+def _patch_http(url: str, auth:_FabricAuthentication, params: dict = None, json: Union[list, dict] = None,  item: Item = None,**kwargs) -> FabricResponse:
     """
     :kwargs dict headers_include:Additional headers to include.
     :kwargs List[str] headers_include:Additional headers to include.
@@ -388,6 +388,9 @@ def _patch_http(url: str, auth:_FabricAuthentication, params: dict = None, json:
         extra_args["json"] = json
     if params:
         extra_args["params"] = params
+    if item:
+        extra_args["json"] = item.model_dump()
+        
     _requests_args = _parse_requests_args(**kwargs)
     return FabricResponse(requests.patch(
         url,
