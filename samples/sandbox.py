@@ -1,3 +1,4 @@
+from typing import Optional
 
 from needlr import auth, FabricClient
 from needlr.models.item import Item, ItemType
@@ -45,17 +46,24 @@ semantic_model_ws_id = "e951d4bf-eb6b-4973-8b38-560d91ba57db"
 semantic_model_to_delete_id = "d3735118-8aa6-4a76-8033-ea37966e0879"
 sample_ws_id = "75609229-8f61-41f5-8b35-69a9e6188935"
 
-sms = fr.semanticmodel.ls(workspace_id=sample_ws_id)
-for sm in sms:
-    with open('../tests/powerbi/semantic_model_definition.pkl', 'rb') as sample_semantic_model_definition:
-            definition = pickle.load(sample_semantic_model_definition)
-            nsm = fr.semanticmodel.create(workspace_id=sample_ws_id, definition=definition, display_name='New_Sales2')
-            print(type(nsm))
+# sms = fr.semanticmodel.ls(workspace_id=sample_ws_id)
+# for sm in sms:
+#     with open('../tests/powerbi/semantic_model_definition.pkl', 'rb') as sample_semantic_model_definition:
+#             definition = pickle.load(sample_semantic_model_definition)
+#             nsm = fr.semanticmodel.create(workspace_id=sample_ws_id, definition=definition, display_name='New_Sales2')
+#             print(type(nsm))
 
 
-# ws = fr.workspace.create(display_name=wsname, capacity_id='558B0068-C465-4249-895E-A3985CBE841C', description='test')
-# print(ws)
-# print(type(ws))
+
+ws = fr.workspace.create(display_name=wsname, capacity_id='558B0068-C465-4249-895E-A3985CBE841C', description='test')
+rpts = fr.report.ls(workspace_id=sample_ws_id)
+for rpt in rpts:
+    #r = fr.report.get(workspace_id=sample_ws_id, report_id='c177ec3f-c011-4096-94a2-193cbb4ea5e8/b562f9c8ce86df85cc37')
+    cloned_rpt = fr.report.clone(source_workspace_id=rpt.workspaceId, 
+                                 report_id=rpt.id, 
+                                 clone_name='cloned_'+rpt.name, 
+                                 target_workspace_id=ws.id)
+    a = cloned_rpt.id
 
 # wh = fr.warehouse.create(display_name='wh1', workspace_id=ws.id, description='wh1')
 # print(wh)
