@@ -10,6 +10,8 @@ from needlr.dataengineering.sqlendpoints import _SQLEndpointClient
 from needlr.powerbi.report import _ReportClient 
 from needlr.realtimeintelligence.eventhouse import _EventhouseClient
 from needlr.realtimeintelligence.eventstream import _EvenstreamClient
+from needlr.realtimeintelligence.kqldatabase import _KQLDatabaseClient
+from needlr.realtimeintelligence.kqlqueryset import _KQLQuerySetClient
 
 
 
@@ -29,5 +31,7 @@ class FabricClient():
         self.report = _ReportClient(auth=auth, base_url=self._base_url)
         self.eventhouse = _EventhouseClient(auth=auth, base_url=self._base_url)
         self.eventstream = _EvenstreamClient(auth=auth, base_url=self._base_url)
+        self.kqldatabase = _KQLDatabaseClient(auth=auth, base_url=self._base_url)
+        self.kqlqueryset = _KQLQuerySetClient(auth=auth, base_url=self._base_url)
         
     

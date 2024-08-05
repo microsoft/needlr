@@ -55,9 +55,9 @@ sample_ws_id = "75609229-8f61-41f5-8b35-69a9e6188935"
 
 
 
-ws = fr.workspace.create(display_name=wsname, capacity_id='558B0068-C465-4249-895E-A3985CBE841C', description='test')
-a = fr.eventstream.create(workspace_id=sample_ws_id, display_name='eventstream1', description='eventstream1')
-b = a
+# ws = fr.workspace.create(display_name=wsname, capacity_id='558B0068-C465-4249-895E-A3985CBE841C', description='test')
+# a = fr.eventstream.create(workspace_id=sample_ws_id, display_name='eventstream1', description='eventstream1')
+# b = a
 # rpts = fr.report.ls(workspace_id=sample_ws_id)
 # for rpt in rpts:
 #     #r = fr.report.get(workspace_id=sample_ws_id, report_id='c177ec3f-c011-4096-94a2-193cbb4ea5e8/b562f9c8ce86df85cc37')
@@ -67,13 +67,30 @@ b = a
 #                                  target_workspace_id=ws.id)
 #     a = cloned_rpt.id
 
-e = fr.eventhouse.create(workspace_id=sample_ws_id, display_name='eventhouse1', description='eventhouse1')
+# e = fr.eventhouse.create(workspace_id=ws.id, display_name='eventhouse1', description='eventhouse1')
+
+# newkqlqs = fr.kqlqueryset.create(workspace_id='e6252f4b-3b44-4080-96d0-9b7a53883e09', display_name='kqlqs111', description='kqlqs111')
+
+# kqlqs = fr.kqlqueryset.ls('e6252f4b-3b44-4080-96d0-9b7a53883e09')
+# for kqlq in kqlqs:
+#     a= kqlq
+#     print(kqlq)
+
+
+
+# kqldb = fr.kqldatabase.create_readwrite_database(workspace_id='e6252f4b-3b44-4080-96d0-9b7a53883e09', 
+#                                                  parentEventhouseItem_id='2ea83110-0dde-4e73-94d2-95a738ca5f53', 
+#                                                  display_name='kql_db8', 
+#                                                  description='kql_db8') 
+# a = kqldb.id
+# b = fr.kqldatabase.get(workspace_id='e6252f4b-3b44-4080-96d0-9b7a53883e09', kqlDatabase_id=a)
+# c= b
 elh = fr.eventhouse.ls(workspace_id=sample_ws_id)
 for e in elh: 
     ed = fr.eventhouse.get(workspace_id=sample_ws_id, eventhouse_id=e.id)
-    cloned_e = fr.eventhouse.clone(source_workspace_id=e.workspaceId, 
-                                   eventhouse_id=e.id, 
-                                   clone_name='cloned_'+e.name, 
+    cloned_e = fr.eventhouse.clone(source_workspace_id=ed.workspaceId, 
+                                   eventhouse_id=ed.id, 
+                                   clone_name='clone2_'+ed.name, 
                                    target_workspace_id=sample_ws_id)
     a = cloned_e.id
 

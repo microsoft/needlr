@@ -41,7 +41,7 @@ class _EventhouseClient():
         self._auth = auth
         self._base_url = base_url
 
-    def create(self, workspace_id:uuid.UUID, display_name:str, description:str=None) -> FabricResponse:
+    def create(self, workspace_id:uuid.UUID, display_name:str, description:str=None) -> Eventhouse:
         """
         Create Eventhouse
 
@@ -53,7 +53,7 @@ class _EventhouseClient():
             description (str, optional): The description of the Eventhouse. Defaults to None.
 
         Returns:
-            SemanticModel: The created Eventhouse.
+            Eventhouse: The created Eventhouse.
 
         Reference:
         [Create Eventhouse](POST https://api.fabric.microsoft.com/v1/workspaces/{workspaceId}/eventhouses)
@@ -69,7 +69,7 @@ class _EventhouseClient():
             auth=self._auth,
             item=Eventhouse(**body)
         )
-        return resp
+        return Eventhouse(**resp.body)
 
     def delete(self, workspace_id:uuid.UUID, eventhouse_id:uuid.UUID) -> FabricResponse:
         """
