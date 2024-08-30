@@ -16,16 +16,20 @@ class _WorkspaceClient():
 
     ### Coverage
 
-    * Add Workspace Role Assignment > role_assign()
     * Assign to Capacity > capacity_assign()
+    * Unassign From Capacity > capacity_unassign()
     * Create Workspace > create()
     * Delete Workspace > delete()
-    * Delete Workspace Role Assignment > role_delete()
     * Get Workspace > get()
-    * Get Workspace Role Assignments > role_ls()
+    * List items in the workspace > item_ls()
     * List Workspaces > ls()
-    * Unassign From Capacity > capacity_unassign()
     * Update Workspace > update()
+    
+    * Delete Workspace Role Assignment > role_delete()
+
+    * Get Workspace Role Assignments > role_ls()
+
+
     * Update Workspace Role Assignment > role_update()
 
     """
