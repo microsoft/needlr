@@ -15,6 +15,12 @@ class _WorkspaceRoleClient():
 
     [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/workspaces)
 
+    * Add Workspace Role Assignment > assign()
+    * Delete Workspace Role Assignment > delete()
+    * Get Workspace > get()
+    * List Workspace Role Assignments > ls()
+    * Update Workspace Role Assignment > update()    
+
     """
     def __init__(self, auth:_FabricAuthentication, base_url):
         """
