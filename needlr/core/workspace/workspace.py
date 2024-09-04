@@ -6,6 +6,7 @@ from needlr._http import FabricResponse
 from needlr import _http
 from needlr.auth.auth import _FabricAuthentication
 from needlr.core.workspace.role import _WorkspaceRoleClient
+from needlr.core.workspace.identity import _WorkspaceIdentityClient
 from needlr.models.workspace import Workspace
 from needlr.models.item import Item, ItemType
 
@@ -46,6 +47,7 @@ class _WorkspaceClient():
         self._base_url = base_url
         self.item = _ItemClient()
         self.role = _WorkspaceRoleClient(auth, base_url)
+        self.identity = _WorkspaceIdentityClient(auth, base_url)
 
     def capacity_assign(self, workspace_id:str, capacity_id:str) -> FabricResponse:
             """
