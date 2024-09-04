@@ -1,0 +1,2 @@
+class FabricException(Exception):
+    pass

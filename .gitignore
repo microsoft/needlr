@@ -396,3 +396,13 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/.venv
+.vscode/launch.json
+/scratch
+/samples/.needler
+
+
+.needler/token.cache.bin
+.vscode
+.needler/token.cache.bin
+.vscode/settings.json
