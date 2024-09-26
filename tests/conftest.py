@@ -1,4 +1,5 @@
 from dotenv import load_dotenv
+import random
 import pytest
 from needlr import auth, FabricClient
 from needlr.models.workspace import Workspace
@@ -11,9 +12,9 @@ load_dotenv()
 @pytest.fixture(scope='session')
 def testParameters():
     new_number = str(random.randint(1000000000, 9999999999))
-    ws_name = f'_needlr_{new_number}' 
+    ws_name = f'_needlr_{new_number}'
     return {
-        'workspace_name': 'my_test_workspace',
+        'workspace_name': ws_name,
         'capacity_id': os.getenv('CAPACITY_ID'),  # unique
         'description': 'Workspace created by PyTest',
         'warehouse_name': 'my_test_warehouse',
