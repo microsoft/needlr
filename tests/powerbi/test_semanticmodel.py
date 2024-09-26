@@ -26,7 +26,10 @@ class TestSemanticModelLifeCycle:
         assert definition['parts'] is not None
 
     def test_semantic_model_clone(self, fc: FabricClient, workspace_test: Workspace, test_semanticmodel:SemanticModel):
-        cloned = fc.semanticmodel.clone(workspace_id=workspace_test.id, semanticmodel_id=test_semanticmodel.id, clone_name=f'{test_semanticmodel.name}_cloned')
+        cloned = fc.semanticmodel.clone(source_workspace_id=workspace_test.id, 
+                                        semanticmodel_id=test_semanticmodel.id, 
+                                        clone_name=f'{test_semanticmodel.name}_cloned',
+                                        target_workspace_id=workspace_test.id)
         assert cloned is not None
         if cloned is not None:
             fc.semanticmodel.delete(workspace_id=workspace_test.id, semanticmodel_id=cloned.id)    

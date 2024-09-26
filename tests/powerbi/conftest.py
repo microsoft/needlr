@@ -23,6 +23,7 @@ def test_semanticmodel(fc: FabricClient, workspace_test: Workspace, sm_definitio
     yield sm
 
 @pytest.fixture(scope='session')
-def test_report(fc: FabricClient, workspace_test: Workspace, rpt_definition:dict, testParameters: dict[str, str]):
+def test_report(fc: FabricClient, workspace_test: Workspace, rpt_definition:dict, testParameters: dict[str, str], test_semanticmodel: SemanticModel):
+    a = test_semanticmodel # To make sure Semantic model is created before report
     rpt = fc.report.create(workspace_id=workspace_test.id, definition=rpt_definition, display_name=testParameters['report_name'])
     yield rpt

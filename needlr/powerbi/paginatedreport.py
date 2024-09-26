@@ -18,6 +18,7 @@ class _PaginatedReportClient():
 
     * Update Paginated Report Definition > update_definition()
     * List Paginated Report > ls()
+    * Update Paginated Report definition > update_definition()
 
     """
     def __init__(self, auth:_FabricAuthentication, base_url):
