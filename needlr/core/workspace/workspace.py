@@ -42,7 +42,7 @@ class _WorkspaceClient():
         self._base_url = base_url
         self.item = _ItemClient()
         self.role = _WorkspaceRoleClient(auth, base_url)
-
+    
     def capacity_assign(self, workspace_id:str, capacity_id:str) -> FabricResponse:
             """
             Assign a Workspace to a Capacity

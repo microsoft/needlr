@@ -1,5 +1,5 @@
 from typing import Optional
-
+import base64
 from needlr import auth, FabricClient
 from needlr.models.item import Item, ItemType
 from needlr.core.workspace.role import GroupPrincipal, WorkspaceRole
@@ -8,6 +8,50 @@ import pickle
 fr = FabricClient(auth=auth.FabricInteractiveAuth(scopes=['https://api.fabric.microsoft.com/.default'])
                 )
 
+
+with open('../tests/powerbi/semantic_model_definition.pkl', 'rb') as sample_semantic_model_definition:
+    definition = pickle.load(sample_semantic_model_definition)
+    a = definition
+   
+    a30 = base64.b64decode(definition['parts'][0]['payload'])
+    a31 = base64.b64decode(definition['parts'][1]['payload'])
+    a32 = base64.b64decode(definition['parts'][2]['payload'])
+    a33 = base64.b64decode(definition['parts'][3]['payload'])
+    a34 = base64.b64decode(definition['parts'][4]['payload'])
+    a35 = base64.b64decode(definition['parts'][5]['payload'])
+    
+    a = definition    
+
+with open('../tests/powerbi/report_definition.pkl', 'rb') as sample_report_definition:
+    definition = pickle.load(sample_report_definition)
+    a = definition
+    a30 = base64.b64decode(definition['parts'][0]['payload'])
+    a31 = base64.b64decode(definition['parts'][1]['payload'])
+    a32 = base64.b64decode(definition['parts'][2]['payload'])
+    a = definition
+
+# ws = fr.workspace.create(display_name=wsname, capacity_id='558B0068-C465-4249-895E-A3985CBE841C', description='test')
+
+
+# sms = fr.semanticmodel.ls(workspace_id="8f948b27-4a22-491e-b56a-40d48aa58dd4")
+# for sm in sms:
+#     a2 = fr.semanticmodel.get(workspace_id="8f948b27-4a22-491e-b56a-40d48aa58dd4", 
+#                               semanticmodel_id=sm.id, include_defintion=True)
+#     pickle.dump(a2.definition, open('../tests/powerbi/semantic_model_definition.pkl', 'wb'))
+
+dev_ws_id = "e951d4bf-eb6b-4973-8b38-560d91ba57db"
+a = fr.report.ls(workspace_id=dev_ws_id)
+for i in a:
+    print(i)
+    a2 = fr.report.get(workspace_id=dev_ws_id,
+                       report_id=str(i.id), include_defintion=True)
+    a30 = base64.b64decode(a2.definition['parts'][0]['payload'])
+    a31 = base64.b64decode(a2.definition['parts'][1]['payload'])
+    a32 = base64.b64decode(a2.definition['parts'][2]['payload'])
+    a33 = base64.b64decode(a2.definition['parts'][3]['payload'])
+    #pickle.dump(a2.definition, open('../tests/powerbi/report_definition.pkl', 'wb'))
+    print("Stop here")
+print("Stop here")
 # print(fr.workspace.ls())
 # for _ in fr.workspace.ls():
 #     print(_)

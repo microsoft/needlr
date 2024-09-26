@@ -25,6 +25,8 @@ def testParameters():
         'eventstream_description': 'Test Eventstream Description',
         'kqlDatabase_name': 'testkqlatabase',
         'kqlDatabase_description': 'Test KQLDatabase Description',
+        'datapipeline_name': 'testdatapipeline',
+        'datapipeline_description': 'Test Datapipeline Description',
     }
 @pytest.fixture(scope='session')
 def fc() -> FabricClient:
