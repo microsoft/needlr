@@ -400,3 +400,9 @@ FodyWeavers.xsd
 .vscode/launch.json
 /scratch
 /samples/.needler
+
+
+.needler/token.cache.bin
+.vscode
+.needler/token.cache.bin
+.vscode/settings.json

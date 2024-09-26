@@ -2,12 +2,15 @@
 
 from collections.abc import Iterator
 from needlr.core.item.item import _ItemClient
+from needlr.core.capacity.capacity import _CapacityClient
 from needlr._http import FabricResponse
 from needlr import _http
 from needlr.auth.auth import _FabricAuthentication
 from needlr.core.workspace.role import _WorkspaceRoleClient
+from needlr.core.workspace.identity import _WorkspaceIdentityClient
 from needlr.models.workspace import Workspace
 from needlr.models.item import Item, ItemType
+from needlr.models.capacity import Capacity
 
 class _WorkspaceClient():
     """
@@ -16,16 +19,20 @@ class _WorkspaceClient():
 
     ### Coverage
 
-    * Add Workspace Role Assignment > role_assign()
     * Assign to Capacity > capacity_assign()
+    * Unassign From Capacity > capacity_unassign()
     * Create Workspace > create()
     * Delete Workspace > delete()
-    * Delete Workspace Role Assignment > role_delete()
     * Get Workspace > get()
-    * Get Workspace Role Assignments > role_ls()
+    * List items in the workspace > item_ls()
     * List Workspaces > ls()
-    * Unassign From Capacity > capacity_unassign()
     * Update Workspace > update()
+    
+    * Delete Workspace Role Assignment > role_delete()
+
+    * Get Workspace Role Assignments > role_ls()
+
+
     * Update Workspace Role Assignment > role_update()
 
     """
@@ -42,7 +49,9 @@ class _WorkspaceClient():
         self._base_url = base_url
         self.item = _ItemClient()
         self.role = _WorkspaceRoleClient(auth, base_url)
-    
+        self.identity = _WorkspaceIdentityClient(auth, base_url)
+        self.capacity = _CapacityClient()
+
     def capacity_assign(self, workspace_id:str, capacity_id:str) -> FabricResponse:
             """
             Assign a Workspace to a Capacity
@@ -92,6 +101,19 @@ class _WorkspaceClient():
                 responseNotJson=True
             )
             return resp
+
+    def capacity_ls(self) -> Iterator[Capacity]:
+            """
+            Lists items in the workspace based on the given workspace ID.
+
+            Args:
+                workspace_id (str): The ID of the workspace.
+
+            Returns:
+                Iterator[Capacity]: An iterator of Capacity that match the given workspace ID.
+            """
+            return self.capacity.list_capacities(base_url=self._base_url, auth=self._auth)
+
 
     def create(self, display_name:str, capacity_id:str, description:str=None) -> Workspace:
             """
