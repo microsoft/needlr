@@ -23,7 +23,7 @@ for ws in fr.workspace.ls():
 
 # Create a new workspace
 ws = fr.workspace.create(display_name=wsname, 
-                         capacity_id='558B0068-C465-4249-895E-A3985CBE841C', 
+                         capacity_id='9828D8D8-27A1-4CC2-A227-F166FE35ABB8', 
                          description='test')
 print(ws)
 
