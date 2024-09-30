@@ -406,3 +406,4 @@ FodyWeavers.xsd
 .vscode
 .needler/token.cache.bin
 .vscode/settings.json
+.env
