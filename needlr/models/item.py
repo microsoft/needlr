@@ -24,6 +24,7 @@ class ItemType(str, Enum):
     SQLEndpoint = 'SQLEndpoint'
     SemanticModel = 'SemanticModel'
     SparkJobDefinition = 'SparkJobDefinition'
+    SynapseNotebook = 'SynapseNotebook'
     Warehouse = 'Warehouse'
 
 class Item(BaseModel):
