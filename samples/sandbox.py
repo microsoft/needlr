@@ -68,7 +68,7 @@ print("Stop here")
 # print(fr.admin_workspace.get(workspace_id='5bd603ee-cfa8-48e3-8f7e-ceb3dc6dbfd5'))
 
 # sh = logging.StreamHandler()
-# logger_faburest = logging.getLogger('needler')
+# logger_faburest = logging.getLogger('needlr')
 # logger_faburest.setLevel(logging.DEBUG)
 # logger_faburest.addHandler(sh)
 

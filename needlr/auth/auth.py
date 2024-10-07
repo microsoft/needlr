@@ -44,7 +44,7 @@ class FabricInteractiveAuth(_FabricAuthentication):
         self._token = None
         self._expiration = datetime.now()
         # TODO: Make this configurable?
-        self._cache_directory = ".needler"
+        self._cache_directory = ".needlr"
         self._cache_filename = "token.cache.bin"
         self._cache = SerializableTokenCache()
         self._establish_cache()
