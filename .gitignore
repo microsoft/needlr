@@ -404,5 +404,9 @@ FodyWeavers.xsd
 
 .needler/token.cache.bin
 .vscode
+.pypirc
 .needler/token.cache.bin
 .vscode/settings.json
+.env
+build
+dist
