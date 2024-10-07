@@ -3,7 +3,7 @@
 from collections.abc import Iterator
 from needlr import _http
 from needlr.auth.auth import _FabricAuthentication
-from needlr.models.git import GitStatusResponse, CommitToGitRequest, ItemIdentifier
+from needlr.models.git import GitStatusResponse, CommitToGitRequest, ItemIdentifier, CommitMode
 
 
 class _GitClient():
@@ -37,9 +37,10 @@ class _GitClient():
         You can choose to commit all changes or only specific changed items. To sync the workspace for the first time, use this API after the Connect and Initialize Connection APIs.
 
         Parameters:
-        - workspace_id (str): The ID of the workspace where the item will be created.            
+        - workspace_id (str): The ID of the workspace for the commit to act on.            
         - mode:  Modes for the Commit operation.  Refer to (https://learn.microsoft.com/en-us/rest/api/fabric/core/git/commit-to-git?tabs=HTTP#commitmode)
         - comment:  The comment that will be assigned for the commmit.
+        - items: A list of items to be added if the mode is Selective:  Refer to (https://learn.microsoft.com/en-us/rest/api/fabric/core/git/commit-to-git?tabs=HTTP#itemidentifier)
 
         Returns:
             [Iterator]GitStatusResponse An iterator that yields Workspace objects representing each workspace.
@@ -64,29 +65,16 @@ class _GitClient():
                 "comment": comment
         }
 
-        if items:
-            body["items"] = items
+        if mode == CommitMode.Selective:  # only add the items if the mode if selective
+        
+            if items:
+                body["items"] = items
 
         resp = _http._post_http_long_running(
             url = f"{self._base_url}workspaces/{workspace_id}/git/commitToGit",
             auth=self._auth,
             item=CommitToGitRequest(**body)
         ) 
-
-    def __getWorkspaceHead__(self, workspace_id:str) -> str:
-        """
-        Get the workspacehead string from the response object.  This is needed for other methods.
-
-        Args:
-            - workspace_id (str): The ID of the workspace where the item will be created.
-
-        Returns:
-            The workspacehead as a string
-        """
-        
-        gitStatus = self.get_status(self, workspace_id)
-
-        return gitStatus.workspaceHead
 
     def get_status(self, workspace_id:str) -> GitStatusResponse:
         """
@@ -95,9 +83,7 @@ class _GitClient():
         The status indicates changes to the item(s) since the last workspace and remote branch sync. If both locations were modified, the API flags a conflict.
 
         Parameters:
-        - base_url (str): The base URL of the fabric API.
         - workspace_id (str): The ID of the workspace where the item will be created.            
-        - auth (_FabricAuthentication): The authentication object for making API requests.
 
         Returns:
             [Iterator]GitStatusResponse An iterator that yields Workspace objects representing each workspace.
