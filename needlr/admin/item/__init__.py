@@ -1,8 +1,8 @@
 import json
 import time
 
-from ...auth.auth import _FabricAuthentication
-from ... import _http
+from needlr.auth.auth import _FabricAuthentication
+from needlr import _http
 from .item import FabricItem, LakehouseItem, WarehouseItem
 from . import types
 
