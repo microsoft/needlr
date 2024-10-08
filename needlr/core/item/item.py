@@ -54,7 +54,7 @@ class _ItemClient():
             _completed = False
             _retry_after = create_op.retry_after
             _result = {}
-            for trial in range(retry_attempts):
+            for _ in range(retry_attempts):
                 time.sleep(_retry_after)
                 op_status = _http._get_http(
                     url=create_op.next_location,
