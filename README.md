@@ -1,33 +1,68 @@
-# Project
+# Needlr
 
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
+Needlr is a Python SDK package for working with Microsoft Fabric. It provides a simple way to use the Microsoft Fabric APIs and includes several utilities for Workspace item management. Needlr is designed to be easy to use and flexible, allowing you to quickly build custom solutions for your business needs.
 
-As the maintainer of this project, please make a few updates:
+## Features
 
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
+- Easy to use client for all Microsoft Fabric APIs
+- Complete documentation
+- Out-of-the-box examples to help you get started
+- Complete Pytests Test for all modules
+
+## Installation
+To install Needlr, use pip:
+
+```bash
+pip install needlr
+```
+
+## Quick Start
+
+Here's a quick example to get you started:
+
+```python
+from needlr import auth, FabricClient
+
+#Some sample variables
+wsname = 'TONIO_WS_TEST_1'
+mirrored_ws_id ="27018a3b-d0ad-4925-9757-b09132484480"
+semantic_model_ws_id = "e951d4bf-eb6b-4973-8b38-560d91ba57db"
+semantic_model_to_delete_id = "d3735118-8aa6-4a76-8033-ea37966e0879"
+
+
+# Fabric CLient with Interactive Auth
+fr = FabricClient(auth=auth.FabricInteractiveAuth(scopes=['https://api.fabric.microsoft.com/.default']))
+
+# Print WOrkspace List
+for ws in fr.workspace.ls():
+    print(ws.name)
+
+# Create a new workspace
+ws = fr.workspace.create(display_name=wsname, 
+                         capacity_id='982748D8-27A1-4CC2-A227-F166GF45ABB8', 
+                         description='test')
+print(ws)
+
+# Create a new Warehouse    
+wh = fr.warehouse.create(workspace_id=ws.id, 
+                         display_name='New_Warehouse', 
+                         description='test')
+print(wh)
+```
+
+## Documentation
+Full documentation is available at [http://needlr.co].
 
 ## Contributing
+Contributions are welcome! Please read the CONTRIBUTING.md file for guidelines.
 
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
-Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
+## License
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-When you submit a pull request, a CLA bot will automatically determine whether you need to provide
-a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions
-provided by the bot. You will only need to do this once across all repos using our CLA.
+## Acknowledgements
+Inspired by the capabilities of Microsoft Fabric
 
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+Special thanks to the open-source community
 
-## Trademarks
-
-This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft 
-trademarks or logos is subject to and must follow 
-[Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
-Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
-Any use of third-party trademarks or logos are subject to those third-party's policies.
+## Contact
+For questions or feedback, please reach out to [tonio.lora@outlook.com].
