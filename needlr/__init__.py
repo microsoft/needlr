@@ -3,4 +3,4 @@ from .client import FabricClient
 
 import logging
 
-logging.getLogger('needler').addHandler(logging.NullHandler())
+logging.getLogger('needlr').addHandler(logging.NullHandler())
