@@ -401,7 +401,9 @@ FodyWeavers.xsd
 /scratch
 /samples/.needler
 
-
+*.egg-info
+.pytest_cache/
+.needler/
 .needler/token.cache.bin
 .vscode
 .pypirc
