@@ -3,6 +3,7 @@
 from collections.abc import Iterator
 from needlr.core.item.item import _ItemClient
 from needlr.core.capacity.capacity import _CapacityClient
+from needlr.core.git.git import _GitClient
 from needlr._http import FabricResponse
 from needlr import _http
 from needlr.auth.auth import _FabricAuthentication
@@ -50,7 +51,8 @@ class _WorkspaceClient():
         self.item = _ItemClient()
         self.role = _WorkspaceRoleClient(auth, base_url)
         self.identity = _WorkspaceIdentityClient(auth, base_url)
-        self.capacity = _CapacityClient()
+        #self.capacity = _CapacityClient( auth, base_url )
+        self.git = _GitClient( auth, base_url )
 
     def capacity_assign(self, workspace_id:str, capacity_id:str) -> FabricResponse:
             """
@@ -101,19 +103,6 @@ class _WorkspaceClient():
                 responseNotJson=True
             )
             return resp
-
-    def capacity_ls(self) -> Iterator[Capacity]:
-            """
-            Lists items in the workspace based on the given workspace ID.
-
-            Args:
-                workspace_id (str): The ID of the workspace.
-
-            Returns:
-                Iterator[Capacity]: An iterator of Capacity that match the given workspace ID.
-            """
-            return self.capacity.list_capacities(base_url=self._base_url, auth=self._auth)
-
 
     def create(self, display_name:str, capacity_id:str, description:str=None) -> Workspace:
             """
