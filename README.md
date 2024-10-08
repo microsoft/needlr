@@ -10,6 +10,7 @@ Needlr is a Python SDK package for working with Microsoft Fabric. It provides a 
 - Complete Pytests Test for all modules
 
 ## Installation
+
 To install Needlr, use pip:
 
 ```bash
@@ -51,18 +52,23 @@ print(wh)
 ```
 
 ## Documentation
+
 Full documentation is available at [http://needlr.co].
 
 ## Contributing
+
 Contributions are welcome! Please read the CONTRIBUTING.md file for guidelines.
 
 ## License
+
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Acknowledgements
+
 Inspired by the capabilities of Microsoft Fabric
 
 Special thanks to the open-source community
 
 ## Contact
+
 For questions or feedback, please reach out to [tonio.lora@outlook.com].
