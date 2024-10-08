@@ -1,5 +1,6 @@
 """Module providing Core Semantic Model functions."""
 
+from typing import Optional
 from collections.abc import Iterator
 import uuid
 
@@ -203,7 +204,7 @@ class _SemanticModelClient():
         )
         return resp
 
-    def clone(self, workspace_id: uuid.UUID, semanticmodel_id: uuid.UUID, clone_name: str) -> SemanticModel:
+    def clone(self, source_workspace_id: uuid.UUID, semanticmodel_id: uuid.UUID, clone_name: str,  target_workspace_id: Optional[uuid.UUID]) -> SemanticModel:
         """
         Clones a semantic model.
 
@@ -215,6 +216,8 @@ class _SemanticModelClient():
         Returns:
             SemanticModel: The cloned semantic model.
         """
-        source_semantic_model = self.get(workspace_id, semanticmodel_id, include_defintion=True)
-        return self.create(workspace_id, display_name=clone_name, definition=source_semantic_model.definition, description=source_semantic_model.description)
+        source_semantic_model = self.get(source_workspace_id, semanticmodel_id, include_defintion=True)
+        if target_workspace_id is None:
+            target_workspace_id = source_workspace_id
+        return self.create(target_workspace_id, display_name=clone_name, definition=source_semantic_model.definition, description=source_semantic_model.description)
 
