@@ -1,8 +1,6 @@
 from needlr import FabricClient
 from needlr.models.workspace import Workspace
 from needlr.models.item import ItemType
-from needlr.models.capacity import Capacity
-from needlr.models.git import GitStatusResponse
 
 class TestWorkspaceLifeCycle:
     def test_workspace_get(self, fc: FabricClient, workspace_test: Workspace, testParameters: dict[str, str]):
