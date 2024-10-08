@@ -1,3 +1,5 @@
+"""Module providing Core Item Model."""
+
 from enum import Enum
 import uuid
 from pydantic import BaseModel
