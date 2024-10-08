@@ -4,8 +4,8 @@ with open('requirements.txt', encoding='utf-16') as f:
     requirements = f.read().splitlines()
 
 setup(
-    name='needler',
-    version='0.1.1',
+    name='needlr',
+    version='0.1.2',
     description='A package to help you work with Microsoft Fabric from Python',
     author='Tonio Lora',
     author_email='tonio.lora@outlook.com',
@@ -25,4 +25,7 @@ setup(
         'Topic :: Utilities',
     ],
     python_requires='>=3.8',  # Specify the Python version requirement
+    package_data={
+        'needlr': ['needlr.png'],
+    },
 )

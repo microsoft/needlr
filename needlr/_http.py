@@ -11,7 +11,7 @@ from typing import Callable, Generator, List, Union
 
 import requests
 
-module_logger = logging.getLogger('needler')
+module_logger = logging.getLogger('needlr')
 
 class FabricResponse():
     # body: Union[dict, bytes]
@@ -87,7 +87,7 @@ class FabricPagedResponse(FabricResponse):
         super().__init__(response, **kwargs)
         self.items = items_extract(self.body)
 
-_USER_AGENT = {"User-Agent": "needler/{0} {1}".format(
+_USER_AGENT = {"User-Agent": "needlr/{0} {1}".format(
     __version__, requests.utils.default_headers().get("User-Agent"))}
 
 def _parse_requests_args(**kwargs):
@@ -356,7 +356,7 @@ def _post_http_long_running(url: str, auth:_FabricAuthentication, item: Item = N
         if _completed:
             return _result
         else:
-            raise NeedlerRetriesExceeded(json.dumps({"Location":create_op.next_location, "error":"010-needler failed to retrieve object status in set retries"}))
+            raise NeedlerRetriesExceeded(json.dumps({"Location":create_op.next_location, "error":"010-needlr failed to retrieve object status in set retries"}))
 
 
 def _delete_http(url: str, auth:_FabricAuthentication, params: dict = None, json: Union[list, dict] = None, **kwargs) -> FabricResponse:
