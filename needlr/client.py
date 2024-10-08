@@ -9,8 +9,11 @@ from needlr.powerbi.paginatedreport import _PaginatedReportClient
 from needlr.dataengineering.sqlendpoints import _SQLEndpointClient
 from needlr.powerbi.report import _ReportClient 
 from needlr.core.capacity import _CapacityClient
-
-
+from needlr.realtimeintelligence.eventhouse import _EventhouseClient
+from needlr.realtimeintelligence.eventstream import _EvenstreamClient
+from needlr.realtimeintelligence.kqldatabase import _KQLDatabaseClient
+from needlr.realtimeintelligence.kqlqueryset import _KQLQuerySetClient
+from needlr.datafactory.datapipeline import _DatapipelineClient
 
 class FabricClient():
     def __init__(self, auth, **kwargs):
@@ -27,5 +30,8 @@ class FabricClient():
         self.paginatedreportclient = _PaginatedReportClient(auth=auth, base_url=self._base_url)
         self.sqlendpoint = _SQLEndpointClient(auth=auth, base_url=self._base_url)
         self.report = _ReportClient(auth=auth, base_url=self._base_url)
-        
-    
+        self.eventhouse = _EventhouseClient(auth=auth, base_url=self._base_url)
+        self.eventstream = _EvenstreamClient(auth=auth, base_url=self._base_url)
+        self.kqldatabase = _KQLDatabaseClient(auth=auth, base_url=self._base_url)
+        self.kqlqueryset = _KQLQuerySetClient(auth=auth, base_url=self._base_url)
+        self.datapipeline = _DatapipelineClient(auth=auth, base_url=self._base_url)

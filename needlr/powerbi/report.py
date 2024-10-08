@@ -1,5 +1,6 @@
 """Module providing a Core Workspace functions."""
 
+from typing import Optional
 from collections.abc import Iterator
 import uuid
 
@@ -236,18 +237,26 @@ class _ReportClient():
         )
         return resp
     
-    def clone(self, workspace_id: uuid.UUID, report_id: uuid.UUID, clone_name: str) -> Report:
+    def clone(self, source_workspace_id: uuid.UUID, report_id: uuid.UUID, clone_name: str, target_workspace_id: Optional[uuid.UUID]) -> Report:
         """
-        Clones a Report.
+        Clone Report
+
+        Clones a Report from the source workspace to the target workspace.
 
         Args:
-            workspace_id (uuid.UUID): The ID of the workspace.
+            source_workspace_id (uuid.UUID): The ID of the source workspace.
             report_id (uuid.UUID): The ID of the Report to clone.
             clone_name (str): The name of the cloned Report.
+            target_workspace_id (uuid.UUID, optional): The ID of the target workspace. If not provided, the Report is cloned to the source workspace. Defaults to None.
 
         Returns:
             Report: The cloned Report.
+
         """
-        source_report = self.get(workspace_id, report_id, include_defintion=True)
-        return self.create(workspace_id, display_name=clone_name, definition=source_report.definition, description=source_report.description)
+        source_report = self.get(source_workspace_id, report_id, include_defintion=True)
+        if target_workspace_id is None:
+            target_workspace_id = source_workspace_id
+        cloned_rpt =  self.create(target_workspace_id, display_name=clone_name, definition=source_report.definition, description=source_report.description)
+        return cloned_rpt
+
 
