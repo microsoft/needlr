@@ -21,7 +21,21 @@ class _CapacityClient():
 
     """
 
-    def list_capacities(self, base_url, auth:_FabricAuthentication, **kwargs) -> Iterator[Capacity]:
+    def __init__(self, auth:_FabricAuthentication, base_url):
+        """
+        Initializes a Role object.
+
+        Args:
+            auth (_FabricAuthentication): An instance of the _FabricAuthentication class.
+            base_url (str): The base URL for the role.
+
+        Returns:
+            None
+        """
+        self._auth = auth
+        self._base_url = base_url    
+
+    def list_capacities(self, **kwargs) -> Iterator[Capacity]:
             """
             List Capacities
 
@@ -37,8 +51,8 @@ class _CapacityClient():
             - [List Workspaces](https://learn.microsoft.com/en-us/rest/api/fabric/core/workspaces/list-workspaces?tabs=HTTP)
             """
             resp = _http._get_http_paged(
-                url = base_url+"capacities",
-                auth= auth,
+                url = self._base_url+"capacities",
+                auth= self._auth,
                 items_extract=lambda x:x["value"],
                 **kwargs
             )
