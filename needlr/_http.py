@@ -1,7 +1,9 @@
-from . import __version__
-from .utils.util import FabricException
-from .auth.auth import _FabricAuthentication
-from .models.item import Item
+"""Module providing a HTTP call features."""
+
+from needlr import __version__
+from needlr.utils.util import FabricException
+from needlr.auth.auth import _FabricAuthentication
+from needlr.models.item import Item
 
 import json
 import logging
