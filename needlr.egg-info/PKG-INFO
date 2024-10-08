@@ -1,0 +1,57 @@
+Metadata-Version: 2.1
+Name: needlr
+Version: 0.1.2
+Summary: A package to help you work with Microsoft Fabric from Python
+Home-page: https://github.com/microsoft/needlr
+Author: Tonio Lora
+Author-email: tonio.lora@outlook.com
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Utilities
+Requires-Python: >=3.8
+License-File: LICENSE
+Requires-Dist: alabaster==0.7.16
+Requires-Dist: annotated-types==0.7.0
+Requires-Dist: Babel==2.15.0
+Requires-Dist: certifi==2024.6.2
+Requires-Dist: cffi==1.16.0
+Requires-Dist: charset-normalizer==3.3.2
+Requires-Dist: colorama==0.4.6
+Requires-Dist: cryptography==42.0.8
+Requires-Dist: docutils==0.20.1
+Requires-Dist: idna==3.7
+Requires-Dist: imagesize==1.4.1
+Requires-Dist: iniconfig==2.0.0
+Requires-Dist: Jinja2==3.1.4
+Requires-Dist: MarkupSafe==2.1.5
+Requires-Dist: msal==1.29.0
+Requires-Dist: packaging==24.1
+Requires-Dist: pluggy==1.5.0
+Requires-Dist: pycparser==2.22
+Requires-Dist: pydantic==2.8.0
+Requires-Dist: pydantic_core==2.20.0
+Requires-Dist: Pygments==2.18.0
+Requires-Dist: PyJWT==2.8.0
+Requires-Dist: pytest==8.2.2
+Requires-Dist: pytest-order==1.2.1
+Requires-Dist: python-dotenv==1.0.1
+Requires-Dist: requests==2.32.3
+Requires-Dist: snowballstemmer==2.2.0
+Requires-Dist: Sphinx==7.3.7
+Requires-Dist: sphinx-rtd-theme==2.0.0
+Requires-Dist: sphinxcontrib-applehelp==1.0.8
+Requires-Dist: sphinxcontrib-devhelp==1.0.6
+Requires-Dist: sphinxcontrib-htmlhelp==2.0.5
+Requires-Dist: sphinxcontrib-jquery==4.1
+Requires-Dist: sphinxcontrib-jsmath==1.0.1
+Requires-Dist: sphinxcontrib-qthelp==1.0.7
+Requires-Dist: sphinxcontrib-serializinghtml==1.1.10
+Requires-Dist: typing_extensions==4.12.2
+Requires-Dist: urllib3==2.2.2

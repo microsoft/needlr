@@ -83,7 +83,7 @@ class _ItemClient():
             if _completed:
                 return _result
             else:
-                raise _http.NeedlerRetriesExceeded(json.dumps({"Location":create_op.next_location, "error":"010-needler failed to retrieve object status in set retries"}))
+                raise _http.NeedlerRetriesExceeded(json.dumps({"Location":create_op.next_location, "error":"010-needlr failed to retrieve object status in set retries"}))
 
     def list_items(self, base_url, workspace_id:str, auth:_FabricAuthentication, **kwargs)  -> Iterator[Item]:
         """

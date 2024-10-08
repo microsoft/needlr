@@ -1,6 +1,8 @@
 from needlr import FabricClient
 from needlr.models.workspace import Workspace
 from needlr.models.item import ItemType
+from needlr.models.capacity import Capacity
+from needlr.models.git import GitStatusResponse
 
 class TestWorkspaceLifeCycle:
     def test_workspace_get(self, fc: FabricClient, workspace_test: Workspace, testParameters: dict[str, str]):
@@ -23,6 +25,6 @@ class TestWorkspaceLifeCycle:
         items = fc.workspace.item_ls(workspace_id=workspace_test.id)
         assert len(list(items)) == 0
 
-    def test_wokspace_item_ls_with_type(self, fc: FabricClient, workspace_test: Workspace):
+    def test_workspace_item_ls_with_type(self, fc: FabricClient, workspace_test: Workspace):
         items = fc.workspace.item_ls(workspace_id=workspace_test.id, item_type=ItemType.DataPipeline)
         assert len(list(items)) == 0
