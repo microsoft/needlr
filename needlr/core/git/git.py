@@ -124,6 +124,22 @@ class _GitClient:
             responseNotJson=True
         )
 
+    def disconnect(self, workspace_id: str):
+        """
+        Disconnect a specific workspace from the Git repository and branch it is connected to.
+
+            Parameters:
+            - workspace_id (str): The ID of the workspace to disconnect the repository from.
+
+            Reference:
+            - [Git - Connect](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/disconnect?tabs=HTTP)
+        """
+        _http._post_http(
+            url = self._base_url+f"workspaces/{workspace_id}/git/disconnect",
+            auth=self._auth,
+            responseNotJson=True
+        )
+
     def get_status(self, workspace_id: str) -> GitStatusResponse:
         """
         Returns the Git status of items in the workspace, that can be committed to Git.
