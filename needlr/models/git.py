@@ -5,6 +5,57 @@ from pydantic import BaseModel, Field, AliasChoices
 from typing import List
 from needlr.models.item import ItemType
 
+class GitProviderDetails(BaseModel):
+    """
+    The Git provider details.
+    
+    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/connect?tabs=HTTP#gitproviderdetails)
+
+    azureDevOpsDetails - Azure DevOps provider details.
+    gitHubDetails - GitHub provider details.
+
+    """
+    branchName: str = None
+    directoryName: str = None
+    repositoryName: str = None
+
+    
+class AzureDevOpsDetails(GitProviderDetails):
+    """
+    Azure DevOps provider details.
+    
+    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/connect?tabs=HTTP#azuredevopsdetails)
+
+    branchName	- The branch name. Maximum length is 250 characters.
+    directoryName - The directory name. Maximum length is 256 characters.
+    gitProviderType - [ AzureDevOps ] A Git provider type. Additional provider types may be added over time.
+    organizationName - The organization name. Maximum length is 100 characters.
+    projectName - The project name. Maximum length is 100 characters.
+    repositoryName - The repository name. Maximum length is 128 characters.
+    """
+    organizationName: str = None
+    projectName: str = None
+    gitProviderType: str = 'AzureDevOps'
+
+
+    
+class GitHubDetails(GitProviderDetails):
+    """
+    GitHub provider details.
+    
+    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/connect?tabs=HTTP#githubdetails)
+
+    branchName	- The branch name. Maximum length is 250 characters.
+    directoryName - The directory name. Maximum length is 256 characters.
+    gitProviderType - [ GitHub ] A Git provider type. Additional provider types may be added over time.
+    ownerName - The owner name. Maximum length is 100 characters.
+    repositoryName - The repository name. Maximum length is 128 characters.
+
+    """
+    gitProviderType: str = 'GitHub'
+    ownerName: str = None
+
+
 class ChangeType(Enum):
     """
     A Change of an item.  Additional changed types may be added over time.
@@ -46,6 +97,37 @@ class ConflictType(str, Enum):
     #null = Field(validation_alias=AliasChoices('None', None))
     none ='None'
     SameChanges = 'SameChanges'
+
+
+class GitConnectRequest(BaseModel):
+    """
+    Contains the Git connect request data.
+    
+    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/connect?tabs=HTTP#gitconnectrequest)
+
+    gitProviderDetails	- The Git provider details.
+
+    """
+    gitProviderDetails: GitProviderDetails = None
+
+    #GitProviderDetails: List[GitProviderDetails]
+
+
+class GitProviderType(BaseModel):
+    """
+    A Git provider type. Additional provider types may be added over time.
+    
+    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/connect?tabs=HTTP#gitprovidertype)
+
+    AzureDevOps	- Azure DevOps provider.
+    GitHub - GitHub provider.
+
+
+    """
+    AzureDevOps: str = None
+    GitHub: str = None
+
+
 
 class ItemIdentifier(BaseModel):
     """
