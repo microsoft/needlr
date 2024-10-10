@@ -11,9 +11,9 @@ from needlr.models.git import (
     GitProviderDetails,
     AzureDevOpsDetails,
     GitHubDetails,
+    GitConnection
 )
 from pydantic import BaseModel
-
 
 class _GitClient:
     """
@@ -140,6 +140,54 @@ class _GitClient:
             responseNotJson=True
         )
 
+    def get_connection(self, workspace_id: str) -> GitConnection:
+        """
+        Returns git connection details for the specified workspace.
+
+        Parameters:
+        - workspace_id (str): The ID of the workspace for the connection details.
+
+        Returns:
+            GitConnection -  A GitConnection object representing the connection details.
+
+        Reference:
+        - [Git - Get Connection](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/get-connection?tabs=HTTP)
+        """
+        # print( "Getting status for url: "+ self._base_url+f"workspaces/{workspace_id}/git/status")
+
+        # resp = _http._get_http(
+        #     url=self._base_url + f"workspaces/{workspace_id}/git/connection",
+        #     auth=self._auth,
+        #     items_extract=lambda x: x["changes"],
+        # )
+        resp = _http._get_http(
+            url=self._base_url + f"workspaces/{workspace_id}/git/connection",
+            auth=self._auth
+        )
+
+        localBody = resp.body
+
+        if localBody['gitConnectionState'] == 'NotConnected':
+
+            del localBody['gitProviderDetails']
+            del localBody['gitSyncDetails']
+
+        else:    
+                
+            if localBody['gitProviderDetails']['gitProviderType'] == 'AzureDevOps':
+                gpd = AzureDevOpsDetails(**localBody['gitProviderDetails'])  
+
+            elif localBody['gitProviderDetails']['gitProviderType'] == 'GitHub':
+                gpd = GitHubDetails(**localBody['gitProviderDetails'])
+
+            del localBody['gitProviderDetails']
+
+            #update the body with the new gitProviderDetails
+            localBody['gitProviderDetails'] = gpd.model_dump()
+
+        gitConnection = GitConnection(**localBody)
+        return gitConnection
+
     def get_status(self, workspace_id: str) -> GitStatusResponse:
         """
         Returns the Git status of items in the workspace, that can be committed to Git.
@@ -164,3 +212,4 @@ class _GitClient:
         )
 
         return GitStatusResponse(**resp.body)
+
