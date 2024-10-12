@@ -1,9 +1,112 @@
 """Module providing Core Git Models."""
 
 from enum import Enum
-from pydantic import BaseModel, Field, AliasChoices
-from typing import List
+from pydantic import BaseModel
+from typing import List, Union
 from needlr.models.item import ItemType
+
+class GitProviderDetails(BaseModel):
+    """
+    The Git provider details.
+    
+    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/connect?tabs=HTTP#gitproviderdetails)
+
+    azureDevOpsDetails - Azure DevOps provider details.
+    gitHubDetails - GitHub provider details.
+
+    """
+    #branchName: str = None
+    #directoryName: str = None
+    #repositoryName: str = None
+   
+
+    
+class AzureDevOpsDetails(GitProviderDetails):
+    """
+    Azure DevOps provider details.
+    
+    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/connect?tabs=HTTP#azuredevopsdetails)
+
+    branchName	- The branch name. Maximum length is 250 characters.
+    directoryName - The directory name. Maximum length is 256 characters.
+    gitProviderType - [ AzureDevOps ] A Git provider type. Additional provider types may be added over time.
+    organizationName - The organization name. Maximum length is 100 characters.
+    projectName - The project name. Maximum length is 100 characters.
+    repositoryName - The repository name. Maximum length is 128 characters.
+    """
+    branchName: str = None
+    directoryName: str = None
+    repositoryName: str = None
+   
+    organizationName: str = None
+    projectName: str = None
+    gitProviderType: str = 'AzureDevOps'
+
+
+    
+class GitHubDetails(GitProviderDetails):
+    """
+    GitHub provider details.
+    
+    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/connect?tabs=HTTP#githubdetails)
+
+    branchName	- The branch name. Maximum length is 250 characters.
+    directoryName - The directory name. Maximum length is 256 characters.
+    gitProviderType - [ GitHub ] A Git provider type. Additional provider types may be added over time.
+    ownerName - The owner name. Maximum length is 100 characters.
+    repositoryName - The repository name. Maximum length is 128 characters.
+
+    """
+    branchName: str = None
+    directoryName: str = None
+    repositoryName: str = None
+
+    gitProviderType: str = 'GitHub'
+    ownerName: str = None
+
+class GitSyncDetails(BaseModel):
+    """
+    Contains the sync details.
+    
+    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/get-connection?tabs=HTTP#gitsyncdetails)
+
+    head	- The full Secure Hash Algorithm 1 (SHA-1) of the synced commit ID.
+    lastSyncTime - The date and time of last sync state
+
+
+    """
+    Head: str = None
+    LastSyncTime: str = None
+
+class GitConnectionState(str,Enum):
+    """
+    Git connection state. Additional connection state types may be added over time.
+    
+    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/get-connection?tabs=HTTP#gitconnectionstate)
+
+    Connected	- Connected state.
+    ConnectedAndInitialized - Connected and initialized state.
+    NotConnected - Not connected state.
+
+    """
+    Connected = 'Connected'
+    ConnectedAndInitialized = 'ConnectedAndInitialized'
+    NotConnected = 'NotConnected'
+
+class GitConnection(BaseModel):
+    """
+    Contains the Git connection details.
+    
+    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/get-connection?tabs=HTTP#gitconnection)
+
+    gitConnectionState	- Git connection state. Additional connection state types may be added over time.
+    gitProviderDetails	- The Git provider details.
+    gitSyncDetails - Contains the sync details.
+
+    """
+    gitConnectionState: GitConnectionState = None
+    gitProviderDetails: Union[AzureDevOpsDetails, GitHubDetails] = None
+    gitSyncDetails: GitSyncDetails = None
 
 class ChangeType(Enum):
     """
@@ -46,6 +149,35 @@ class ConflictType(str, Enum):
     #null = Field(validation_alias=AliasChoices('None', None))
     none ='None'
     SameChanges = 'SameChanges'
+
+
+class GitConnectRequest(BaseModel):
+    """
+    Contains the Git connect request data.
+    
+    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/connect?tabs=HTTP#gitconnectrequest)
+
+    gitProviderDetails	- The Git provider details.
+
+    """
+    gitProviderDetails: GitProviderDetails = None
+
+
+class GitProviderType(BaseModel):
+    """
+    A Git provider type. Additional provider types may be added over time.
+    
+    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/connect?tabs=HTTP#gitprovidertype)
+
+    AzureDevOps	- Azure DevOps provider.
+    GitHub - GitHub provider.
+
+
+    """
+    AzureDevOps: str = None
+    GitHub: str = None
+
+
 
 class ItemIdentifier(BaseModel):
     """
