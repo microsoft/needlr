@@ -412,3 +412,6 @@ FodyWeavers.xsd
 .env
 build
 dist
+
+# Virtual Environment
+venv/
