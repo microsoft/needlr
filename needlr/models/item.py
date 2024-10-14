@@ -35,8 +35,10 @@ class Item(BaseModel):
     type: ItemType = None   # In case new types how up, this will be None
     displayName: str
     description: str = None
+    # TODO: definition should be optional for ItemClient.update
     definition:dict = None
     workspaceId: uuid.UUID = None
+    # TODO: properties should be optional for ItemClient.update
     properties: dict = None
 
 class ItemDefinitionPart(BaseModel):

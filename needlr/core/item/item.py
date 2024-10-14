@@ -214,3 +214,28 @@ class _ItemClient():
             item = None
         )
         return ItemDefinitionResponse(**resp.body)
+    
+    def update(self, workspace_id:uuid.UUID,  item_id:uuid.UUID, displayName: str, description: str) -> Item:
+        """
+        Update an Item's display name and description
+        
+        Args:
+            workspace_id (uuid.UUID): The ID of the workspace.
+            item_id (uuid.UUID): The ID of the item to be updated.
+            displayName: The new display name
+            description: the new description
+
+        Returns:
+            ItemDefinitionResponse:
+                An Item Definition Response that includes a definition field
+                and within there a parts list which contains a base64 payload
+
+        Reference:
+        - [Update Item](https://learn.microsoft.com/en-us/rest/api/fabric/core/items/update-item?tabs=HTTP)
+        """
+        resp = _http._patch_http(
+            url=f"{self._base_url}workspaces/{workspace_id}/items/{item_id}",
+            auth=self._auth,
+            json={"displayName":displayName, "description":description}
+        )
+        return Item(**resp.body)
