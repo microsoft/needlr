@@ -15,9 +15,10 @@ class _ItemClient():
     This class provides methods for interacting with items in the fabric workspace.
 
     Methods:
-    - create_item: Create an item in the fabric workspace.
-    - list_items: Retrieve a list of items from the specified workspace.
-    - list_items_by_filter: List items of a specific type based on the provided filters.
+    - create: Create an item in the fabric workspace.
+    - delete: Delete and item in the fabric workspace.
+    - ls: Retrieve a list of items from the specified workspace.
+    - ls_with_filter: List items of a specific type based on the provided filters.
     """
     def __init__(self, auth:_FabricAuthentication, base_url):
         """
@@ -31,7 +32,7 @@ class _ItemClient():
         self._base_url = base_url
         self._auth = auth
     
-    def create_item(self, workspace_id:str, fabric_item:Item, wait_for_success=False, retry_attempts=5) -> FabricResponse:
+    def create(self, workspace_id:str, fabric_item:Item, wait_for_success=False, retry_attempts=5) -> FabricResponse:
         """
         Create Item
 
@@ -97,7 +98,7 @@ class _ItemClient():
             else:
                 raise _http.NeedlerRetriesExceeded(json.dumps({"Location":create_op.next_location, "error":"010-needlr failed to retrieve object status in set retries"}))
 
-    def list_items(self, workspace_id:str, **kwargs)  -> Iterator[Item]:
+    def ls(self, workspace_id:str, **kwargs)  -> Iterator[Item]:
         """
         List Items
 
@@ -128,7 +129,7 @@ class _ItemClient():
             for item in page.items:
                 yield Item(**item)
 
-    def list_items_by_filter(self, base_url:str, workspace_id:str, auth:_FabricAuthentication, item_type:ItemType, **kwargs) -> Iterator[Item]:
+    def ls_with_filter(self, workspace_id:str,item_type:ItemType, **kwargs) -> Iterator[Item]:
         """
         List Items of a Specific Type
 
@@ -153,9 +154,9 @@ class _ItemClient():
                                 }.items() 
                                 if v is not None and v != ""
                 }
-        yield from self.list_items(base_url=base_url, workspace_id=workspace_id, auth=auth, params=params, **kwargs)
+        yield from self.list_items(base_url=self.base_url, workspace_id=workspace_id, auth=self.auth, params=params, **kwargs)
 
-    def delete_item(self, workspace_id:uuid.UUID,  item_id:uuid.UUID) -> FabricResponse:
+    def delete(self, workspace_id:uuid.UUID,  item_id:uuid.UUID) -> FabricResponse:
         """
         Delete an Item
 
