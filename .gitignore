@@ -403,8 +403,8 @@ FodyWeavers.xsd
 
 *.egg-info
 .pytest_cache/
-.needler/
-.needler/token.cache.bin
+.needlr/
+.needlr/token.cache.bin
 .vscode
 .pypirc
 .needler/token.cache.bin
