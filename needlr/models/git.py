@@ -177,7 +177,15 @@ class GitProviderType(BaseModel):
     AzureDevOps: str = None
     GitHub: str = None
 
+class InitializationStrategy(Enum):
+    """
+    The strategy required for an initialization process when content exists on both the remote side and the workspace side. Additional strategies may be added over time.
 
+    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/initialize-connection?tabs=HTTP#initializationstrategy)
+    """
+    null = None
+    PreferRemote = 'PreferRemote'
+    PreferWorkspace = 'PreferWorkspace'
 
 class ItemIdentifier(BaseModel):
     """
@@ -224,6 +232,47 @@ class ItemChange(BaseModel):
     itemMetadata: ItemMetadata = None
     remoteChange: ChangeType = None
     workspaceChange: ChangeType = None
+
+class InitializeGitConnectionRequest(BaseModel):
+    """
+    Contains the initialize Git connection request data.
+
+    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/initialize-connection?tabs=HTTP#initializegitconnectionrequest)
+
+    initializationStrategy - The strategy required for an initialization process when content exists on both the remote side and the workspace side. Additional strategies may be added over time.
+    
+    """
+
+    initializationStrategy: InitializationStrategy = None
+
+class RequiredAction(Enum):
+    """
+    Required action after the initialization process has finished. Additional actions may be added over time.
+    
+    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/initialize-connection?tabs=HTTP#requiredaction)
+
+    CommitToGit - Commit to Git is required.
+    UpdateFromGit - Update from Git is required.
+    None - No action is required.
+    """
+    CommitToGit = 'CommitToGit'
+    UpdateFromGit = 'UpdateFromGit'
+    null = None
+
+class InitializeGitConnectionResponse(BaseModel):
+    """
+    Contains the initialize Git connection response data.
+
+    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/initialize-connection?tabs=HTTP#initializegitconnectionresponse)
+
+    initializationStrategy - The strategy required for an initialization process when content exists on both the remote side and the workspace side. Additional strategies may be added over time.
+    
+    """
+
+    remoteCommitHash: str = None
+    requiredAction: RequiredAction = None
+    workspaceHead: str = None
+
 
 class GitStatusResponse(BaseModel):
     """
