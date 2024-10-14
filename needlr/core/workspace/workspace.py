@@ -48,7 +48,7 @@ class _WorkspaceClient():
         """
         self._auth = auth
         self._base_url = base_url
-        self.item = _ItemClient()
+        self.item = _ItemClient(auth, base_url)
         self.role = _WorkspaceRoleClient(auth, base_url)
         self.identity = _WorkspaceIdentityClient(auth, base_url)
         #self.capacity = _CapacityClient( auth, base_url )
