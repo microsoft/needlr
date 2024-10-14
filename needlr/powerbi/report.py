@@ -42,7 +42,6 @@ class _ReportClient():
         """
         self._auth = auth
         self._base_url = base_url
-        self.item = _ItemClient()
         self.role = _WorkspaceRoleClient(auth, base_url)
 
     def create(self, workspace_id:uuid.UUID, display_name:str, definition:dict, description:str=None) -> Report:
