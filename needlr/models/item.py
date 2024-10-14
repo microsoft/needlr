@@ -1,8 +1,9 @@
 """Module providing Core Item Model."""
 
 from enum import Enum
+from typing import List, Optional
 import uuid
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class ItemType(str, Enum):
@@ -37,3 +38,15 @@ class Item(BaseModel):
     definition:dict = None
     workspaceId: uuid.UUID = None
     properties: dict = None
+
+class ItemDefinitionPart(BaseModel):
+    path: str = None
+    payload: str = None
+    payloadType: str = None
+
+class ItemDefinition(BaseModel):
+    format_: Optional[str] = Field(default=None, alias='format')
+    parts: List[ItemDefinitionPart] = []
+
+class ItemDefinitionResponse(BaseModel):
+    definition: ItemDefinition = None

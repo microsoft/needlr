@@ -6,7 +6,7 @@ import uuid
 from needlr.auth.auth import _FabricAuthentication
 from needlr import _http
 from needlr._http import FabricResponse
-from needlr.models.item import Item, ItemType
+from needlr.models.item import Item, ItemType, ItemDefinitionResponse
 
 class _ItemClient():
     """
@@ -177,3 +177,40 @@ class _ItemClient():
             auth=self._auth
         )
         return resp
+
+    def get_definition(self, workspace_id:uuid.UUID,  item_id:uuid.UUID) -> ItemDefinitionResponse:
+        """
+        Get an Item Definition
+
+        Get an item definition with the specified `item_id` in the given `workspace_id`.
+        Extract the various parts of the definition by reaching into `definition.parts`
+        and iterating over the parts (e.g. part.path, part.payload).
+
+        Be sure to check the official documentation as not all ItemTypes are
+        supported with this API. At the time of writing this doc, only Notebook,
+        Spark Job, Report, Semantic Model, KQL Dashboard are supported.
+
+        Code Sample:
+        ```
+        resp = fabric.workspace.item.get_definition("<workspace-id>", "<item-id>")
+        for part in resp.definition.parts:
+            print(f"{part.path}: {part.payload}")
+        ```
+        Args:
+            workspace_id (uuid.UUID): The ID of the workspace.
+            item_id (uuid.UUID): The ID of the warehouse to be deleted.
+
+        Returns:
+            ItemDefinitionResponse:
+                An Item Definition Response that includes a definition field
+                and within there a parts list which contains a base64 payload
+
+        Reference:
+        - [Get Item Definition](https://learn.microsoft.com/en-us/rest/api/fabric/core/items/get-item-definition?tabs=HTTP)
+        """
+        resp = _http._post_http_long_running(
+            url=f"{self._base_url}workspaces/{workspace_id}/items/{item_id}/getDefinition",
+            auth=self._auth,
+            item = None
+        )
+        return ItemDefinitionResponse(**resp.body)
