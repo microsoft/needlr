@@ -214,7 +214,9 @@ class _GitClient:
             items_extract=lambda x: x["changes"],
         )
 
-        # convert the None to 'None' for the response
+        # convert the None to 'None' for the response due to the impedence mismatch between the API and the model
+        # None va 'None'
+        # TODO: Find a better way of handling this and document this needed.
         for k,v in resp.body.items():
             if v is None:
                 resp.body[k] = 'None'
@@ -255,7 +257,9 @@ class _GitClient:
             item=InitializeGitConnectionRequest(**body),
         )
 
-        # convert the None to 'None' for the response
+        # convert the None to 'None' for the response due to the impedence mismatch between the API and the model
+        # None va 'None'
+        # TODO: Find a better way of handling this and document this needed.
         for k,v in resp.body.items():
             if v is None:
                 resp.body[k] = 'None'
