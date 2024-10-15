@@ -42,6 +42,29 @@ class AzureDevOpsDetails(GitProviderDetails):
     projectName: str = None
     gitProviderType: str = 'AzureDevOps'
 
+class ConflictResolutionPolicy(str, Enum):
+    """
+    Conflict resolution policy. Additional conflict resolution policies may be added over time.
+
+    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/update-from-git?tabs=HTTP#conflictresolutionpolicy)
+
+    PreferRemote - Prefer remote Git side content.
+    PreferWorkspace - Prefer workspace side content.
+    """
+
+    PreferRemote = 'PreferRemote'
+    PreferWorkspace = 'PreferWorkspace'
+
+class ConflictResolutionType(str, Enum):
+    """
+    Conflict resolution type. Additional conflict resolution types may be added over time
+
+    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/update-from-git?tabs=HTTP#conflictresolutiontype)
+
+    Workspace - Conflict resolution representing the workspace level.
+   
+    """
+    Workspace = 'Workspace'
 
     
 class GitHubDetails(GitProviderDetails):
@@ -108,7 +131,7 @@ class GitConnection(BaseModel):
     gitProviderDetails: Union[AzureDevOpsDetails, GitHubDetails] = None
     gitSyncDetails: GitSyncDetails = None
 
-class ChangeType(Enum):
+class ChangeType(str,Enum):
     """
     A Change of an item.  Additional changed types may be added over time.
     
@@ -122,7 +145,7 @@ class ChangeType(Enum):
     Added = 'Added'
     Deleted = 'Deleted'
     Modified = 'Modified'
-    null = None
+    null = 'None'
 
 class CommitMode(str, Enum):
     """
@@ -146,8 +169,7 @@ class ConflictType(str, Enum):
     """
 
     Conflict = 'Conflict'
-    #null = Field(validation_alias=AliasChoices('None', None))
-    none ='None'
+    null ='None'
     SameChanges = 'SameChanges'
 
 
@@ -177,7 +199,15 @@ class GitProviderType(BaseModel):
     AzureDevOps: str = None
     GitHub: str = None
 
+class InitializationStrategy(str, Enum):
+    """
+    The strategy required for an initialization process when content exists on both the remote side and the workspace side. Additional strategies may be added over time.
 
+    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/initialize-connection?tabs=HTTP#initializationstrategy)
+    """
+    null = 'None'
+    PreferRemote = 'PreferRemote'
+    PreferWorkspace = 'PreferWorkspace'
 
 class ItemIdentifier(BaseModel):
     """
@@ -225,6 +255,47 @@ class ItemChange(BaseModel):
     remoteChange: ChangeType = None
     workspaceChange: ChangeType = None
 
+class InitializeGitConnectionRequest(BaseModel):
+    """
+    Contains the initialize Git connection request data.
+
+    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/initialize-connection?tabs=HTTP#initializegitconnectionrequest)
+
+    initializationStrategy - The strategy required for an initialization process when content exists on both the remote side and the workspace side. Additional strategies may be added over time.
+    
+    """
+
+    initializationStrategy: InitializationStrategy = None
+
+class RequiredAction(str,Enum):
+    """
+    Required action after the initialization process has finished. Additional actions may be added over time.
+    
+    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/initialize-connection?tabs=HTTP#requiredaction)
+
+    CommitToGit - Commit to Git is required.
+    UpdateFromGit - Update from Git is required.
+    None - No action is required.
+    """
+    CommitToGit = 'CommitToGit'
+    UpdateFromGit = 'UpdateFromGit'
+    null = 'None'
+
+class InitializeGitConnectionResponse(BaseModel):
+    """
+    Contains the initialize Git connection response data.
+
+    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/initialize-connection?tabs=HTTP#initializegitconnectionresponse)
+
+    initializationStrategy - The strategy required for an initialization process when content exists on both the remote side and the workspace side. Additional strategies may be added over time.
+    
+    """
+
+    remoteCommitHash: str = None
+    requiredAction: RequiredAction = None
+    workspaceHead: str = None
+
+
 class GitStatusResponse(BaseModel):
     """
 
@@ -256,3 +327,43 @@ class CommitToGitRequest(BaseModel):
     items: List[ItemIdentifier] = None
     mode: str = CommitMode.All
     workspaceHead: str = None
+
+class UpdateOptions(BaseModel):
+    """
+    Contains the options that are enabled for the update from Git.
+    
+    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/update-from-git?tabs=HTTP#updateoptions)
+
+    allowOverrideItems - User consent to override incoming items during the update from Git process. When incoming items are present and the allow override items is not specified or is provided as false, the update operation will not start. Default value is false.
+    """
+    allowOverrideItems: bool = False
+
+class WorkspaceConflictResolution(BaseModel):
+    """
+    The basic conflict resolution data.
+    
+    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/update-from-git?tabs=HTTP#workspaceconflictresolution)
+
+    conflictResolutionPolicy - Conflict resolution policy. Additional conflict resolution policies may be added over time.
+    conflictResolutionType - Conflict resolution type. Additional conflict resolution types may be added over time.
+
+    """
+    conflictResolutionPolicy: ConflictResolutionPolicy = None
+    conflictResolutionType: ConflictResolutionType = None
+
+class UpdateFromGitRequest(BaseModel):
+    """
+    Contains the update from Git request data.
+    
+    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/update-from-git?tabs=HTTP#updatefromgitrequest)
+
+    conflictResolution - Conflict resolution to be used in the update from Git operation. If items are in conflict and a conflict resolution is not specified, the update operation will not start.
+    options - Options to be used in the update from Git operation
+    remoteCommitHash - Remote full SHA commit hash.
+    workspaceHead - Full SHA hash that the workspace is synced to. This value may be null only after Initialize Connection. In other cases, the system will validate that the given value is aligned with the head known to the system.
+
+    """
+    conflictResolution: WorkspaceConflictResolution = None
+    options: UpdateOptions = None
+    remoteCommitHash: str = None
+    workspaceHead: str = None    

@@ -1,4 +1,4 @@
-"""Module providing Core Capacity functions."""
+"""Module providing Core Git functions."""
 
 from collections.abc import Iterator
 from needlr import _http
@@ -11,8 +11,15 @@ from needlr.models.git import (
     GitProviderDetails,
     AzureDevOpsDetails,
     GitHubDetails,
-    GitConnection
+    GitConnection,
+    InitializeGitConnectionRequest,
+    WorkspaceConflictResolution,
+    UpdateOptions,
+    UpdateFromGitRequest,
+    InitializeGitConnectionResponse
 )
+
+import json
 from pydantic import BaseModel
 
 class _GitClient:
@@ -54,15 +61,11 @@ class _GitClient:
         - comment:  The comment that will be assigned for the commmit.
         - items: A list of items to be added if the mode is Selective:  Refer to (https://learn.microsoft.com/en-us/rest/api/fabric/core/git/commit-to-git?tabs=HTTP#itemidentifier)
 
-        Returns:
-            [Iterator]GitStatusResponse An iterator that yields Workspace objects representing each workspace.
-
         Reference:
         - [Git - Commit to Git](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/commit-to-git?tabs=HTTP)
         """
 
         # get the workspacehead string which is required for the body to the commit
-        # wsh = self.__getWorkspaceHead__(self, workspace_id)
         gitStatus = self.get_status(workspace_id)
         wsh = gitStatus.workspaceHead
 
@@ -211,5 +214,89 @@ class _GitClient:
             items_extract=lambda x: x["changes"],
         )
 
+        # convert the None to 'None' for the response due to the impedence mismatch between the API and the model
+        # None va 'None'
+        # TODO: Find a better way of handling this and document this needed.
+        for k,v in resp.body.items():
+            if v is None:
+                resp.body[k] = 'None'
+            if k == 'changes':
+                for change in v:
+                    for k2,v2 in change.items():
+                        if v2 is None:
+                            change[k2] = 'None'
+
+        #print( json.dumps(resp.body ))        
+
         return GitStatusResponse(**resp.body)
 
+    def initialize_connection(self, workspace_id: str, initializationStrategy: str ) -> InitializeGitConnectionResponse:
+        """
+       Initialize a connection for a workspace that is connected to Git.
+
+        This API supports long running operations (LRO).
+
+        This API should be called after a successful call to the Connect API. To complete a full sync of the workspace, use the Required Action operation to call the relevant sync operation, either Commit To Git or Update From Git.
+        
+        Parameters:
+        - workspace_id (str): The ID of the workspace for the commit to act on.
+        - initializationStrategy (InitializationStrategy): The strategy required for an initialization process when content exists on both the remote side and the workspace side.
+
+        Returns:
+            InitializeGitConnectionResponse:  Contains the initialize Git connection response data.
+
+        Reference:
+        - [Git - Commit to Git](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/initialize-connection?tabs=HTTP#initializegitconnectionresponse)
+        """
+
+        body = {"initializationStrategy": initializationStrategy}
+
+        resp = _http._post_http_long_running(
+            url=f"{self._base_url}workspaces/{workspace_id}/git/initializeConnection",
+            auth=self._auth,
+            item=InitializeGitConnectionRequest(**body),
+        )
+
+        # convert the None to 'None' for the response due to the impedence mismatch between the API and the model
+        # None va 'None'
+        # TODO: Find a better way of handling this and document this needed.
+        for k,v in resp.body.items():
+            if v is None:
+                resp.body[k] = 'None'
+
+
+        #print( json.dumps(resp.body ))
+
+        return InitializeGitConnectionResponse(**resp.body)
+    
+
+    def update_from_git(
+        self, workspace_id: str, conflictResolution: WorkspaceConflictResolution, options: UpdateOptions
+    ):
+        """
+        Updates the workspace with commits pushed to the connected branch.
+        This API supports long running operations (LRO).
+        The update only affects items in the workspace that were changed in those commits. 
+        If called after the Connect and Initialize Connection APIs, it will perform a full update of the entire workspace.
+
+        Parameters:
+        - workspace_id (str): The ID of the workspace for the commit to act on.
+        - conflictResolution(WorkspaceConflictResolution):  Conflict resolution to be used in the update from Git operation. If items are in conflict and a conflict resolution is not specified, the update operation will not start.
+        - options(UpdateOptions):  Options to be used in the update from Git operation
+
+        Reference:
+        - [Git - Update From Git](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/update-from-git?tabs=HTTP)
+        """
+
+        # get the workspacehead string which is required for the body to the commit
+        gitStatus = self.get_status(workspace_id)
+        wsh = gitStatus.workspaceHead
+        rch = gitStatus.remoteCommitHash
+
+        body = {"conflictResolution": conflictResolution, "options": options, "remoteCommitHash": rch, "workspaceHead": wsh}   
+
+        resp = _http._post_http_long_running(
+            url=f"{self._base_url}workspaces/{workspace_id}/git/updateFromGit",
+            auth=self._auth,
+            item=UpdateFromGitRequest(**body),
+        )    
