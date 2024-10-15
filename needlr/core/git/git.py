@@ -14,6 +14,7 @@ from needlr.models.git import (
     GitConnection
 )
 from pydantic import BaseModel
+import uuid
 
 class _GitClient:
     """
@@ -41,7 +42,7 @@ class _GitClient:
         self._base_url = base_url
 
     def commit_to_git(
-        self, workspace_id: str, mode: str, comment: str, items: list[ItemIdentifier]
+        self, workspace_id: uuid.UUID, mode: str, comment: str, items: list[ItemIdentifier]
     ):
         """
         Commits the changes made in the workspace to the connected remote branch.
@@ -49,7 +50,7 @@ class _GitClient:
         You can choose to commit all changes or only specific changed items. To sync the workspace for the first time, use this API after the Connect and Initialize Connection APIs.
 
         Parameters:
-        - workspace_id (str): The ID of the workspace for the commit to act on.
+        - workspace_id (uuid.UUID): The ID of the workspace for the commit to act on.
         - mode:  Modes for the Commit operation.  Refer to (https://learn.microsoft.com/en-us/rest/api/fabric/core/git/commit-to-git?tabs=HTTP#commitmode)
         - comment:  The comment that will be assigned for the commmit.
         - items: A list of items to be added if the mode is Selective:  Refer to (https://learn.microsoft.com/en-us/rest/api/fabric/core/git/commit-to-git?tabs=HTTP#itemidentifier)
@@ -84,7 +85,7 @@ class _GitClient:
             item=CommitToGitRequest(**body),
         )
 
-    def connect(self, workspace_id: str, gpd: GitProviderDetails):
+    def connect(self, workspace_id: uuid.UUID, gpd: GitProviderDetails):
         """
         Connect a specific workspace to a git repository and branch.
 
@@ -92,7 +93,7 @@ class _GitClient:
         To complete the sync, use the Initialize Connection operation and follow with either the Commit To Git or the Update From Git operation.
 
             Parameters:
-            - workspace_id (str): The ID of the workspace where the item will be created.
+            - workspace_id (uuid.UUID): The ID of the workspace where the item will be created.
             - GitProviderDetails( GitProviderDetails): The details of the Git provider to connect to.
 
             Reference:
@@ -124,12 +125,12 @@ class _GitClient:
             responseNotJson=True
         )
 
-    def disconnect(self, workspace_id: str):
+    def disconnect(self, workspace_id: uuid.UUID):
         """
         Disconnect a specific workspace from the Git repository and branch it is connected to.
 
             Parameters:
-            - workspace_id (str): The ID of the workspace to disconnect the repository from.
+            - workspace_id (uuid.UUID): The ID of the workspace to disconnect the repository from.
 
             Reference:
             - [Git - Connect](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/disconnect?tabs=HTTP)
@@ -140,12 +141,12 @@ class _GitClient:
             responseNotJson=True
         )
 
-    def get_connection(self, workspace_id: str) -> GitConnection:
+    def get_connection(self, workspace_id: uuid.UUID) -> GitConnection:
         """
         Returns git connection details for the specified workspace.
 
         Parameters:
-        - workspace_id (str): The ID of the workspace for the connection details.
+        - workspace_id (uuid.UUID): The ID of the workspace for the connection details.
 
         Returns:
             GitConnection -  A GitConnection object representing the connection details.
@@ -188,14 +189,14 @@ class _GitClient:
         gitConnection = GitConnection(**localBody)
         return gitConnection
 
-    def get_status(self, workspace_id: str) -> GitStatusResponse:
+    def get_status(self, workspace_id: uuid.UUID) -> GitStatusResponse:
         """
         Returns the Git status of items in the workspace, that can be committed to Git.
         This API supports long running operations (LRO).
         The status indicates changes to the item(s) since the last workspace and remote branch sync. If both locations were modified, the API flags a conflict.
 
         Parameters:
-        - workspace_id (str): The ID of the workspace where the item will be created.
+        - workspace_id (uuid.UUID): The ID of the workspace where the item will be created.
 
         Returns:
             [Iterator]GitStatusResponse An iterator that yields Workspace objects representing each workspace.
