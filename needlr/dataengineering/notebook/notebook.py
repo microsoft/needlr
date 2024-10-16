@@ -1,5 +1,3 @@
-"""Module providing Notebook functions."""
-
 from collections.abc import Iterator
 import uuid
 
@@ -22,9 +20,9 @@ class _NotebookClient():
     * Update Notebooks > update()
 
     """
-    def __init__(self, auth:_FabricAuthentication, base_url):
+    def __init__(self, auth:_FabricAuthentication, base_url:str):
         """
-        Initializes a Notebook object.
+        Initializes a Notebook client to support, get, update, delete operations on notebooks.
 
         Args:
             auth (_FabricAuthentication): An instance of the _FabricAuthentication class.
@@ -67,7 +65,7 @@ class _NotebookClient():
         """
         Get a Notebook
 
-        Returns properties of the specified notebook.
+        Returns the meta-data/properties of the specified notebook.
 
         Args:
             workspace_id (uuid.UUID): The ID of the workspace.
@@ -77,7 +75,7 @@ class _NotebookClient():
             Notebook: The retrieved notebook object.
 
         Reference:
-        [Microsoft Documentation](https://learn.microsoft.com/en-us/rest/api/fabric/notebook/items/get-notebook?tabs=HTTP)
+        [Get Notebook](https://learn.microsoft.com/en-us/rest/api/fabric/notebook/items/get-notebook?tabs=HTTP)
         """
         resp = _http._get_http(
             url = f"{self._base_url}workspaces/{workspace_id}/notebooks/{notebook_id}",
@@ -100,7 +98,7 @@ class _NotebookClient():
             Iterator[Notebook]: An iterator that yields Notebook objects.
 
         Reference:
-        - [List Warehouses](https://learn.microsoft.com/en-us/rest/api/fabric/notebook/items/list-notebooks?tabs=HTTP)
+        - [List Notebooks](https://learn.microsoft.com/en-us/rest/api/fabric/notebook/items/list-notebooks?tabs=HTTP)
         """
         resp = _http._get_http_paged(
             url = f"{self._base_url}workspaces/{workspace_id}/notebooks",
@@ -135,9 +133,9 @@ class _NotebookClient():
             raise ValueError("display_name or description must be provided")
 
         body = dict()
-        if display_name is not None:
+        if display_name:
             body["displayName"] = display_name
-        if description is not None:
+        if description:
             body["description"] = description
 
         resp = _http._patch_http(
@@ -168,4 +166,5 @@ class _NotebookClient():
             url = f"{self._base_url}workspaces/{workspace_id}/notebooks/{notebook_id}",
             auth=self._auth
         )
-        return resp    
+        return resp
+    
