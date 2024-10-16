@@ -5,7 +5,7 @@ with open('requirements.txt', encoding='utf-16') as f:
 
 setup(
     name='needlr',
-    version='0.1.2',
+    version='0.1.4',
     description='A package to help you work with Microsoft Fabric from Python',
     author='Tonio Lora',
     author_email='tonio.lora@outlook.com',
