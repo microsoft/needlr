@@ -1,5 +1,9 @@
 # Needlr
 
+![Textual splash image](https://raw.githubusercontent.com/Textualize/textual/main/imgs/textual.png)
+
+[![Discord](https://img.shields.io/discord/1026214085173461072)](https://discord.gg/Enf6Z3qhVr)
+
 Needlr is a Python SDK package for working with Microsoft Fabric. It provides a simple way to use the Microsoft Fabric APIs and includes several utilities for Workspace item management. Needlr is designed to be easy to use and flexible, allowing you to quickly build custom solutions for your business needs.
 
 ## Features
