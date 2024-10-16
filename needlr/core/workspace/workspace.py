@@ -12,7 +12,7 @@ from needlr.core.workspace.identity import _WorkspaceIdentityClient
 from needlr.models.workspace import Workspace
 from needlr.models.item import Item, ItemType
 #from needlr.models.capacity import Capacity
-from needlr.dataengineering.notebook.notebook import _NotebookClient
+from needlr.dataengineering.notebook import _NotebookClient
 
 class _WorkspaceClient():
     """
