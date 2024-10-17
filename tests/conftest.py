@@ -3,6 +3,7 @@ import random
 import pytest
 from needlr import auth, FabricClient
 from needlr.models.workspace import Workspace
+from needlr.models.notebook import Notebook
 import os
 
 # Loading an Environment Variable File with dotenv
@@ -32,6 +33,8 @@ def testParameters():
         'kqlDatabase_description': 'Test KQLDatabase Description',
         'datapipeline_name': 'testdatapipeline',
         'datapipeline_description': 'Test Datapipeline Description',
+        'notebook_name': 'Test API Created Notebook',
+        'notebook_description': 'This is an API Create Notebook from the REST API Test Harness.',
     }
 @pytest.fixture(scope='session')
 def fc() -> FabricClient:
@@ -44,3 +47,10 @@ def workspace_test(fc: FabricClient, testParameters) -> Workspace:
                              description=testParameters['description'])
     yield ws
     fc.workspace.delete(workspace_id=ws.id)
+
+@pytest.fixture(scope='session')
+def notebook_test(fc: FabricClient, workspace_test: Workspace, testParameters) -> Notebook:
+    nb = fc.notebook.create(display_name=testParameters['notebook_name'], 
+                            workspace_id=workspace_test.id, 
+                            description=testParameters['notebook_description'])
+    yield nb    
