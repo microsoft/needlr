@@ -14,6 +14,7 @@ from needlr.realtimeintelligence.eventstream import _EvenstreamClient
 from needlr.realtimeintelligence.kqldatabase import _KQLDatabaseClient
 from needlr.realtimeintelligence.kqlqueryset import _KQLQuerySetClient
 from needlr.datafactory.datapipeline import _DatapipelineClient
+from needlr.dataengineering.notebook import _NotebookClient
 
 class FabricClient():
     def __init__(self, auth, **kwargs):
@@ -35,3 +36,4 @@ class FabricClient():
         self.kqldatabase = _KQLDatabaseClient(auth=auth, base_url=self._base_url)
         self.kqlqueryset = _KQLQuerySetClient(auth=auth, base_url=self._base_url)
         self.datapipeline = _DatapipelineClient(auth=auth, base_url=self._base_url)
+        self.notebook = _NotebookClient(auth=auth, base_url=self._base_url)
