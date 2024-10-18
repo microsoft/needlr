@@ -7,7 +7,7 @@ from needlr.models.notebook import Notebook
 class TestNotebook:
 
     def test_notebook_ls(self, fc: FabricClient, workspace_test: Workspace, notebook_test: Notebook):
-        notebooks = fc .notebook.ls(workspace_id=workspace_test.id)
+        notebooks = fc.notebook.ls(workspace_id=workspace_test.id)
         assert len(list(notebooks)) > 0
 
 

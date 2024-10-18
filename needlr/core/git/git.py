@@ -3,6 +3,7 @@
 from collections.abc import Iterator
 from needlr import _http
 from needlr.auth.auth import _FabricAuthentication
+from needlr._http import FabricResponse
 from needlr.models.git import (
     GitStatusResponse,
     CommitToGitRequest,
@@ -50,7 +51,7 @@ class _GitClient:
 
     def commit_to_git(
         self, workspace_id: uuid.UUID, mode: str, comment: str, items: list[ItemIdentifier]
-    ):
+    ) -> FabricResponse:
         """
         Commits the changes made in the workspace to the connected remote branch.
         This API supports long running operations (LRO).
@@ -87,8 +88,9 @@ class _GitClient:
             auth=self._auth,
             item=CommitToGitRequest(**body),
         )
+        return resp
 
-    def connect(self, workspace_id: uuid.UUID, gpd: GitProviderDetails):
+    def connect(self, workspace_id: uuid.UUID, gpd: GitProviderDetails) -> FabricResponse:
         """
         Connect a specific workspace to a git repository and branch.
 
@@ -121,14 +123,15 @@ class _GitClient:
         else:
             raise TypeError("Unsupported type")
 
-        _http._post_http(
+        resp = _http._post_http(
             url = self._base_url+f"workspaces/{workspace_id}/git/connect",
             auth=self._auth,
             json=det.model_dump(),
             responseNotJson=True
         )
+        return resp
 
-    def disconnect(self, workspace_id: uuid.UUID):
+    def disconnect(self, workspace_id: uuid.UUID) -> FabricResponse:
         """
         Disconnect a specific workspace from the Git repository and branch it is connected to.
 
@@ -138,11 +141,12 @@ class _GitClient:
             Reference:
             - [Git - Connect](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/disconnect?tabs=HTTP)
         """
-        _http._post_http(
+        resp = _http._post_http(
             url = self._base_url+f"workspaces/{workspace_id}/git/disconnect",
             auth=self._auth,
             responseNotJson=True
         )
+        return resp
 
     def get_connection(self, workspace_id: uuid.UUID) -> GitConnection:
         """
@@ -273,7 +277,7 @@ class _GitClient:
 
     def update_from_git(
         self, workspace_id: str, conflictResolution: WorkspaceConflictResolution, options: UpdateOptions
-    ):
+    ) -> FabricResponse:
         """
         Updates the workspace with commits pushed to the connected branch.
         This API supports long running operations (LRO).
@@ -301,3 +305,4 @@ class _GitClient:
             auth=self._auth,
             item=UpdateFromGitRequest(**body),
         )    
+        return resp
