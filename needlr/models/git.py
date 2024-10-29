@@ -2,7 +2,7 @@
 
 from enum import Enum
 from pydantic import BaseModel
-from typing import List, Union
+from typing import List, Optional, Union
 from needlr.models.item import ItemType
 
 class GitProviderDetails(BaseModel):
@@ -366,4 +366,4 @@ class UpdateFromGitRequest(BaseModel):
     conflictResolution: WorkspaceConflictResolution = None
     options: UpdateOptions = None
     remoteCommitHash: str = None
-    workspaceHead: str = None    
+    workspaceHead: Optional[str] = None
