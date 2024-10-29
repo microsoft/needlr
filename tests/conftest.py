@@ -21,6 +21,13 @@ def testParameters():
         'warehouse_name': 'my_test_warehouse',
         'warehouse_description': 'Warehouse created by PyTest',
         'principal_id': os.getenv('PRINCIPAL_ID'),  # unique
+        'git_repository_name': os.getenv('GIT_REPOSITORY_NAME'),  # unique
+        'git_organization_name': os.getenv('GIT_ORGANIZATION_NAME'),  # unique
+        'git_project_name': os.getenv('GIT_PROJECT_NAME'),  # unique
+        'git_provider_type': os.getenv('GIT_PROVIDER_TYPE'),  # unique
+        'git_branch_name': os.getenv('GIT_BRANCH_NAME'),  # unique
+        'git_directory_name': os.getenv('GIT_DIRECTORY_NAME'),  # unique
+        'git_initialization_strategy': os.getenv('GIT_INITIALIZATION_STRATEGY'),  # unique
         'semanticmodel_name': 'SalesModel',
         'paginatedReport_name': 'SalesReportPaginatedReportNewName',
         'paginatedReport_description': 'SalesReportPaginatedReport Description',
