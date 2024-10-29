@@ -2,7 +2,9 @@
 
 from collections.abc import Iterator
 from needlr import _http
+from requests import Response
 from needlr.auth.auth import _FabricAuthentication
+from needlr._http import FabricResponse, FabricException
 from needlr.models.git import (
     GitStatusResponse,
     CommitToGitRequest,
@@ -50,7 +52,7 @@ class _GitClient:
 
     def commit_to_git(
         self, workspace_id: uuid.UUID, mode: str, comment: str, items: list[ItemIdentifier]
-    ):
+    ) -> FabricResponse:
         """
         Commits the changes made in the workspace to the connected remote branch.
         This API supports long running operations (LRO).
@@ -70,10 +72,10 @@ class _GitClient:
         gitStatus = self.get_status(workspace_id)
         wsh = gitStatus.workspaceHead
 
-        # TODO Maybe throw an exception is wsh has a null value
-
         # TODO Throw an exception for a bad mode?
         # if mode != CommitMode.All or CommitMode.Selective:
+
+        #if gitStatus.changes.count > 0:
 
         body = {"mode": mode, "workspaceHead": wsh, "comment": comment}
 
@@ -82,13 +84,19 @@ class _GitClient:
             if items:
                 body["items"] = items
 
+        # 10.21.24 Confered with Bret.  If an attempt to commit fails due to a lack of items needing to be committed,
+        # a 400 error is raised with the message -- "errorCode":"NoChangesToCommit","message":"There are no changes to commit."
+
         resp = _http._post_http_long_running(
             url=f"{self._base_url}workspaces/{workspace_id}/git/commitToGit",
             auth=self._auth,
             item=CommitToGitRequest(**body),
         )
+        return resp
+            
 
-    def connect(self, workspace_id: uuid.UUID, gpd: GitProviderDetails):
+
+    def connect(self, workspace_id: uuid.UUID, gpd: GitProviderDetails) -> FabricResponse:
         """
         Connect a specific workspace to a git repository and branch.
 
@@ -121,14 +129,15 @@ class _GitClient:
         else:
             raise TypeError("Unsupported type")
 
-        _http._post_http(
+        resp = _http._post_http(
             url = self._base_url+f"workspaces/{workspace_id}/git/connect",
             auth=self._auth,
             json=det.model_dump(),
             responseNotJson=True
         )
+        return resp
 
-    def disconnect(self, workspace_id: uuid.UUID):
+    def disconnect(self, workspace_id: uuid.UUID) -> FabricResponse:
         """
         Disconnect a specific workspace from the Git repository and branch it is connected to.
 
@@ -138,11 +147,12 @@ class _GitClient:
             Reference:
             - [Git - Connect](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/disconnect?tabs=HTTP)
         """
-        _http._post_http(
+        resp = _http._post_http(
             url = self._base_url+f"workspaces/{workspace_id}/git/disconnect",
             auth=self._auth,
             responseNotJson=True
         )
+        return resp
 
     def get_connection(self, workspace_id: uuid.UUID) -> GitConnection:
         """
@@ -272,8 +282,8 @@ class _GitClient:
     
 
     def update_from_git(
-        self, workspace_id: str, conflictResolution: WorkspaceConflictResolution, options: UpdateOptions
-    ):
+        self, workspace_id: uuid.UUID, conflictResolution: WorkspaceConflictResolution, options: UpdateOptions
+    ) -> FabricResponse:
         """
         Updates the workspace with commits pushed to the connected branch.
         This API supports long running operations (LRO).
@@ -294,10 +304,15 @@ class _GitClient:
         wsh = gitStatus.workspaceHead
         rch = gitStatus.remoteCommitHash
 
-        body = {"conflictResolution": conflictResolution, "options": options, "remoteCommitHash": rch, "workspaceHead": wsh}   
+        body = {"conflictResolution": conflictResolution, "options": options, "remoteCommitHash": rch }
+
+        if wsh != 'None': # only add the items if the mode if not Null
+            body["workspaceHead"] = wsh
+            
 
         resp = _http._post_http_long_running(
             url=f"{self._base_url}workspaces/{workspace_id}/git/updateFromGit",
             auth=self._auth,
             item=UpdateFromGitRequest(**body),
         )    
+        return resp
