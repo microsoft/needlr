@@ -45,3 +45,6 @@ dependencies = [
     "urllib3==2.2.2",
     "ruff==0.7.1"
 ]
+
+[tool.setuptools]
+py-modules = []
