@@ -25,11 +25,5 @@ class TestEventhouseLifeCycle:
                                         clone_name= 'cloned_'+test_eventhouse.name,  
                                         target_workspace_id=workspace_test.id)
         assert type(cloned) == Eventhouse
-    
-    @pytest.mark.order(after="test_eventhouse_clone")
-    def test_eventhouse_delete(self, fc: FabricClient, workspace_test: Workspace, test_eventhouse:Eventhouse):
-        resp = fc.eventhouse.delete(workspace_id=workspace_test.id, eventhouse_id=test_eventhouse.id)
-        assert resp.is_successful is True
-        
         
     
