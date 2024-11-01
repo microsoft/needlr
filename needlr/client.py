@@ -1,3 +1,6 @@
+
+from needlr.core.workspace.workspace import _WorkspaceClient
+from needlr.admin.workspace.adminworkspace import _AdminWorkspaceClient
 from needlr.admin.tenant import _TenantClient
 from needlr.core.capacity import _CapacityClient
 from needlr.dataengineering.notebook import _NotebookClient
@@ -14,9 +17,6 @@ from needlr.realtimeintelligence.eventhouse import _EventhouseClient
 from needlr.realtimeintelligence.eventstream import _EvenstreamClient
 from needlr.realtimeintelligence.kqldatabase import _KQLDatabaseClient
 from needlr.realtimeintelligence.kqlqueryset import _KQLQuerySetClient
-
-from .admin.workspace.adminworkspace import _AdminWorkspaceClient
-from .core.workspace.workspace import _WorkspaceClient
 
 
 class FabricClient():
