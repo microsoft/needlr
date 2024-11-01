@@ -162,11 +162,35 @@ class _DatapipelineClient():
         if description is not None:
             body["description"] = description
 
-        resp = _http._post_http(
+        resp = _http._patch_http(
             url = f"{self._base_url}workspaces/{workspace_id}/dataPipelines/{datapipeline_id}",
             auth=self._auth,
             item=Item(**body)
         )
         return resp
 
+    # Complete Implementation when Methods to get Pipeline Defintion is implemented
+    def clone(self, source_workspace_id:uuid.UUID, datapipeline_id:uuid.UUID, clone_name:str, target_workspace_id:uuid.UUID) -> Datapipeline:
+        """
+        Clone Datapipeline
 
+        This method clones a Datapipeline from one workspace to another.
+
+        Args:
+            source_workspace_id (uuid.UUID): The ID of the source workspace.
+            datapipeline_id (uuid.UUID): The ID of the Datapipeline to clone.
+            clone_name (str): The name of the cloned Datapipeline.
+            target_workspace_id (uuid.UUID): The ID of the target workspace.
+
+        Returns:
+            Datapipeline: The cloned Datapipeline.
+
+        Reference:
+            [Clone Datapipeline](https://learn.microsoft.com/en-us/rest/api/fabric/datapipeline/items/clone-data-pipeline?tabs=HTTP)
+        """
+        #### COMPLETE IMPLEMENTATION WHEN METHODS TO GET PIPELINE DEFINITION IS IMPLEMENTED
+        source_datapipeline = self.get(source_workspace_id, datapipeline_id)
+        if target_workspace_id is None:
+            target_workspace_id = source_workspace_id
+        cloned_datapipeline =  self.create(target_workspace_id, display_name=clone_name, description=source_datapipeline.description)
+        return cloned_datapipeline
