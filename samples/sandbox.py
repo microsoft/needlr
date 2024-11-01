@@ -8,6 +8,19 @@ import pickle
 fr = FabricClient(auth=auth.FabricInteractiveAuth(scopes=['https://api.fabric.microsoft.com/.default'])
                 )
 
+dev_ws_id = "63549f4b-bf02-430e-8773-0c9dbbfabf9d"
+a = fr.report.ls(workspace_id=dev_ws_id)
+for i in a:
+    print(i)
+    a2 = fr.report.get(workspace_id=dev_ws_id,
+                       report_id=str(i.id), include_defintion=True)
+    a30 = base64.b64decode(a2.definition['parts'][0]['payload'])
+    # a31 = base64.b64decode(a2.definition['parts'][1]['payload'])
+    # a32 = base64.b64decode(a2.definition['parts'][2]['payload'])
+    # a33 = base64.b64decode(a2.definition['parts'][3]['payload'])
+    pickle.dump(a2.definition, open('../tests/powerbi/report_definition.pkl', 'wb'))
+    print("Stop here")
+
 
 with open('../tests/powerbi/semantic_model_definition.pkl', 'rb') as sample_semantic_model_definition:
     definition = pickle.load(sample_semantic_model_definition)

@@ -42,7 +42,7 @@ class _WorkspaceIdentityClient():
         Reference:
         - [Add Workspace Role Assignment](https://learn.microsoft.com/en-us/rest/api/fabric/core/workspaces/provision-identity?tabs=HTTP)
         """
-        resp = _http._post_http(
+        resp = _http._post_http_long_running(
             url = self._base_url+f"workspaces/{workspace_id}/provisionIdentity",
             auth=self._auth,
             responseNotJson=True
@@ -62,7 +62,7 @@ class _WorkspaceIdentityClient():
         Reference:
         - [Add Workspace Role Assignment](https://learn.microsoft.com/en-us/rest/api/fabric/core/workspaces/deprovision-identity?tabs=HTTP)
         """
-        resp = _http._post_http(
+        resp = _http._post_http_long_running(
             url = self._base_url+f"workspaces/{workspace_id}/deprovisionIdentity",
             auth=self._auth,
             responseNotJson=True

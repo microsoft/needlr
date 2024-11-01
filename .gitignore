@@ -405,6 +405,8 @@ FodyWeavers.xsd
 .pytest_cache/
 .needler/
 .needler/token.cache.bin
+.needlr/
+.needlr/token.cache.bin
 .vscode
 .pypirc
 .needler/token.cache.bin
@@ -412,3 +414,6 @@ FodyWeavers.xsd
 .env
 build
 dist
+
+# Virtual Environment
+venv/
