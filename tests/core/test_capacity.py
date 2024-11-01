@@ -9,5 +9,4 @@ class TestCapacityLifeCycle:
 
     def test_workspace_capacity_ls(self, fc: FabricClient, workspace_test: Workspace):
         capacities = fc.capacity.list_capacities()
-        myvar = list(capacities)
         assert len(list(capacities)) >= 0

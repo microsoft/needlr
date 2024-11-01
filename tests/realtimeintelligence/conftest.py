@@ -20,6 +20,7 @@ def test_eventhouse(fc: FabricClient, workspace_test: Workspace, testParameters:
                               display_name=testParameters['eventhouse_name'], 
                               description=testParameters['eventhouse_description'])
     yield eh
+    fc.eventhouse.delete(workspace_id=workspace_test.id, eventhouse_id=eh.id)
 
 @pytest.fixture(scope='session')
 def test_kqlDatabase(fc: FabricClient, workspace_test: Workspace, testParameters: dict[str, str], test_eventhouse:Eventhouse) -> Generator[KQLDatabase, None, None]:
