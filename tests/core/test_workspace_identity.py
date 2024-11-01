@@ -7,5 +7,5 @@ class TestWorkspaceIdentity:
         assert res.is_successful
 
     def test_workspace_deprovision_identity(self, fc: FabricClient, workspace_test: Workspace):
-        res = fc.workspace.identity.provision_identity(workspace_id=workspace_test.id)
+        res = fc.workspace.identity.deprovision_identity(workspace_id=workspace_test.id)
         assert res.is_successful        
