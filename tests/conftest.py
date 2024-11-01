@@ -1,9 +1,9 @@
 from dotenv import load_dotenv
 import random
 import pytest
+from typing import Generator
 from needlr import auth, FabricClient
 from needlr.models.workspace import Workspace
-from needlr.models.notebook import Notebook
 import os
 
 # Loading an Environment Variable File with dotenv
@@ -48,16 +48,9 @@ def fc() -> FabricClient:
     return FabricClient(auth=auth.FabricInteractiveAuth(scopes=['https://api.fabric.microsoft.com/.default']))
 
 @pytest.fixture(scope='session')
-def workspace_test(fc: FabricClient, testParameters) -> Workspace:
+def workspace_test(fc: FabricClient, testParameters) -> Generator[Workspace, None, None]:
     ws = fc.workspace.create(display_name=testParameters['workspace_name'],
                              capacity_id=testParameters['capacity_id'], 
                              description=testParameters['description'])
     yield ws
     fc.workspace.delete(workspace_id=ws.id)
-
-@pytest.fixture(scope='session')
-def notebook_test(fc: FabricClient, workspace_test: Workspace, testParameters) -> Notebook:
-    nb = fc.notebook.create(display_name=testParameters['notebook_name'], 
-                            workspace_id=workspace_test.id, 
-                            description=testParameters['notebook_description'])
-    yield nb    
