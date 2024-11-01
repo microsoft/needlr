@@ -1,3 +1,6 @@
+
+from needlr.core.workspace.workspace import _WorkspaceClient
+from needlr.admin.workspace.adminworkspace import _AdminWorkspaceClient
 from needlr.admin.tenant import _TenantClient
 from needlr.core.capacity import _CapacityClient
 from needlr.dataengineering.notebook import _NotebookClient
@@ -15,8 +18,7 @@ from needlr.realtimeintelligence.eventstream import _EvenstreamClient
 from needlr.realtimeintelligence.kqldatabase import _KQLDatabaseClient
 from needlr.realtimeintelligence.kqlqueryset import _KQLQuerySetClient
 
-from .admin.workspace.adminworkspace import _AdminWorkspaceClient
-from .core.workspace.workspace import _WorkspaceClient
+
 
 
 class FabricClient():
@@ -25,7 +27,7 @@ class FabricClient():
         self._base_url = kwargs.get("base_url") if "base_url" in kwargs else "https://api.fabric.microsoft.com/v1/"
         self.workspace = _WorkspaceClient(auth=auth, base_url=self._base_url)
         self.capacity = _CapacityClient(auth=auth, base_url=self._base_url)
-        self.admin_workspace = _AdminWorkspaceClient(auth=auth, base_url=self._base_url)
+        self.admin_workspaceclient = _AdminWorkspaceClient(auth=auth, base_url=self._base_url)
         self.warehouse = _WarehouseClient(auth=auth, base_url=self._base_url)
         self.mirroredwarehouse = _MirroredWarehouseClient(auth=auth, base_url=self._base_url)
         self.semanticmodel = _SemanticModelClient(auth=auth, base_url=self._base_url)
