@@ -11,7 +11,7 @@ from needlr.core.workspace.role import _WorkspaceRoleClient
 from needlr.core.workspace.identity import _WorkspaceIdentityClient
 from needlr.models.workspace import Workspace
 from needlr.models.item import Item, ItemType
-from needlr.models.capacity import Capacity
+
 
 class _WorkspaceClient():
     """
@@ -51,7 +51,6 @@ class _WorkspaceClient():
         self.item = _ItemClient()
         self.role = _WorkspaceRoleClient(auth, base_url)
         self.identity = _WorkspaceIdentityClient(auth, base_url)
-        #self.capacity = _CapacityClient( auth, base_url )
         self.git = _GitClient( auth, base_url )
 
     def capacity_assign(self, workspace_id:str, capacity_id:str) -> FabricResponse:
