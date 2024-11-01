@@ -1,21 +1,23 @@
-from .core.workspace.workspace import _WorkspaceClient
-from .admin.workspace.adminworkspace import _AdminWorkspaceClient
-from needlr.datawarehouse.warehouse.mirroredwarehouse import _MirroredWarehouseClient
-from needlr.datawarehouse.warehouse.warehouse import _WarehouseClient
-from needlr.powerbi.semanticmodel import _SemanticModelClient
+from needlr.admin.tenant import _TenantClient
+from needlr.core.capacity import _CapacityClient
+from needlr.dataengineering.notebook import _NotebookClient
+from needlr.dataengineering.sqlendpoints import _SQLEndpointClient
+from needlr.datafactory.datapipeline import _DatapipelineClient
+from needlr.datawarehouse.mirroredwarehouse import _MirroredWarehouseClient
+from needlr.datawarehouse.warehouse import _WarehouseClient
 from needlr.powerbi.dashboard import _DashboardClient
 from needlr.powerbi.datamart import _DatamartClient
 from needlr.powerbi.paginatedreport import _PaginatedReportClient
-from needlr.dataengineering.sqlendpoints import _SQLEndpointClient
-from needlr.powerbi.report import _ReportClient 
-from needlr.core.capacity import _CapacityClient
+from needlr.powerbi.report import _ReportClient
+from needlr.powerbi.semanticmodel import _SemanticModelClient
 from needlr.realtimeintelligence.eventhouse import _EventhouseClient
 from needlr.realtimeintelligence.eventstream import _EvenstreamClient
 from needlr.realtimeintelligence.kqldatabase import _KQLDatabaseClient
 from needlr.realtimeintelligence.kqlqueryset import _KQLQuerySetClient
-from needlr.datafactory.datapipeline import _DatapipelineClient
-from needlr.dataengineering.notebook import _NotebookClient
-from needlr.admin.tenant import _TenantClient
+
+from .admin.workspace.adminworkspace import _AdminWorkspaceClient
+from .core.workspace.workspace import _WorkspaceClient
+
 
 class FabricClient():
     def __init__(self, auth, **kwargs):
