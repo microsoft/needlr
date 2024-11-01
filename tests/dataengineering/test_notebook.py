@@ -6,8 +6,8 @@ from needlr.models.notebook import Notebook
 
 class TestNotebook:
 
-    def test_notebook_ls(self, fc: FabricClient, workspace_test: Workspace):
-
+    def test_notebook_ls(self, fc: FabricClient, workspace_test: Workspace, notebook_test:Notebook):
+        int_nb = notebook_test
         notebooks = fc.notebook.ls(workspace_id=workspace_test.id)
         assert len(list(notebooks)) > 0
 
