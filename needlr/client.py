@@ -19,13 +19,15 @@ from needlr.realtimeintelligence.kqldatabase import _KQLDatabaseClient
 from needlr.realtimeintelligence.kqlqueryset import _KQLQuerySetClient
 
 
+
+
 class FabricClient():
     def __init__(self, auth, **kwargs):
         self._auth = auth
         self._base_url = kwargs.get("base_url") if "base_url" in kwargs else "https://api.fabric.microsoft.com/v1/"
         self.workspace = _WorkspaceClient(auth=auth, base_url=self._base_url)
         self.capacity = _CapacityClient(auth=auth, base_url=self._base_url)
-        self.admin_workspace = _AdminWorkspaceClient(auth=auth, base_url=self._base_url)
+        self.admin_workspaceclient = _AdminWorkspaceClient(auth=auth, base_url=self._base_url)
         self.warehouse = _WarehouseClient(auth=auth, base_url=self._base_url)
         self.mirroredwarehouse = _MirroredWarehouseClient(auth=auth, base_url=self._base_url)
         self.semanticmodel = _SemanticModelClient(auth=auth, base_url=self._base_url)
