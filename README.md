@@ -15,7 +15,7 @@ Needlr is a Python SDK package for working with Microsoft Fabric. It provides a 
 
 ## Local Environment Setup for Developers
 
-1. [Install uv to your local machine](https://docs.astral.sh/uv/getting-started/installation/)
+1. [Install uv to your local machine](https://docs.astral.sh/uv/getting-started/installation/).
 2. Post-installation, either restart your system or run the commands to set the $Path variable.
 3. To test that `uv` works, in an IDE of your choice, open "Terminal" and select *Command Prompt*.
 4. In that *Command Prompt*, type in `uv` and press *Enter*.
