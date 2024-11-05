@@ -20,11 +20,17 @@ Needlr is a Python SDK package for working with Microsoft Fabric. It provides a 
 3. To test that `uv` works, in an IDE of your choice, open "Terminal" and select *Command Prompt*.
 4. In that *Command Prompt*, type in `uv` and press *Enter*.
 5. Now that `uv` has been installed and set up, create a virtual environment by running the following command:
-```uv venv venv```.
+```bash
+uv venv venv
+```
 6. Then, activate the virtual environment:
-```venv\Scripts\activate```
+```bash
+venv\Scripts\activate
+```
 7. After activating the virtual environment, install the required package dependencies:
-```uv pip install -r pyproject.toml```
+```python
+uv pip install -r pyproject.toml
+```
 8. When all dependencies have been installed to the virtual environment, the virtual environment setup is complete.
 
 ## Installation
