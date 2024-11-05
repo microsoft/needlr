@@ -16,7 +16,6 @@ needlr package
    needlr.powerbi
    needlr.realtimeintelligence
    needlr.utils
-   needlr.client
    
 --------------------
 
