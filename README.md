@@ -13,6 +13,20 @@ Needlr is a Python SDK package for working with Microsoft Fabric. It provides a 
 - Out-of-the-box examples to help you get started
 - Complete Pytests Test for all modules
 
+## Local Environment Setup for Developers
+
+1. [Install uv to your local machine](https://docs.astral.sh/uv/getting-started/installation/)
+2. Post-installation, either restart your system or run the commands to set the $Path variable.
+3. To test that `uv` works, in an IDE of your choice, open "Terminal" and select *Command Prompt*.
+4. In that *Command Prompt*, type in `uv` and press *Enter*.
+5. Now that `uv` has been installed and set up, create a virtual environment by running the following command:
+`uv venv venv`.
+6. Then, activate the virtual environment:
+`venv\Scripts\activate`
+7. After activating the virtual environment, install the required package dependencies:
+`uv pip install -r pyproject.toml`
+8. When all dependencies have been installed to the virtual environment, the virtual environment setup is complete.
+
 ## Installation
 
 To install Needlr, use pip:
