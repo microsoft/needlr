@@ -1,9 +1,10 @@
 # Needlr
 
-[![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
 [![PyPI](https://img.shields.io/pypi/v/needlr)](https://pypi.org/project/needlr/)
 [![PyPI downloads](https://img.shields.io/pypi/dm/needlr)](https://pypi.org/project/needlr/)
 ![Python version](https://img.shields.io/badge/python-3.8+-important)
+[![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
 ![Textual splash image](https://raw.githubusercontent.com/Textualize/textual/main/imgs/textual.png)
 
