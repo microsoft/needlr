@@ -79,15 +79,17 @@ print(wh)
 
 ## Documentation
 
-Full documentation is available at [http://needlr.co].
+[needlr documentation](http://needlr.co)
+
+[Microsoft's Fabric REST API documentation](https://learn.microsoft.com/en-us/rest/api/fabric/articles/)
 
 ## Contributing
 
-Contributions are welcome! Please read the CONTRIBUTING.md file for guidelines.
+Contributions are welcome! Please read the [CONTRIBUTING.md]() file for guidelines.
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License. See the [LICENSE](https://github.com/microsoft/needlr/blob/main/LICENSE) file for details.
 
 ## Acknowledgements
 
@@ -97,4 +99,4 @@ Special thanks to the open-source community
 
 ## Contact
 
-For questions or feedback, please reach out to [tonio.lora@outlook.com].
+For questions or feedback, please reach out to [Tonio Lora](tonio.lora@outlook.com).
