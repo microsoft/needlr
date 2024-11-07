@@ -1,10 +1,11 @@
 """Module providing a Core Workspace and Role Models."""
 
 from enum import Enum
-import uuid, json
+import uuid
+import json
 from typing import Literal
 from pydantic import BaseModel, Field, AliasChoices
-from needlr.models.item import Item, ItemType
+from needlr.models.item import Item
 
 
 class WorkspaceRole(str, Enum):

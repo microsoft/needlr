@@ -1,8 +1,10 @@
 # Needlr
 
-![Textual splash image](https://raw.githubusercontent.com/Textualize/textual/main/imgs/textual.png)
-
-[![Discord](https://img.shields.io/discord/1026214085173461072)](https://discord.gg/Enf6Z3qhVr)
+[![PyPI](https://img.shields.io/pypi/v/needlr)](https://pypi.org/project/needlr/)
+[![PyPI downloads](https://img.shields.io/pypi/dm/needlr)](https://pypi.org/project/needlr/)
+![Python version](https://img.shields.io/badge/python-3.8+-important)
+[![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
 Needlr is a Python SDK package for working with Microsoft Fabric. It provides a simple way to use the Microsoft Fabric APIs and includes several utilities for Workspace item management. Needlr is designed to be easy to use and flexible, allowing you to quickly build custom solutions for your business needs.
 
@@ -77,15 +79,17 @@ print(wh)
 
 ## Documentation
 
-Full documentation is available at [http://needlr.co].
+[needlr documentation](http://needlr.co)
+
+[Microsoft's Fabric REST API documentation](https://learn.microsoft.com/en-us/rest/api/fabric/articles/)
 
 ## Contributing
 
-Contributions are welcome! Please read the CONTRIBUTING.md file for guidelines.
+Contributions are welcome! Please read the [CONTRIBUTING.md]() file for guidelines.
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License. See the [LICENSE](https://github.com/microsoft/needlr/blob/main/LICENSE) file for details.
 
 ## Acknowledgements
 
@@ -95,4 +99,4 @@ Special thanks to the open-source community
 
 ## Contact
 
-For questions or feedback, please reach out to [tonio.lora@outlook.com].
+For questions or feedback, please reach out to [Tonio Lora](tonio.lora@outlook.com).

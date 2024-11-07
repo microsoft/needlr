@@ -1,7 +1,6 @@
 """Module providing Notebook Models."""
 
 from enum import Enum
-from pydantic import BaseModel
 from needlr.models.item import ItemType, Item
 from pydantic import AliasChoices, BaseModel, Field
 

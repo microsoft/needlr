@@ -5,8 +5,7 @@ import uuid
 from pydantic import BaseModel
 from needlr.models.git import AzureDevOpsDetails, GitHubDetails
 from needlr.models.workspace import WorkspaceRole, WorkspaceType, PrincipalType
-#from needlr.models.adminworkspacedefs import ServicePrincipalProfileDetails
-from typing import List, Union, Optional
+from typing import List, Union
 
 class WorkspaceState(str, Enum):
     """
@@ -16,16 +15,6 @@ class WorkspaceState(str, Enum):
     """
     Active = 'Active'
     Deleted = 'Deleted'
-
-class WorkspaceType(str, Enum):
-    """
-    A workspace type. Additional workspace types may be added over time.
-
-    [WorkspaceType](https://learn.microsoft.com/en-us/rest/api/fabric/admin/workspaces/get-workspace?tabs=HTTP#workspacetype)
-    """
-    AdminWorkspace = 'AdminWorkspace'
-    Personal = 'Personal'
-    Workspace = 'Workspace'
 
 class Workspace(BaseModel):
     """
