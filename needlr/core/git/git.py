@@ -1,10 +1,8 @@
 """Module providing Core Git functions."""
 
-from collections.abc import Iterator
 from needlr import _http
-from requests import Response
 from needlr.auth.auth import _FabricAuthentication
-from needlr._http import FabricResponse, FabricException
+from needlr._http import FabricResponse
 from needlr.models.git import (
     GitStatusResponse,
     CommitToGitRequest,
@@ -21,7 +19,6 @@ from needlr.models.git import (
     InitializeGitConnectionResponse
 )
 
-import json
 from pydantic import BaseModel
 import uuid
 
