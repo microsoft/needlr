@@ -10,6 +10,16 @@ import pickle
 fr = FabricClient(auth=auth.FabricInteractiveAuth(scopes=['https://api.fabric.microsoft.com/.default'])
                 )
 
+wsl = fr.workspace.ls()
+for w in wsl:
+    print(w.name,'|', w.id)
+
+#ws = fr.workspace.create(display_name='TONIO_WS_TEST_2', capacity_id='9828D8D8-27A1-4CC2-A227-F166FE35ABB8', description='test')
+#wh = fr.warehouse.create(display_name='wh1', workspace_id=ws.id, description='wh1')
+aa = fr.warehouse.check_v_order(workspace_id="31de176d-3585-475c-9ff3-7c7f5c50acc6", warehouse_id="4403db57-bf90-4ed5-9013-d89ff05eaad6")
+bb =aa
+cc= fr.warehouse.disable_v_order(workspace_id="31de176d-3585-475c-9ff3-7c7f5c50acc6", warehouse_id="4403db57-bf90-4ed5-9013-d89ff05eaad6")
+dd= cc
 dev_ws_id = "a7cf76c2-aa3e-4741-ac82-ed0a33a4d3f2"
 
 a = fr.datapipeline.ls(workspace_id=dev_ws_id)
