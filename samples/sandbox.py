@@ -5,8 +5,30 @@ from needlr.models.item import Item, ItemType
 from needlr.core.workspace.role import GroupPrincipal, WorkspaceRole
 import pickle
 
+
+
 fr = FabricClient(auth=auth.FabricInteractiveAuth(scopes=['https://api.fabric.microsoft.com/.default'])
                 )
+
+dev_ws_id = "a7cf76c2-aa3e-4741-ac82-ed0a33a4d3f2"
+
+a = fr.datapipeline.ls(workspace_id=dev_ws_id)
+for d in a:
+    print(d)
+    par =   { 
+                "executionData": { 
+                    "parameters": {
+                    "param_waitsec": "10" 
+                    } 
+                } 
+            }
+    r = fr.datapipeline.run_on_demand_job(workspace_id=dev_ws_id, datapipeline_id=d.id,
+                                          parameters=par)
+    jiid = r.next_location.split( '/')[-1]
+    r2 = fr.datapipeline.get_item_job_instance(workspace_id=dev_ws_id, datapipeline_id=d.id, job_instance_id=jiid)
+    a2 = fr.datapipeline.get(workspace_id=dev_ws_id, datapipeline_id=d.id, include_defintion=True)
+    pickle.dump(a2.definition, open('../tests/datafactory/datapipeline_definition.pkl', 'wb'))
+    print("Stop here")
 
 dev_ws_id = "63549f4b-bf02-430e-8773-0c9dbbfabf9d"
 a = fr.report.ls(workspace_id=dev_ws_id)
