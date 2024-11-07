@@ -81,7 +81,6 @@ class _NotebookClient():
             url = f"{self._base_url}workspaces/{workspace_id}/notebooks/{notebook_id}",
             auth=self._auth
         )
-        notebook = Notebook(**resp.body)
         return Notebook(**resp.body)    
     
     def ls(self, workspace_id:uuid.UUID) -> Iterator[Notebook]:

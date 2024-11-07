@@ -2,7 +2,6 @@
 
 from collections.abc import Iterator
 from needlr.core.item.item import _ItemClient
-from needlr.core.capacity.capacity import _CapacityClient
 from needlr.core.git.git import _GitClient
 from needlr._http import FabricResponse
 from needlr import _http
