@@ -40,6 +40,7 @@ for d in a:
     pickle.dump(a2.definition, open('../tests/datafactory/datapipeline_definition.pkl', 'wb'))
     print("Stop here")
 
+dev_ws_id = "63549f4b-bf02-430e-8773-0c9dbbfabf9d"
 a = fr.report.ls(workspace_id=dev_ws_id)
 for i in a:
     print(i)
