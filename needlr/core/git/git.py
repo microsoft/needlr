@@ -25,7 +25,7 @@ import json
 from pydantic import BaseModel
 import uuid
 
-class _GitClient:
+class _GitClient():
     """
 
     [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/git)

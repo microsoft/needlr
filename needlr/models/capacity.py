@@ -8,7 +8,7 @@ from pydantic import BaseModel
 
 class CapacityState(str, Enum):
     """
-    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/capacities/list-capacities?tabs=HTTP#capacitystate)
+    [CapacityState](https://learn.microsoft.com/en-us/rest/api/fabric/core/capacities/list-capacities?tabs=HTTP#capacitystate)
     """
     Active = 'Active'
     Inactive = 'Inactive'
@@ -16,7 +16,7 @@ class CapacityState(str, Enum):
 class Capacity(BaseModel):
     """
 
-    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/capacities/list-capacities?tabs=HTTP#capacity)
+    [Capacity](https://learn.microsoft.com/en-us/rest/api/fabric/core/capacities/list-capacities?tabs=HTTP#capacity)
 
     displayName - The capacity display name.
     id - The capacity ID.
