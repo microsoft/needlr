@@ -3,6 +3,7 @@ from needlr.core.workspace.workspace import _WorkspaceClient
 from needlr.admin.workspace.adminworkspace import _AdminWorkspaceClient
 from needlr.admin.tenant import _TenantClient
 from needlr.core.capacity import _CapacityClient
+from needlr.core.gateway import _GatewayClient
 from needlr.dataengineering.notebook import _NotebookClient
 from needlr.dataengineering.sqlendpoints import _SQLEndpointClient
 from needlr.datafactory.datapipeline import _DatapipelineClient
@@ -43,3 +44,4 @@ class FabricClient():
         self.datapipeline = _DatapipelineClient(auth=auth, base_url=self._base_url)
         self.notebook = _NotebookClient(auth=auth, base_url=self._base_url)
         self.tenant = _TenantClient(auth=auth, base_url=self._base_url)
+        self.gateway = _GatewayClient(auth=auth, base_url=self._base_url)

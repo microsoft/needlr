@@ -9,7 +9,7 @@ class GitProviderDetails(BaseModel):
     """
     The Git provider details.
     
-    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/connect?tabs=HTTP#gitproviderdetails)
+    [GitProviderDetails](https://learn.microsoft.com/en-us/rest/api/fabric/core/git/connect?tabs=HTTP#gitproviderdetails)
 
     azureDevOpsDetails - Azure DevOps provider details.
     gitHubDetails - GitHub provider details.
