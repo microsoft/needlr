@@ -3,7 +3,8 @@
 from enum import Enum
 import uuid
 from pydantic import BaseModel, AliasChoices, Field
-from typing import List
+from typing import List, Union
+
 
 class GatewayType(str, Enum):
     """
@@ -23,6 +24,7 @@ class Gateway(BaseModel):
     A list of gateways returned.
     
     """
+    pass
 
 class PublicKey(BaseModel):
     """
@@ -101,10 +103,10 @@ class VirtualNetworkAzureResource(BaseModel):
     virtualNetworkName - string - The name of the virtual network
     """
 
-    id: uuid.UUID = Field(validation_alias=AliasChoices('id'))
-    publicKey: PublicKey = None
-    type: str = None
-    version: str = None
+    resourceGroupName: str = None
+    subnetName: str = None
+    subscriptionId: str = None
+    virtualNetworkName: str = None
 
 class VirtualNetworkGateway(Gateway):
     """
@@ -136,7 +138,7 @@ class ListGatewaysResponse(BaseModel):
 
     continuationToken - string - The token for the next result set batch. If there are no more records, it's removed from the response.
     continuationUri -string - The URI of the next result set batch. If there are no more records, it's removed from the response.
-    value - A list of gateways returned.
+    gateway - A list of gateways returned.
         Gateway[]:
         OnPremisesGateway[]
         OnPremisesGatewayPersonal[]
@@ -146,9 +148,27 @@ class ListGatewaysResponse(BaseModel):
 
     continuationToken: str = None
     continuationUri: str = None
-    value: List[Gateway] = None 
+    value: List[Union[VirtualNetworkGateway, OnPremisesGatewayPersonal, OnPremisesGateway ]] = None
 
+class CreateVirtualNetworkGatewayRequest(BaseModel):
+    """
 
-    
+    [CreateVirtualNetworkGatewayRequest](https://learn.microsoft.com/en-us/rest/api/fabric/core/gateways/create-gateway?tabs=HTTP#createvirtualnetworkgatewayrequest)
+
+    capacityId - string - The object ID of the Fabric license capacity.
+    displayName -string - The display name of the virtual network gateway. Maximum length is 200 characters.
+    inactivityMinutesBeforeSleep - integer - The minutes of inactivity before the virtual network gateway goes into auto-sleep. Must be one of the following values: 30, 60, 90, 120, 150, 240, 360, 480, 720, 1440.
+    numberOfMemberGateways - integer - The number of member gateways. A number between 1 and 7.
+    type - string - The type of the gateway. Must be VirtualNetwork. 
+    virtualNetworkAzureResource - VirtualNetworkAzureResource - The Azure virtual network resource.
+
+    """
+
+    capacityId: str = None
+    displayName: str = Field(validation_alias=AliasChoices('displayName'))
+    inactivityMinutesBeforeSleep: int = None
+    numberOfMemberGateways: int = None
+    type: str = None
+    virtualNetworkAzureResource: VirtualNetworkAzureResource = None    
 
 
