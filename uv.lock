@@ -12,7 +12,7 @@ babel==2.15.0
     # via
     #   needlr (pyproject.toml)
     #   sphinx
-certifi==2024.6.2
+certifi==2024.7.4
     # via
     #   needlr (pyproject.toml)
     #   requests
@@ -29,7 +29,7 @@ colorama==0.4.6
     #   needlr (pyproject.toml)
     #   pytest
     #   sphinx
-cryptography==42.0.8
+cryptography==43.0.1
     # via
     #   needlr (pyproject.toml)
     #   msal
@@ -59,7 +59,7 @@ markupsafe==2.1.5
     # via
     #   needlr (pyproject.toml)
     #   jinja2
-msal==1.29.0
+msal==1.31.0
     # via needlr (pyproject.toml)
 packaging==24.1
     # via
@@ -88,6 +88,8 @@ pyjwt==2.8.0
     # via
     #   needlr (pyproject.toml)
     #   msal
+pyodbc==5.2.0
+    # via needlr (pyproject.toml)
 pytest==8.2.2
     # via
     #   needlr (pyproject.toml)

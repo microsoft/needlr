@@ -8,18 +8,18 @@ dependencies = [
     "alabaster==0.7.16",
     "annotated-types==0.7.0",
     "Babel==2.15.0",
-    "certifi==2024.6.2",
+    "certifi==2024.7.4",
     "cffi==1.16.0",
     "charset-normalizer==3.3.2",
     "colorama==0.4.6",
-    "cryptography==42.0.8",
+    "cryptography==43.0.1",
     "docutils==0.20.1",
     "idna==3.7",
     "imagesize==1.4.1",
     "iniconfig==2.0.0",
     "Jinja2==3.1.4",
     "MarkupSafe==2.1.5",
-    "msal==1.29.0",
+    "msal==1.31.0",
     "packaging==24.1",
     "pluggy==1.5.0",
     "pycparser==2.22",
@@ -43,8 +43,88 @@ dependencies = [
     "sphinxcontrib-serializinghtml==1.1.10",
     "typing_extensions==4.12.2",
     "urllib3==2.2.2",
-    "ruff==0.7.1"
+    "ruff==0.7.1",
+    "pyodbc==5.2.0"
 ]
 
 [tool.setuptools]
 py-modules = []
+
+[tool.ruff]
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+    "venv",
+]
+
+# Same as Black.
+line-length = 88
+indent-width = 4
+
+# Assume Python 3.8
+target-version = "py38"
+
+[tool.ruff.lint]
+# Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
+# Unlike Flake8, Ruff doesn't enable pycodestyle warnings (`W`) or
+# McCabe complexity (`C901`) by default.
+select = ["E4", "E7", "E9", "F"]
+ignore = []
+
+# Allow fix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+unfixable = []
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.format]
+# Like Black, use double quotes for strings.
+quote-style = "double"
+
+# Like Black, indent with spaces, rather than tabs.
+indent-style = "space"
+
+# Like Black, respect magic trailing commas.
+skip-magic-trailing-comma = false
+
+# Like Black, automatically detect the appropriate line ending.
+line-ending = "auto"
+
+# Enable auto-formatting of code examples in docstrings. Markdown,
+# reStructuredText code/literal blocks and doctests are all supported.
+#
+# This is currently disabled by default, but it is planned for this
+# to be opt-out in the future.
+docstring-code-format = false
+
+# Set the line length limit used when formatting code snippets in
+# docstrings.
+#
+# This only has an effect when the `docstring-code-format` setting is
+# enabled.
+docstring-code-line-length = "dynamic"

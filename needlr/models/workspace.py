@@ -1,10 +1,11 @@
 """Module providing a Core Workspace and Role Models."""
 
 from enum import Enum
-import uuid, json
+import uuid
+import json
 from typing import Literal
 from pydantic import BaseModel, Field, AliasChoices
-from needlr.models.item import Item, ItemType
+from needlr.models.item import Item
 
 
 class WorkspaceRole(str, Enum):
@@ -43,8 +44,11 @@ class UserPrincipal(_Principal):
 
 class ServicePrincipalProfile(_Principal):
     type: Literal[PrincipalType.ServicePrincipalProfile]
+
 class WorkspaceType(str, Enum):
     """
+    A workspace type. Additional workspace types may be added over time.
+
     [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/workspaces/get-workspace?tabs=HTTP#workspacetype)
     """
     AdminWorkspace = 'AdminWorkspace'
@@ -60,9 +64,13 @@ class CapacityAssignmentProgress(str, Enum):
     InProgress = 'InProgress'
 
 class Workspace(Item):
+    """
+        This is the Core Workspace definition for the Core Workspace Client.
+        This model is slightly different from the Admin Workspace model.
+    """
+
     name: str = Field(validation_alias=AliasChoices('displayName'))
     type: WorkspaceType = None
     capacityId: uuid.UUID = None
     capacityAssignmentProgress: CapacityAssignmentProgress = None
     workspaceIdentity: dict = None
-
