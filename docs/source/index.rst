@@ -10,7 +10,6 @@ needlr Documentation
    :maxdepth: 3
    :caption: Contents:
 
-   needlr
 
 Indices and tables
 ==================
