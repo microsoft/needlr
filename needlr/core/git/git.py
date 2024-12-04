@@ -1,6 +1,7 @@
 """Module providing Core Git functions."""
 
 from needlr import _http
+from requests import Response
 from needlr.auth.auth import _FabricAuthentication
 from needlr._http import FabricResponse
 from needlr.models.git import (
