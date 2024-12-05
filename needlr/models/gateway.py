@@ -139,7 +139,6 @@ class ListGatewaysResponse(BaseModel):
     continuationToken - string - The token for the next result set batch. If there are no more records, it's removed from the response.
     continuationUri -string - The URI of the next result set batch. If there are no more records, it's removed from the response.
     gateway - A list of gateways returned.
-        Gateway[]:
         OnPremisesGateway[]
         OnPremisesGatewayPersonal[]
         VirtualNetworkGateway[]

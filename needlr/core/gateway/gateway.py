@@ -83,13 +83,12 @@ class _GatewayClient():
                 "inactivityMinutesBeforeSleep": inactivityMinutesBeforeSleep,
                 "numberOfMemberGateways": numberOfMemberGateways,
                 "type": type,
-                "virtualNetworkAzureResource": VirtualNetworkAzureResource(**vnar)}
-        
+                "virtualNetworkAzureResource": vnar}
+
         resp = _http._post_http(
             url=f"{self._base_url}gateways",
             auth=self._auth,
             item=CreateVirtualNetworkGatewayRequest(**body),
-
         )
         return resp
     
@@ -115,7 +114,6 @@ class _GatewayClient():
                 auth=self._auth
             )
             localBody = resp.body
-            #pp.pprint(localBody)
 
             listGatewaysResponse = ListGatewaysResponse(**localBody)
 
