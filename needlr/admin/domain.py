@@ -104,15 +104,41 @@ class _DomainClient():
         Returns:
             list of domains
         """
-        url = "https://api.fabric.microsoft.com/v1/admin/domains/"
+        #url = "https://api.fabric.microsoft.com/v1/admin/domains/"
 
-        resp = _http._get_http_paged(
+        ''' resp = _http._get_http_paged(
             url=url,
             items_extract=lambda x:x["domains"],
-            params = kwargs
-        )
+            params = kwargs'''
+        resp = _http._get_http_paged(
+                url = f"{self._base_url}admin/domains",
+                auth= self._auth,
+                items_extract=lambda x:x["domains"],
+            )
+        
         for page in resp:
             for item in page.items:
                 yield Domain(**item)                
     
+    def delete(self, DomainId: uuid.UUID) -> Domain:
+        """
+        delete Domain
+
+        This method delete a  domain in fabric.
+
+        Args:
+            
+            DomainId (uuid.UUID): The domain ID
+
+        Returns:
+            http response
+        """
+        url = "https://api.fabric.microsoft.com/v1/admin/domains/"
+
+        resp = _http._delete_http(
+            url = url + DomainId,
+            auth=self._auth
+        )
+        return resp
+      
             
