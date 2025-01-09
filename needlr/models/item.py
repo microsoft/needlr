@@ -37,3 +37,5 @@ class Item(BaseModel):
     definition:dict = None
     workspaceId: uuid.UUID = None
     properties: dict = None
+    parentDomainId: str = None
+
