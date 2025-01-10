@@ -4,6 +4,7 @@ import pytest
 from typing import Generator
 from needlr import auth, FabricClient
 from needlr.models.workspace import Workspace
+from needlr.models.domain import Domain
 import os
 
 # Loading an Environment Variable File with dotenv
@@ -54,3 +55,10 @@ def workspace_test(fc: FabricClient, testParameters) -> Generator[Workspace, Non
                              description=testParameters['description'])
     yield ws
     fc.workspace.delete(workspace_id=ws.id)
+    
+@pytest.fixture(scope='session')
+def domain_test(fc: FabricClient, testParameters) -> Generator[Domain, None, None]:
+    domain_info = fc.domain.create(display_name=testParameters['workspace_name'],
+                             parentDomainId="", 
+                             description=testParameters['description'])
+    yield domain_info
