@@ -1,14 +1,12 @@
-"""Module providing a Core Workspace functions."""
+"""Module providing Core Pipelines functions."""
 
-from typing import Optional
 from collections.abc import Iterator
-import uuid, json
+import uuid
+import json
 
-from needlr.core.item.item import _ItemClient
 from needlr._http import FabricResponse
 from needlr import _http
 from needlr.auth.auth import _FabricAuthentication
-from needlr.core.workspace.role import _WorkspaceRoleClient
 from needlr.models.datapipeline import Datapipeline
 from needlr.models.item import Item
 
@@ -26,7 +24,7 @@ class _DatapipelineClient():
     * Get Datapipeline Definition > get_definition()
     * List Datapipelines > ls()
     * Update Datapipeline > update()
-    * Update Datapipeline Defintion > update_definition()
+    * Update Datapipeline Definition > update_definition()
     * Clone Datapipeline > clone()
     * Run on-demand item job > run_on_demand_job()
     * Get Item Job Instance > get_item_job_instance()
@@ -101,7 +99,7 @@ class _DatapipelineClient():
         )
         return resp
     
-    def get(self, workspace_id:uuid.UUID, datapipeline_id:uuid.UUID, include_defintion:bool = False) -> Datapipeline:
+    def get(self, workspace_id:uuid.UUID, datapipeline_id:uuid.UUID, include_definition:bool = False) -> Datapipeline:
         """
         Get Datapipeline
 
@@ -110,7 +108,7 @@ class _DatapipelineClient():
         Args:
             workspace_id (uuid.UUID): The ID of the workspace containing the Datapipeline.
             datapipeline_id (uuid.UUID): The ID of the Datapipeline to retrieve.
-            include_defintion (bool, optional): Specifies whether to include the definition of the Datapipeline. 
+            include_definition (bool, optional): Specifies whether to include the definition of the Datapipeline. 
                 Defaults to False.
 
         Returns:
@@ -124,7 +122,7 @@ class _DatapipelineClient():
             auth=self._auth
         )
         datapipeline = Datapipeline(**resp.body)
-        if include_defintion:
+        if include_definition:
             definition = self.get_definition(workspace_id, datapipeline_id)
             datapipeline.definition = definition
         return datapipeline
@@ -255,7 +253,7 @@ class _DatapipelineClient():
         Reference:
             [Clone Datapipeline](https://learn.microsoft.com/en-us/rest/api/fabric/datapipeline/items/clone-data-pipeline?tabs=HTTP)
         """
-        source_datapipeline = self.get(source_workspace_id, datapipeline_id , include_defintion=True)
+        source_datapipeline = self.get(source_workspace_id, datapipeline_id , include_definition=True)
         if target_workspace_id is None:
             target_workspace_id = source_workspace_id
         cloned_datapipeline =  self.create(target_workspace_id, display_name=clone_name, 
