@@ -43,6 +43,11 @@ def testParameters():
         'datapipeline_description': 'Test Datapipeline Description',
         'notebook_name': 'Test API Created Notebook',
         'notebook_description': 'This is an API Create Notebook from the REST API Test Harness.',
+        'shortcut_source_lakehouse_id': os.getenv('SHORTCUT_SOURCE_LAKEHOUSE_ID'),
+        'shortcut_source_path': os.getenv('SHORTCUT_SOURCE_PATH'),
+        'shortcut_source_workspace_id': os.getenv('SHORTCUT_SOURCE_WORKSPACE_ID'),
+        'shortcut_name': 'city_safety_seattle',
+        'shortcut_path': 'Files/test',
     }
 @pytest.fixture(scope='session')
 def fc() -> FabricClient:
