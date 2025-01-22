@@ -291,7 +291,7 @@ def _post_http_paged(url: str, auth:_FabricAuthentication, params: dict = dict()
 
 
 def _post_http_long_running(url: str, auth:_FabricAuthentication, item: Item = None,
-                    params: dict = dict(), files: dict = None,
+                    params: dict = dict(), files: dict = None, json_par: json = None,
                     wait_for_success:bool = True, 
                     retry_attempts:int = 5,
                     **kwargs) -> FabricResponse:
@@ -304,12 +304,17 @@ def _post_http_long_running(url: str, auth:_FabricAuthentication, item: Item = N
     * `wait_for_success:bool = True` True if the function should wait for the operation to complete
     * `retry_attempts:int = 5` the number of times to retry the operation before failing
     """
-    
+    if item:
+        json_val = item.model_dump()
+    elif json_par:
+        json_val = json_par
+    else:
+        json_val = None
     create_op = _post_http(
         url = url,
         auth=auth,
         params=params,
-        json=item.model_dump() if item else None,
+        json=json_val,    
         file=files
     )
 

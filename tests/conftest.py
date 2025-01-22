@@ -21,6 +21,8 @@ def testParameters():
         'description': 'Workspace created by PyTest',
         'warehouse_name': 'my_test_warehouse',
         'warehouse_description': 'Warehouse created by PyTest',
+        'lakehouse_name': 'my_test_lakehouse',
+        'lakehouse_description': 'Lakehouse created by PyTest',
         'principal_id': os.getenv('PRINCIPAL_ID'),  # unique
         'git_repository_name': os.getenv('GIT_REPOSITORY_NAME'),  # unique
         'git_organization_name': os.getenv('GIT_ORGANIZATION_NAME'),  # unique

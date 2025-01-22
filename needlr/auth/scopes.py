@@ -1,4 +1,4 @@
-
+DEFAULT = "https://api.fabric.microsoft.com/.default"
 WORKSPACE_RW_ALL = "https://api.fabric.microsoft.com/Workspace.ReadWrite.All"
 ITEM_RW_ALL = "https://api.fabric.microsoft.com/Item.ReadWrite.All"
 

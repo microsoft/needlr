@@ -127,6 +127,8 @@ docstring-code-line-length = "dynamic"
 [dependency-groups]
 dev = [
     "annotated-types==0.7.0",
+    "azure-identity>=1.19.0",
+    "azure-storage-file-datalake>=12.18.0",
     "pytest>=8.3.4",
     "pytest-order==1.2.1",
     "python-dotenv==1.0.1",

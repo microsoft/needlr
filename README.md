@@ -6,15 +6,24 @@ The Needlr packages provides a unified, cross-experience Microsoft Fabric SDK. T
 ## Quickstart
 Needlr is available on [PyPi](https://pypi.org/project/needlr/) and can be installed via `pip install needlr`.
 
-With needlr installed, you first authenticate by creating a Fabric client. You can use either [auth.FabricInteractiveAuth](https://learn.microsoft.com/en-us/python/api/azure-identity/azure.identity.interactivebrowsercredential?view=azure-python) to use your personal credentials or `auth.FabricServicePrincipal` to use a service principal (which is supported for most but not all APIs).
+With needlr installed, you first authenticate by creating a Fabric client. You can use either [FabricInteractiveAuth](https://learn.microsoft.com/en-us/python/api/azure-identity/azure.identity.interactivebrowsercredential?view=azure-python) to use your personal credentials or `FabricServicePrincipal` to use a service principal (which is supported for most but not all APIs).
 
 ```python
 from needlr import auth, FabricClient
+from needlr.auth import FabricInteractiveAuth
 
-fc = FabricClient(
-    auth=auth.FabricInteractiveAuth(
-        scopes=['https://api.fabric.microsoft.com/.default'])
-    )
+fc = FabricClient(auth=auth.FabricInteractiveAuth())
+for ws in fc.workspace.ls():
+    print(f"{ws.name}: Id:{ws.id} Capacity:{ws.capacityId}")
+```
+You use Service Principals in a similar way by bringing in the app id, secret, and tenant id. Replace the strings below with your service principals information.
+
+```python
+from needlr import auth, FabricClient
+from needlr.auth import FabricServicePrincipal
+
+auth = FabricServicePrincipal("APP_ID", "APP_SECRET", "TENANT_ID")
+fc = FabricClient(auth=auth)
 for ws in fc.workspace.ls():
     print(f"{ws.name}: Id:{ws.id} Capacity:{ws.capacityId}")
 ```
