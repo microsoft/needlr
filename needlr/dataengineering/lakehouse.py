@@ -50,7 +50,7 @@ class _LakehouseClient():
             workspace_id (uuid.UUID): The workspace ID.
             display_name (str): The display name of the lakehouse.
             description (str): The description of the lakehouse.
-            enableSchemas (bool): The enable schemas flag.
+            enableSchemas (bool): The enable schemas flag. Set to True once feature is GA.
 
         Returns:
             lakehouse: The created lakehouse.
@@ -190,6 +190,15 @@ class _LakehouseClient():
         """
         Loads data into a table.
 
+        Only CSV and Parquet formats are currently supported.
+
+        Example:
+        resp = fc.lakehouse.load_table(workspace_id=my_ws.id, lakehouse_id=lh.id, 
+                    table_name='dimension_customer', 
+                    relative_path='Files/dimension_customer.csv',
+                    path_type='File', mode='Overwrite', recursive=False,
+                    format='CSV', delimiter=',', header=True)
+
         Args:
             workspace_id (uuid.UUID): The workspace ID.
             lakehouse_id (uuid.UUID): The lakehouse ID.
@@ -206,8 +215,11 @@ class _LakehouseClient():
             FabricResponse: The response.
 
         Reference:
-        [Load Table](https://learn.microsoft.com/en-us/rest/api/fabric/lakehouse/items/load-table?tabs=HTTP)
+        [Load Table](https://learn.microsoft.com/en-us/rest/api/fabric/lakehouse/tables/load-table?tabs=HTTP)
         """
+        if format not in ['Csv', 'Parquet']:
+            raise ValueError("Only CSV and Parquet formats are supported.")
+
         body = {
                 "relativePath": relative_path,
                 "pathType": path_type,
