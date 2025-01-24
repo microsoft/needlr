@@ -7,7 +7,7 @@ import pytest
 class TestWarehouseLifeCycle:
 
     def test_warehouse_ls(self, fc: FabricClient, workspace_test: Workspace, warehouse_test: Warehouse):
-        t = warehouse_test
+        # t = warehouse_test
         whs = fc.warehouse.ls(workspace_id=workspace_test.id)
         assert len(list(whs)) == 1
 

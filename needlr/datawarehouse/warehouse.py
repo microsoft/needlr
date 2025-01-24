@@ -10,7 +10,7 @@ from needlr import auth
 from needlr._http import FabricResponse
 from needlr import _http
 from needlr.auth.auth import _FabricAuthentication
-from needlr.models.warehouse import Warehouse
+from needlr.models.warehouse import Warehouse, WarehouseCollation
 
 
 
@@ -44,7 +44,7 @@ class _WarehouseClient():
         self._auth = auth
         self._base_url = base_url
 
-    def create(self, display_name:str, workspace_id:uuid.UUID, description:str=None) -> Warehouse:
+    def create(self, display_name:str, workspace_id:uuid.UUID, description:str=None, caseInsensitive:bool = False) -> Warehouse:
         """
         Create Warehouse
 
@@ -54,7 +54,8 @@ class _WarehouseClient():
             display_name (str): The display name of the warehouse.
             workspace_id (uuid.UUID): The ID of the workspace where the warehouse will be created.
             description (str, optional): The description of the warehouse. Defaults to None.
-
+            caseInsensitive (bool, optional): The case insensitivity of the warehouse. Defaults to False.
+            
         Returns:
             Warehouse: The created warehouse object.
 
@@ -66,7 +67,10 @@ class _WarehouseClient():
         }
         if description:
             body["description"] = description
-
+        if caseInsensitive:
+            body["creationPayload"] = {
+                'defaultCollation': WarehouseCollation.CASE_INSENSITIVE
+            }
         resp = _http._post_http_long_running(
             url = f"{self._base_url}workspaces/{workspace_id}/warehouses",
             auth=self._auth,
