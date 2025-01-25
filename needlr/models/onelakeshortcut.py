@@ -8,7 +8,7 @@ from pydantic import AliasChoices, Field
 
 from needlr.models.item import Item
 
-class OneLakeShortcutConflictPolicy(str, Enum):
+class OneLakeShortcutConflictPolicy(Enum):
     """
     [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/core/onelake-shortcuts/create-shortcut?tabs=HTTP#shortcutconflictpolicy)
     """
@@ -72,7 +72,7 @@ class OneLakeShortcutTarget(BaseModel):
     oneLake: Optional[OneLakeShortcutTarget_OneLake] = None
     s3Compatible: Optional[OneLakeShortcutTarget_S3Compatible] = None
 
-class OneLakeShortcut(Item):
-    name: str = Field(validation_alias=AliasChoices('displayName'))
+class OneLakeShortcut(BaseModel):
+    name: str #= Field(validation_alias=AliasChoices('displayName'))
     path: str
     target: OneLakeShortcutTarget

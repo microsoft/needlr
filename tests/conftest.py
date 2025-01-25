@@ -5,6 +5,7 @@ from typing import Generator
 from needlr import auth, FabricClient
 from needlr.models.workspace import Workspace
 from needlr.models.domain import Domain
+from needlr.models.lakehouse import Lakehouse
 import os
 
 # Loading an Environment Variable File with dotenv
@@ -48,8 +49,8 @@ def testParameters():
         'shortcut_source_lakehouse_id': os.getenv('SHORTCUT_SOURCE_LAKEHOUSE_ID'),
         'shortcut_source_path': os.getenv('SHORTCUT_SOURCE_PATH'),
         'shortcut_source_workspace_id': os.getenv('SHORTCUT_SOURCE_WORKSPACE_ID'),
-        'shortcut_name': 'city_safety_seattle',
-        'shortcut_path': 'Files/test',
+        'shortcut_name': 'publicholidays',
+        'shortcut_path': 'Tables/',
     }
 @pytest.fixture(scope='session')
 def fc() -> FabricClient:
@@ -69,3 +70,13 @@ def domain_test(fc: FabricClient, testParameters) -> Generator[Domain, None, Non
                              parentDomainId="", 
                              description=testParameters['description'])
     yield domain_info
+
+@pytest.fixture(scope='session')
+def lakehouse_test(fc: FabricClient, workspace_test: Workspace, testParameters) -> Generator[Lakehouse, None, None]:
+    lh = fc.lakehouse.create(display_name=testParameters['lakehouse_name'], 
+                            workspace_id=workspace_test.id, 
+                            description=testParameters['lakehouse_description'], 
+                            enableSchemas=True)
+
+    yield lh
+ 
