@@ -135,3 +135,9 @@ dev = [
     "ruff==0.7.1",
     "sphinx>=7.1.2",
 ]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = [
+    "tests"
+]
