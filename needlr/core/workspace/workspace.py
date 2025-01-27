@@ -3,6 +3,7 @@
 from collections.abc import Iterator
 from needlr.core.item.item import _ItemClient
 from needlr.core.git.git import _GitClient
+from needlr.core.jobscheduler.jobscheduler import _JobSchedulerClient
 from needlr._http import FabricResponse
 from needlr import _http
 from needlr.auth.auth import _FabricAuthentication
@@ -51,6 +52,7 @@ class _WorkspaceClient():
         self.role = _WorkspaceRoleClient(auth, base_url)
         self.identity = _WorkspaceIdentityClient(auth, base_url)
         self.git = _GitClient( auth, base_url )
+        self.jobScheduler = _JobSchedulerClient(auth=auth, base_url=self._base_url)
 
     def capacity_assign(self, workspace_id:str, capacity_id:str) -> FabricResponse:
             """
