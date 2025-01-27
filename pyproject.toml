@@ -124,7 +124,7 @@ docstring-code-format = false
 # enabled.
 docstring-code-line-length = "dynamic"
 
-[dependency-groups]
+[project.optional-dependencies]
 dev = [
     "annotated-types==0.7.0",
     "azure-identity>=1.19.0",
