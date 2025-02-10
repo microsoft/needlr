@@ -245,4 +245,23 @@ class ItemSchedules(BaseModel):
     continuationToken: str = None
     continuationUri: str = None
     value: List[ItemSchedule] = None
+
+
+class CreateScheduleRequest(BaseModel):
+    """
+
+    Create item schedule plan request payload.
+
+    [CreateScheduleRequest](https://learn.microsoft.com/en-us/rest/api/fabric/core/job-scheduler/create-item-schedule?tabs=HTTP#createschedulerequest)
+
+    configuration - ScheduleConfig -  CronScheduleConfig
+                                    - DailyScheduleConfig
+                                    - WeeklyScheduleConfig
+    enabled - boolean - Whether this schedule is enabled. True - Enabled, False - Disabled
+
+    
+    """
+    
+    enabled: bool = None
+    configuration: Union[CronScheduleConfig, DailyScheduleConfig, WeeklyScheduleConfig] = None
     
