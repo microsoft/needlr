@@ -37,13 +37,13 @@ class GroupPrincipal(_Principal):
     type: Literal[PrincipalType.Group] = PrincipalType.Group
 
 class ServicePrincipal(_Principal):
-    type: Literal[PrincipalType.ServicePrincipal]
+    type: Literal[PrincipalType.ServicePrincipal] = PrincipalType.ServicePrincipal
 
 class UserPrincipal(_Principal):
-    type: Literal[PrincipalType.User]
+    type: Literal[PrincipalType.User] = PrincipalType.User
 
 class ServicePrincipalProfile(_Principal):
-    type: Literal[PrincipalType.ServicePrincipalProfile]
+    type: Literal[PrincipalType.ServicePrincipalProfile] = PrincipalType.ServicePrincipalProfile
 
 class WorkspaceType(str, Enum):
     """
