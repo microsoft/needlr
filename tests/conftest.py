@@ -48,7 +48,15 @@ def testParameters():
     }
 @pytest.fixture(scope='session')
 def fc() -> FabricClient:
-    return FabricClient(auth=auth.FabricInteractiveAuth(scopes=['https://api.fabric.microsoft.com/.default']))
+    if os.getenv('APP_ID'):
+        authorization = auth.FabricServicePrincipal(
+            client_id=os.getenv('APP_ID'),
+            client_secret=os.getenv('APP_SECRET'),
+            tenant_id=os.getenv('TENANT_ID')
+        )
+    else:
+        authorization = auth.FabricInteractiveAuth()
+    return FabricClient(auth=authorization)
 
 @pytest.fixture(scope='session')
 def workspace_test(fc: FabricClient, testParameters) -> Generator[Workspace, None, None]:
