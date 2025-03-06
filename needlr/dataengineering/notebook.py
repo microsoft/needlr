@@ -16,8 +16,10 @@ class _NotebookClient():
     * Create Notebook > create()
     * Delete Notebook > delete()
     * Get Notebook > get()
+    * Get Notebook Definition > get_definition()
     * List Notebooks > ls()
     * Update Notebooks > update()
+    * Update Notebook Definition > update_definition()
 
     """
     def __init__(self, auth:_FabricAuthentication, base_url:str):
@@ -59,9 +61,34 @@ class _NotebookClient():
             auth=self._auth,
             item=Notebook(**body)
         )
-        return Notebook(**resp.body)        
+        return Notebook(**resp.body)   
+
+    def get_definition(self, workspace_id:uuid.UUID, notebook_id:uuid.UUID) -> dict:
+        """
+        Get Notebook Definition
+
+        Retrieves the definition of a notebook for a given workspace and notebook ID.
+
+        Args:
+            workspace_id (uuid.UUID): The ID of the workspace.
+            notebook_id (uuid.UUID): The ID of the notebook.
+
+        Returns:
+            dict: The definition of the notebook.
+
+        Raises:
+            SomeException: If there is an error retrieving the notebook definition.
+
+        Reference:
+        - [Get Semantic Model Definition](https://learn.microsoft.com/en-us/rest/api/fabric/semanticmodel/items/get-semantic-model-definition?tabs=HTTP)
+        """
+        resp = _http._post_http_long_running(
+            url = f"{self._base_url}workspaces/{workspace_id}/notebooks/{notebook_id}/getDefinition",
+            auth=self._auth
+        )
+        return resp.body['definition']    
     
-    def get(self, workspace_id:uuid.UUID, notebook_id:uuid.UUID) -> Notebook:
+    def get(self, workspace_id:uuid.UUID, notebook_id:uuid.UUID, include_definition:bool = False) -> Notebook:
         """
         Get a Notebook
 
@@ -70,6 +97,8 @@ class _NotebookClient():
         Args:
             workspace_id (uuid.UUID): The ID of the workspace.
             notebook_id (uuid.UUID): The ID of the notebook.
+            include_definition (bool, optional): Specifies whether to include the definition of the Notebook. 
+                Defaults to False.
 
         Returns:
             Notebook: The retrieved notebook object.
@@ -81,7 +110,11 @@ class _NotebookClient():
             url = f"{self._base_url}workspaces/{workspace_id}/notebooks/{notebook_id}",
             auth=self._auth
         )
-        return Notebook(**resp.body)    
+        notebook = Notebook(**resp.body)
+        if include_definition:
+            definition = self.get_definition(workspace_id, notebook_id)
+            notebook.definition = definition
+        return notebook
     
     def ls(self, workspace_id:uuid.UUID) -> Iterator[Notebook]:
 
@@ -108,7 +141,6 @@ class _NotebookClient():
             for item in page.items:
                 yield Notebook(**item)    
 
-
     def update(self, workspace_id:uuid.UUID, notebook_id:uuid.UUID, display_name:str=None, description:str=None) -> Notebook:
         """
         Updates the properties of the specified notebook
@@ -121,7 +153,6 @@ class _NotebookClient():
 
         Returns:
             Notebook: The updated notebook object.
-
         Raises:
             ValueError: If both `display_name` and `description` are left blank.
 
@@ -145,6 +176,50 @@ class _NotebookClient():
         notebook = Notebook(**resp.body)
         return notebook
     
+    def update_definition(self, workspace_id:uuid.UUID, notebook_id:uuid.UUID, definition:dict, updateMetadata:bool = False) -> Notebook:
+            """
+            Update Notebook Definition
+            Updates the definition of a notebook for a given workspace and notebook ID.
+            Args:
+                workspace_id (uuid.UUID): The ID of the workspace.
+                notebook_id (uuid.UUID): The ID of the notebook.
+                definition (dict): The new definition for the notebook.
+                    Sample definition (reading from file):
+                     "definition": {
+                            "parts": [
+                                {
+                                    "path": "notebook-content.py",
+                                    "payload": base64.b64encode(open('part0.txt', 'rb').read()).decode('utf-8'),
+                                    "payloadType": "InlineBase64"
+                                },
+                                {
+                                    "path": ".platform",
+                                    "payload": base64.b64encode(open('part1.txt', 'rb').read()).decode('utf-8'),
+                                    "payloadType": "InlineBase64"
+                                }
+                            ]
+                        }
+            Returns:
+                Notebook: The updated notebook object.
+            Raises:
+                SomeException: If there is an error updating the notebook definition.   
+            Reference:
+            - [Update Notebook Definition](https://learn.microsoft.com/en-us/rest/api/fabric/notebook/items/update-notebook-definition?tabs=HTTP)
+            """
+            flag = f'?updateMetadata={updateMetadata}' if updateMetadata else ''
+            try:
+                resp = _http._post_http_long_running(
+                    url = f"{self._base_url}workspaces/{workspace_id}/notebooks/{notebook_id}/updateDefinition{flag}",
+                    auth=self._auth,
+                    json_par=definition
+                )
+                if resp.is_successful:
+                    return self.get(workspace_id, notebook_id, include_definition=True)
+                else:
+                        return None
+            except Exception:
+                    raise Exception("Error updating notebook definition")
+
     def delete(self, workspace_id:uuid.UUID, notebook_id:uuid.UUID) -> FabricResponse:
         """
         Delete a notebook.
