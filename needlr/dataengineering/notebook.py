@@ -88,7 +88,7 @@ class _NotebookClient():
         )
         return resp.body['definition']    
     
-    def get(self, workspace_id:uuid.UUID, notebook_id:uuid.UUID, include_defintion:bool = False) -> Notebook:
+    def get(self, workspace_id:uuid.UUID, notebook_id:uuid.UUID, include_definition:bool = False) -> Notebook:
         """
         Get a Notebook
 
@@ -97,7 +97,7 @@ class _NotebookClient():
         Args:
             workspace_id (uuid.UUID): The ID of the workspace.
             notebook_id (uuid.UUID): The ID of the notebook.
-            include_defintion (bool, optional): Specifies whether to include the definition of the Notebook. 
+            include_definition (bool, optional): Specifies whether to include the definition of the Notebook. 
                 Defaults to False.
 
         Returns:
@@ -111,7 +111,7 @@ class _NotebookClient():
             auth=self._auth
         )
         notebook = Notebook(**resp.body)
-        if include_defintion:
+        if include_definition:
             definition = self.get_definition(workspace_id, notebook_id)
             notebook.definition = definition
         return notebook
@@ -214,7 +214,7 @@ class _NotebookClient():
                     json_par=definition
                 )
                 if resp.is_successful:
-                    return self.get(workspace_id, notebook_id, include_defintion=True)
+                    return self.get(workspace_id, notebook_id, include_definition=True)
                 else:
                         return None
             except Exception:
