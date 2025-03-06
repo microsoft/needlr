@@ -2,7 +2,7 @@
 
 from enum import Enum
 import uuid
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class ItemType(str, Enum):
@@ -31,11 +31,10 @@ class ItemType(str, Enum):
 
 class Item(BaseModel):
     id: uuid.UUID = None
-    type: ItemType = None   # In case new types how up, this will be None
+    type: ItemType | str   # In case new types show up, this will be None
     displayName: str
     description: str = None
     definition:dict = None
     workspaceId: uuid.UUID = None
     properties: dict = None
     parentDomainId: str = None
-
