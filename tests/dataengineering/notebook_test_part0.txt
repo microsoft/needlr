@@ -1,0 +1,279 @@
+# Fabric notebook source
+
+# METADATA ********************
+
+# META {
+# META   "kernel_info": {
+# META     "name": "synapse_pyspark"
+# META   },
+# META   "dependencies": {
+# META     "lakehouse": {
+# META       "default_lakehouse": "<<your_lakehouse_id>>",
+# META       "default_lakehouse_name": "BillExtraction",
+# META       "default_lakehouse_workspace_id": "<<your_lakehouse_workspace_id>>"
+# META     }
+# META   }
+# META }
+
+# MARKDOWN ********************
+
+# 
+# #### Run the cell below to install the required packages for Copilot
+
+
+# CELL ********************
+
+
+#Run this cell to install the required packages for Copilot
+%load_ext dscopilot_installer
+%activate_dscopilot
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# Welcome to your new notebook
+# Type here in the cell editor to add code!
+#%pip install PyMuPDF 
+%pip install openai
+%pip install pdf2image
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+from pdf2image import convert_from_path
+from datetime import datetime
+import os
+import requests
+import base64
+import time
+import shutil
+import json
+
+# Configuration
+GPT4V_KEY = "<<enter your key here>>"  # Your GPT4V key
+GPT4V_ENDPOINT = "https://vsopenaidfd.openai.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2024-08-01-preview"  # The API endpoint for your GPT4V instance
+
+def convert_pdf_to_images(pdf_path, image_path):
+    clean_folder(image_path)
+    # Read the PDF and convert to images
+    images = convert_from_path(pdf_path)
+    for i, image in enumerate(images):
+        image.save(os.path.join(image_path, f"page{str(i+1)}.jpg"), "JPEG")
+
+
+def encode_images(image_path):
+    encoded_images = []
+    image_paths = [os.path.join(image_path, file) for file in os.listdir(image_path)]
+    for image in image_paths:
+        encoded_image = base64.b64encode(open(image, "rb").read()).decode("ascii")
+        encoded_images.append(encoded_image)
+    return encoded_images
+
+
+def send_request(encoded_images):
+    headers = {
+        "Content-Type": "application/json",
+        "api-key": GPT4V_KEY,
+    }
+
+    # Payload for the request
+    payload = {
+        "enhancements": {
+            "ocr": {
+                "enabled": True  # enabling OCR to extract text from the image using AI vision services
+            },
+            "grounding": {
+                "enabled": True  # enabling grounding to extract the context of the image using AI vision services
+            },
+        },
+        "messages": [
+            {
+                "role": "system",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": """
+                            You are a field extraction expert. When given a series of images, extract all the fields into a JSON object structure.
+                            Treat the series of documents as one cohesive document and return a json mapping all the appropriate fields.
+                            Rewrite json key actual_reading column beginning with the higher month to be called actual_reading_end_reading.
+                            Rewrite json key actual_reading column start with the lower month to be called acual_reading_begin_reading
+                            Convert all dates to MM-DD-YYY format.
+                            Structure the JSON Object the output like this:
+                  {
+    "company": "PSE&G",
+    "total_amount_due": "631.78",
+    "due_date": "1/1/2021",
+    "bill_date": "1/31/2021",
+    "billing_period_start": "01/31/2024",
+    "billing_period_end": "1/31/2024",
+    "account_number": "REDACTED",
+    "service_address": "REDACTED",
+    "balance_remaining_from_last_bill": "128.28",
+    "this_month_charges_and_credits": "103.50",
+    "payment_received": "0.00",
+    "balance_remaining": "128.28",
+    "electric": {
+        "usage": "6.0% less compared to this month last year",
+        "charges": "234.85",
+        "actual_reading_begin": "1111",
+        "actual_reading_end": "222",
+        "electric_usage_difference_": "189",
+        "service_charge": "1.95",
+        "delivery_charges": "2.96",
+        "supply_charges": "2.89",
+        "total_charges": "100.85"
+    },
+    "gas":{
+        "usage": "4.6% less compared to this month last year",
+        "actual_begin_reading": "2761",
+        "actual_end_reading": "2914",
+        "difference": "153",
+        "converted_to_ccf": "154.836",
+        "total_gas_used_therms": "160.255",
+        "monthly_service_charge_gas": "8.62",
+        "delivery_charges": "104.95",
+        "supply_charges": "63.70",
+        "total_charges": "168.65"
+    }
+}
+                        """
+                    }
+                ]
+            },
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": "Return the fields in this document as a complete json object",
+                    },
+                ],
+            },
+        ],
+        "temperature": 0,
+        "top_p": 0,
+        "max_tokens": 4096,
+    }
+
+    # Add an item for each encoded image, limited to 10 images
+    for encoded_image in encoded_images[:10]:
+        payload["messages"][1]["content"].append({
+            "type": "image_url",
+            "image_url": {"url": f"data:image/jpeg;base64,{encoded_image}"},
+        })
+
+    # Send request
+    try:
+        response = requests.post(GPT4V_ENDPOINT, headers=headers, json=payload)
+        response.raise_for_status()  # Will raise an HTTPError if the HTTP request returned an unsuccessful status code
+        json_response = response.json()
+    except requests.RequestException as e:
+        raise SystemExit(f"Failed to make the request. Error: {e}")
+
+    return json_response
+
+
+def clean_json_response(response_content):
+    # Clean up the response's content. Convert the response's json string to a json object
+    # Remove the leading and trailing characters
+    json_string = response_content.replace('```json\n', '')
+    json_string = json_string.rsplit('\n', 1)[0]
+    try:
+        # Try to parse the JSON string into a Python dictionary
+        json_object = json.loads(json_string)
+    except json.JSONDecodeError:
+        print("The JSON string is not complete.")
+    return json_object
+
+
+def write_json_to_file(pdf_file, json_path, json_object):
+    # Create the 'JSON Output' folder if it doesn't exist
+    clean_folder(json_path)
+    # Write the response to a JSON file in the 'JSON Output' folder
+    json_output_filename = pdf_file.rsplit('.', 1)[0] + ".json"
+    json_output_filepath = os.path.join(json_path, json_output_filename)
+    with open(json_output_filepath, "w") as file:
+        json.dump(json_object, file, indent=4)
+
+def archive_pdf_to_folder(pdf_path, archive_path):
+    # Move the PDF file to the 'Archive' folder
+    now = datetime.now()
+    formatted_date_time = f"{now.date()} {now.time()}"
+    if not os.path.exists(archive_path):
+        os.makedirs(archive_path)
+   # Move all files from source to destination
+    shutil.move(pdf_path, archive_path + formatted_date_time)
+
+
+def clean_folder(path):
+    if os.path.exists(path):
+        for filename in os.listdir(path):
+            file_path = os.path.join(path, filename)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+    else:
+        os.makedirs(path)
+
+def runner():
+    lakehouse_path = "/lakehouse/default/Files"
+    pdf_folder_path = f"{lakehouse_path}/invoices/" # Path to pdf folder
+    json_path = f"{lakehouse_path}/json/" # Path to json output folder
+    image_path = f"{lakehouse_path}/images/" # Path to images
+    archive_path = f"{lakehouse_path}/processed/" # Path to archive folder
+    # Get a list of all paths of the pdfs in the pdf folder
+    #pdf_paths = [os.path.join(pdf_folder_path, file) for file in os.listdir(pdf_folder_path)]
+    # Run the extractor for every pdf in the folder
+    for pdf_file in os.listdir(pdf_folder_path):
+        # Convert PDF's to Images
+        pdf_path = os.path.join(pdf_folder_path, pdf_file)
+        print (pdf_path)
+        convert_pdf_to_images(pdf_path, image_path)
+        # Encode all images in image folder
+        encoded_images = encode_images(image_path)
+        # Send Request to GPT4V to Return JSON structure from Images
+        json_response = send_request(encoded_images)
+        # Get the content from the response
+        response_content = json_response["choices"][0]["message"]["content"]
+        print (response_content)
+        # Clean the response
+        json_object = clean_json_response(response_content)
+        # Output to Output folder directory
+        # write_json_to_file(pdf_path, json_path, json_object)
+        write_json_to_file(pdf_file, json_path, json_object)
+        print(pdf_file)
+        print(json_path)
+        print(json_object)
+        # Move pdfs to archive folder
+        # Fix this function to move all files!!!!!!!!!!!!!!!!!!!!!!
+        archive_pdf_to_folder(pdf_path, archive_path)
+
+# Run Extractor
+runner()
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# MARKDOWN ********************
+
+# # Next Steps
+# - Create table from JSON (before archive data)
+# - Deploy Semantic Model
+# - Deploy Report
