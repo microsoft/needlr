@@ -1,6 +1,9 @@
 needlr.powerbi
 ======================
 
+Submodules
+----------
+
 needlr.powerbi.dashboard
 -------------------------------
 
@@ -40,6 +43,9 @@ needlr.powerbi.semanticmodel
    :members:
    :undoc-members:
    :show-inheritance:
+
+Module contents
+---------------
 
 .. automodule:: needlr.powerbi
    :members:
