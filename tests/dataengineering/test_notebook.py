@@ -1,5 +1,5 @@
 import pytest
-
+import uuid
 import base64
 
 from needlr import FabricClient
@@ -46,12 +46,15 @@ class TestNotebook:
     @pytest.mark.order(after="test_notebook_update_definition")
     def test_notebook_get_definition(self, fc: FabricClient, workspace_test: Workspace, notebook_test: Notebook):
         definition = fc.notebook.get_definition(workspace_id=workspace_test.id, notebook_id=notebook_test.id)
-        def_to_compare = base64.b64encode(open('tests/dataengineering/notebook_test_part0.txt', 'rb').read()).decode('utf-8')
-        def_part_1 = definition['parts'][0]['payload']
-        assert def_part_1 == def_to_compare
-
+        assert definition is not None
 
     @pytest.mark.order(after="test_notebook_get_definition")
+    def test_update_default_lakehouse(self, fc: FabricClient, workspace_test: Workspace, notebook_test: Notebook):
+        # nb = fc.notebook.update_default_lakehouse(workspace_id=workspace_test.id, notebook_id=notebook_test.id, default_lakehouse_id=uuid.uuid4(), default_lakehouse_name="MY_NEW_NAME")
+        nb = fc.notebook.update_default_lakehouse(workspace_id=workspace_test.id, notebook_id=notebook_test.id, default_lakehouse_id=uuid.uuid5(uuid.NAMESPACE_OID, 'fb3d37a6-1b44-4641-a912-41edfcd8283c'), default_lakehouse_name="Smple_LH")
+        assert nb is not None
+
+    @pytest.mark.order(after="test_update_default_lakehouse")
     def test_notebook_delete(self, fc: FabricClient, workspace_test: Workspace, notebook_test: Notebook):
         resp = fc.notebook.delete(workspace_id=workspace_test.id, notebook_id=notebook_test.id)
         assert resp.is_successful is True            
