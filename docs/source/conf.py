@@ -7,23 +7,14 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'needlr'
-copyright = '2024, Bret Myers, Christopher Price, Emily Nguyen, Tim Brown, Tonio Lora, Vikas Sawhney, Will Johnson'
-author = 'Bret Myers, Christopher Price, Emily Nguyen, Tim Brown, Tonio Lora, Vikas Sawhney, Will Johnson'
-release = '0.1.4'
-
-## -- Set Path -----------------------------------------------------
-import os
-import sys
-
-sys.path.insert(0, os.path.abspath('../..'))
+copyright = '2025, Tonio Lora, Tim Brown, Emily Nguyen, Bret Myers, Will Johnson, Pardeep Singla'
+author = 'Tonio Lora, Tim Brown, Emily Nguyen, Bret Myers, Will Johnson, Pardeep Singla'
+release = '0.1.8'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ['sphinx.ext.duration',
-              'sphinx.ext.doctest',
-              'sphinx.ext.autodoc',
-              'sphinx.ext.autosummary']
+extensions = []
 
 templates_path = ['_templates']
 exclude_patterns = []
