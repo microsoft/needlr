@@ -247,15 +247,35 @@ class _NotebookClient():
             payload = nb.definition['parts'][0]['payload']
             decoded_payload_bytes = base64.b64decode(payload)
             decoded_payload_string = decoded_payload_bytes.decode("utf-8")
-            # Step 2 Update Default lakehouse
+            # Step 2: Check if Notebook is New
+            if  decoded_payload_string == '# No content':
+                decoded_payload_string = """# Fabric notebook source
+
+# METADATA ********************
+
+# META {
+# META   "kernel_info": {
+# META     "name": "synapse_pyspark"
+# META   },
+# META   "dependencies": {
+# META     "lakehouse": {
+# META       "default_lakehouse": "550e8400-e29b-41d4-a716-446655440000",
+# META       "default_lakehouse_name": "Sample_Lakehouse_Name",
+# META       "default_lakehouse_workspace_id": "550e8400-e29b-41d4-a716-446655440000"
+# META     }
+# META   }
+# META }
+                
+                """
+            # Step 3 Update Default lakehouse
             new_payload_dlh_id = re.sub(r'\"default_lakehouse\": \"([a-z0-9\-]+)\"', r'\"default_lakehouse\": \"' + str(default_lakehouse_id) + '\"', decoded_payload_string)
-            new_payload_dlh_name = re.sub(r'\"default_lakehouse_name\": \"([a-z0-9\-]+)\"', r'\"default_lakehouse_name\": \"' + default_lakehouse_name + '\"', new_payload_dlh_id)
+            new_payload_dlh_name = re.sub(r'\"default_lakehouse_name\":\s*\".*?\"', r'\"default_lakehouse_name\": \"' + default_lakehouse_name + '\"', new_payload_dlh_id)
             new_payload_dlh_ws_id = re.sub(r'\"default_lakehouse_workspace_id\": \"([a-z0-9\-]+)\"', r'\"default_lakehouse_workspace_id\": \"' + str(workspace_id) + '\"', new_payload_dlh_name)
-            # Step 3: Encode the modified payload back to Base64
+            # Step 4: Encode the modified payload back to Base64
             new_payload_bytes = new_payload_dlh_ws_id.encode('utf-8')  # Convert string to bytes
             new_payload_encoded_bytes = base64.b64encode(new_payload_bytes)
             new_payload_encoded_string = new_payload_encoded_bytes.decode('utf-8')  # Convert bytes to string
-            # Update Notebook defintion with new payload
+            # Step 5: Update Notebook defintion with new payload
             nb.definition['parts'][0]['payload'] = new_payload_encoded_string
             new_definition = {
              "definition": {
