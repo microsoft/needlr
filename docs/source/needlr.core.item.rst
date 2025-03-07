@@ -1,6 +1,9 @@
 needlr.core.item
 ========================
 
+Submodules
+----------
+
 needlr.core.item.item
 ----------------------------
 
@@ -8,6 +11,9 @@ needlr.core.item.item
    :members:
    :undoc-members:
    :show-inheritance:
+
+Module contents
+---------------
 
 .. automodule:: needlr.core.item
    :members:

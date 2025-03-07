@@ -1,6 +1,9 @@
 needlr.datafactory
 ==========================
 
+Submodules
+----------
+
 needlr.datafactory.datapipeline
 --------------------------------------
 
@@ -8,6 +11,9 @@ needlr.datafactory.datapipeline
    :members:
    :undoc-members:
    :show-inheritance:
+
+Module contents
+---------------
 
 .. automodule:: needlr.datafactory
    :members:

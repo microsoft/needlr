@@ -1,5 +1,8 @@
-needlr package
+needlr
 ==============
+
+Subpackages
+-----------
 
 .. toctree::
    :maxdepth: 4
@@ -15,14 +18,20 @@ needlr package
    needlr.models
    needlr.powerbi
    needlr.realtimeintelligence
-   needlr.utils
-   
+
+Submodules
+----------
+
+needlr.client
 --------------------
 
 .. automodule:: needlr.client
    :members:
    :undoc-members:
    :show-inheritance:
+
+Module contents
+---------------
 
 .. automodule:: needlr
    :members:

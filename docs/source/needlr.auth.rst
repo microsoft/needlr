@@ -1,6 +1,9 @@
 needlr.auth
 ===================
 
+Submodules
+----------
+
 needlr.auth.auth
 -----------------------
 
@@ -16,6 +19,9 @@ needlr.auth.scopes
    :members:
    :undoc-members:
    :show-inheritance:
+
+Module contents
+---------------
 
 .. automodule:: needlr.auth
    :members:

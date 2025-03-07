@@ -1,6 +1,9 @@
 needlr.dataengineering
 ==============================
 
+Submodules
+----------
+
 needlr.dataengineering.notebook
 --------------------------------------
 
@@ -16,6 +19,9 @@ needlr.dataengineering.sqlendpoints
    :members:
    :undoc-members:
    :show-inheritance:
+
+Module contents
+---------------
 
 .. automodule:: needlr.dataengineering
    :members:

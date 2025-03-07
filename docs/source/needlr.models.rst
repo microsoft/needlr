@@ -1,6 +1,9 @@
 needlr.models
 =====================
 
+Submodules
+----------
+
 needlr.models.adminworkspace
 -----------------------------------
 
@@ -37,6 +40,14 @@ needlr.models.datapipeline
 ---------------------------------
 
 .. automodule:: needlr.models.datapipeline
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+needlr.models.domain
+---------------------------
+
+.. automodule:: needlr.models.domain
    :members:
    :undoc-members:
    :show-inheritance:

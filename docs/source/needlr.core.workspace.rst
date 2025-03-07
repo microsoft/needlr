@@ -1,6 +1,9 @@
 needlr.core.workspace
 =============================
 
+Submodules
+----------
+
 needlr.core.workspace.identity
 -------------------------------------
 
@@ -24,6 +27,9 @@ needlr.core.workspace.workspace
    :members:
    :undoc-members:
    :show-inheritance:
+
+Module contents
+---------------
 
 .. automodule:: needlr.core.workspace
    :members:
