@@ -275,7 +275,7 @@ class _NotebookClient():
             new_payload_bytes = new_payload_dlh_ws_id.encode('utf-8')  # Convert string to bytes
             new_payload_encoded_bytes = base64.b64encode(new_payload_bytes)
             new_payload_encoded_string = new_payload_encoded_bytes.decode('utf-8')  # Convert bytes to string
-            # Step 5: Update Notebook defintion with new payload
+            # Step 5: Update Notebook definition with new payload
             nb.definition['parts'][0]['payload'] = new_payload_encoded_string
             new_definition = {
              "definition": {

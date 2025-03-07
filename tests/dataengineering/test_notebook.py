@@ -50,8 +50,7 @@ class TestNotebook:
 
     @pytest.mark.order(after="test_notebook_get_definition")
     def test_update_default_lakehouse(self, fc: FabricClient, workspace_test: Workspace, notebook_test: Notebook):
-        # nb = fc.notebook.update_default_lakehouse(workspace_id=workspace_test.id, notebook_id=notebook_test.id, default_lakehouse_id=uuid.uuid4(), default_lakehouse_name="MY_NEW_NAME")
-        nb = fc.notebook.update_default_lakehouse(workspace_id=workspace_test.id, notebook_id=notebook_test.id, default_lakehouse_id=uuid.uuid5(uuid.NAMESPACE_OID, 'fb3d37a6-1b44-4641-a912-41edfcd8283c'), default_lakehouse_name="Smple_LH")
+        nb = fc.notebook.update_default_lakehouse(workspace_id=workspace_test.id, notebook_id=notebook_test.id, default_lakehouse_id=uuid.uuid4(), default_lakehouse_name="MY_NEW_NAME")
         assert nb is not None
 
     @pytest.mark.order(after="test_update_default_lakehouse")
