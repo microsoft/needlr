@@ -31,11 +31,22 @@ class ItemType(str, Enum):
     PaginatedReport = 'PaginatedReport'
     Reflex = 'Reflex'
     Report = 'Report'
+    SQLDatabase ='SQLDatabase'
     SQLEndpoint = 'SQLEndpoint'
     SemanticModel = 'SemanticModel'
     SparkJobDefinition = 'SparkJobDefinition'
     Warehouse = 'Warehouse'
 
+class ItemPermissions(str, Enum):
+    """
+    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/admin/users/list-access-entities?tabs=HTTP#itempermissions)
+    """
+    Execute = 'Execute'
+    Explore = 'Explore'
+    Read = 'Read'
+    Reshare = 'Reshare'
+    Write = 'Write'
+    
 class Item(BaseModel):
     id: uuid.UUID = None
     type: ItemType | str   # In case new types how up, this will be None

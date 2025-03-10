@@ -45,6 +45,7 @@ def testParameters():
         'datapipeline_description': 'Test Datapipeline Description',
         'notebook_name': 'Test API Created Notebook',
         'notebook_description': 'This is an API Create Notebook from the REST API Test Harness.',
+        'fabric_admin_upn': os.getenv('ADMIN_UPN'),
     }
 @pytest.fixture(scope='session')
 def fc() -> FabricClient:
