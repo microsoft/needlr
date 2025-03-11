@@ -18,8 +18,8 @@ class _DomainClient():
     * Create Domain > create()
     * Get Domain > get()
     * List Domains > ls()
-
     * Delete Domain > delete()
+
     * Update Domain > update()
     
 
@@ -133,23 +133,23 @@ class _DomainClient():
             for item in page.items:
                 yield Domain(**item)                
     
-    def delete(self, DomainId: uuid.UUID) -> Domain:
+    def delete(self, domain_id: uuid.UUID) -> FabricResponse:
         """
-        delete Domain
-
-        This method delete a  domain in fabric.
+        Deletes the specified domain.
 
         Args:
             
-            DomainId (uuid.UUID): The domain ID
+            domain_id (uuid.UUID): The domain ID
 
         Returns:
-            http response
-        """
-        url = "https://api.fabric.microsoft.com/v1/admin/domains/"
+            FabricResponse
 
+        Reference:
+        [Delete Domain](https://learn.microsoft.com/en-us/rest/api/fabric/admin/domains/delete-domain?tabs=HTTP)            
+
+        """
         resp = _http._delete_http(
-            url = url + DomainId,
+            url = f"{self._base_url}admin/domains/{domain_id}",
             auth=self._auth
         )
         return resp
