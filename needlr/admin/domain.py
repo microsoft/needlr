@@ -4,9 +4,9 @@ from collections.abc import Iterator
 from needlr import _http
 import uuid
 from needlr.auth.auth import _FabricAuthentication
+from needlr._http import FabricResponse
 from needlr.models.domain import Domain
-import json
-from needlr.models.item import Item, ItemType
+from needlr.models.item import Item
 
 class _DomainClient():
     """
@@ -16,6 +16,10 @@ class _DomainClient():
     ### Coverage
 
     * Create Domain > create()
+    * Get Domain > get()
+    * List Domains > ls()
+    * Delete Domain > delete()
+    * Update Domain > update()
     
 
     """
@@ -31,42 +35,45 @@ class _DomainClient():
         self._auth = auth
         self._base_url = base_url
 
-    def create(self, display_name: str, parentDomainId: uuid.UUID, description: str) -> Domain:
+    def create(self, display_name: str, **kwargs) -> Domain:
         """
-        Create Domain
+        Creates a new Domain
 
         This method creates a new domain in fabric.
 
         Args:
-            description (str, optional): The description of the domain. Defaults to None.
             display_name (str): The display name of the domain.
-            parentDomainId (uuid.UUID): The domain parent object ID
+            description (str, optional): The domain description. The description cannot contain more than 256 characters.
+            ex:  description=Some Description
+            parentDomainId (uuid.UUID, optional): The domain parent object ID.
+            ex:  parentDomainId=00000000-0000-0000-0000-000000000000
 
         Returns:
             Domain: The created Domain object.
+
+        Reference:
+        - [Create Domain](https://learn.microsoft.com/en-us/rest/api/fabric/admin/domains/create-domain?tabs=HTTP)            
         """
-        url = "https://api.fabric.microsoft.com/v1/admin/domains/"
 
         body = {
-            
-                "displayName": display_name,
-                "description": description,
-                "parentDomainId": str(parentDomainId),
-            }
+            "displayName":display_name
+        }
 
-        print("Request Body:", body)  # Log the request body for debugging
+        for key, value in kwargs.items():
 
-        try:
-            resp = _http._post_http_long_running(
-            url=url,
+            if key is not None:
+                if key =='description':
+                    body["description"] = value
+
+                if key == 'parentDomainId':
+                    body["parentDomainId"] = value
+
+        resp = _http._post_http_long_running(
+            url = f"{self._base_url}admin/domains",
             auth=self._auth,
-            item=Item(**body)
+            item=Domain(**body)
         )
-            return Domain(**resp.body)
-        except Exception as e:
-            print("Error:", e)
-            if hasattr(e, 'response'):
-                print("Response Body:", e.response.text)
+        return Domain(**resp.body) 
 
 
     def get(self, DomainId: uuid.UUID) -> Domain:
@@ -95,23 +102,29 @@ class _DomainClient():
 
     def ls(self, **kwargs) -> Iterator[Domain]:
         """
-        list Domain
-
-        This method list the domains in fabric.
+        List Domains
 
         Args:
 
-        Returns:
-            list of domains
-        """
-        #url = "https://api.fabric.microsoft.com/v1/admin/domains/"
+        nonEmptyOnly (bool, optional): When true, only return domains that have at least one workspace containing an item. Default: false.
+        nonEmptyOnly=True
 
-        ''' resp = _http._get_http_paged(
-            url=url,
-            items_extract=lambda x:x["domains"],
-            params = kwargs'''
+        Returns:
+            List of domains
+
+        Reference:
+        - [List Domains](https://learn.microsoft.com/en-us/rest/api/fabric/admin/domains/list-domains?tabs=HTTP)            
+
+        """
+        m_url = f"{self._base_url}admin/domains/"
+
+        for key, value in kwargs.items():
+            if value is not None:
+                m_url += f"?{key}={value}"
+                break
+
         resp = _http._get_http_paged(
-                url = f"{self._base_url}admin/domains",
+                url = m_url,
                 auth= self._auth,
                 items_extract=lambda x:x["domains"],
             )
@@ -141,4 +154,40 @@ class _DomainClient():
         )
         return resp
       
-            
+    def update(self, domain_id:str, display_name:str=None, description:str=None) -> Domain:
+        """
+        Updates the specified domain info.
+
+        This method updates the display name and description of a domain identified by the given domain ID.
+
+        Args:
+            domain_id (str): The ID of the domain to update.
+            display_name (str, optional): The new display name for the domain. Defaults to None.
+            description (str, optional): The new description for the domain. Defaults to None.
+
+        Returns:
+            Workspace: The updated domain object.
+
+        Raises:
+            ValueError: If both display_name and description are left blank.
+
+        Reference:
+        - [Update Domain](https://learn.microsoft.com/en-us/rest/api/fabric/admin/domains/update-domain?tabs=HTTP)
+        """
+        if ((display_name is None) and (description is None)):
+            raise ValueError("display_name or description must be provided")
+
+        body = dict()
+        if display_name is not None:
+            body["displayName"] = display_name
+        if description is not None:
+            body["description"] = description
+
+        resp = _http._patch_http(
+            url = self._base_url+f"admin/domains/{domain_id}",
+            auth=self._auth,
+            json=body
+        )
+        domain = Domain(**resp.body)
+        return domain
+          
