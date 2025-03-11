@@ -3,6 +3,7 @@ import uuid
 from enum import Enum
 
 from pydantic import BaseModel
+from typing import List
 
 
 class Domain(BaseModel):
@@ -53,3 +54,14 @@ class UpdateDomainRequest(BaseModel):
     contributorsScope: ContributorsScopeType = None
     description: str
     displayName: str
+
+
+class AssignDomainWorkspacesByCapacitiesRequest(BaseModel):
+    """
+
+    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/admin/domains/assign-domain-workspaces-by-capacities?tabs=HTTP#assigndomainworkspacesbycapacitiesrequest)
+
+    capacitiesIds - The capacity IDs.
+
+    """
+    capacitiesIds: List[str] = None

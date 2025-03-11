@@ -5,7 +5,7 @@ from needlr import _http
 import uuid
 from needlr.auth.auth import _FabricAuthentication
 from needlr._http import FabricResponse
-from needlr.models.domain import Domain
+from needlr.models.domain import Domain, AssignDomainWorkspacesByCapacitiesRequest
 from needlr.models.item import Item
 
 class _DomainClient():
@@ -20,6 +20,7 @@ class _DomainClient():
     * List Domains > ls()
     * Delete Domain > delete()
     * Update Domain > update()
+    * Assign Workspaces by Capacities > assign_workspaces_by_capacities()
     
 
     """
@@ -153,7 +154,7 @@ class _DomainClient():
         )
         return resp
       
-    def update(self, domain_id: str, display_name: str=None, description: str=None) -> Domain:
+    def update(self, domain_id: uuid.UUID, display_name: str=None, description: str=None) -> Domain:
         """
         Updates the specified domain info.
 
@@ -190,3 +191,35 @@ class _DomainClient():
         domain = Domain(**resp.body)
         return domain
           
+    def assign_workspaces_by_capacities( self, domain_id: uuid.UUID, capacities_ids: dict ) ->FabricResponse:
+        """
+        Assign all workspaces that reside on the specified capacities to the specified domain.
+        Preexisting domain assignments will be overridden unless bulk reassignment is blocked by domain management tenant settings.
+
+        Args:
+            domain_id (str): The ID of the domain to assign.
+
+        Returns:
+           FabricResponse
+
+        Raises:
+            ValueError: If capacities_ids is blank.           
+
+        Reference:
+        - [Assign Domain Workspaces By Capacities](https://learn.microsoft.com/en-us/rest/api/fabric/admin/domains/assign-domain-workspaces-by-capacities?tabs=HTTP)
+        """
+
+        body = dict()
+
+        if capacities_ids is not None:
+            body["capacitiesIds"] = capacities_ids
+        else:
+            raise ValueError("At least one capacity ID must be provided")
+
+
+        resp = _http._post_http_long_running(
+            url = f"{self._base_url}admin/domains/{domain_id}/assignWorkspacesByCapacities",
+            auth=self._auth,
+            item=AssignDomainWorkspacesByCapacitiesRequest(**body)
+        )
+        return resp
