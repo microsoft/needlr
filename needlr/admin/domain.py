@@ -17,8 +17,8 @@ class _DomainClient():
 
     * Create Domain > create()
     * Get Domain > get()
-    
     * List Domains > ls()
+
     * Delete Domain > delete()
     * Update Domain > update()
     
@@ -77,25 +77,24 @@ class _DomainClient():
         return Domain(**resp.body) 
 
 
-    def get(self, DomainId: uuid.UUID) -> Domain:
+    def get(self, domain_id: uuid.UUID) -> Domain:
         """
-        Get Domain
-
-        This method get a  domain in fabric.
+        Returns the specified domain info.
 
         Args:
             
-            DomainId (uuid.UUID): The domain ID
+            domain_id (uuid.UUID): The domain ID
 
         Returns:
             Domain: the domain information
-        """
-        url = "https://api.fabric.microsoft.com/v1/admin/domains/"
 
+        Reference:
+        [get Domain](https://learn.microsoft.com/en-us/rest/api/fabric/admin/domains/get-domain?tabs=HTTP)            
+
+        """
         resp = _http._get_http(
-            url=url + DomainId,
-            auth=self._auth,
-            
+            url = f"{self._base_url}admin/domains/{domain_id}",
+            auth=self._auth
         )
         domain = Domain(**resp.body)
         return domain
@@ -114,7 +113,7 @@ class _DomainClient():
             List of domains
 
         Reference:
-        - [List Domains](https://learn.microsoft.com/en-us/rest/api/fabric/admin/domains/list-domains?tabs=HTTP)            
+        [List Domains](https://learn.microsoft.com/en-us/rest/api/fabric/admin/domains/list-domains?tabs=HTTP)            
 
         """
         m_url = f"{self._base_url}admin/domains/"
