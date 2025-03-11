@@ -19,7 +19,6 @@ class _DomainClient():
     * Get Domain > get()
     * List Domains > ls()
     * Delete Domain > delete()
-
     * Update Domain > update()
     
 
@@ -154,7 +153,7 @@ class _DomainClient():
         )
         return resp
       
-    def update(self, domain_id:str, display_name:str=None, description:str=None) -> Domain:
+    def update(self, domain_id: str, display_name: str=None, description: str=None) -> Domain:
         """
         Updates the specified domain info.
 
@@ -166,7 +165,7 @@ class _DomainClient():
             description (str, optional): The new description for the domain. Defaults to None.
 
         Returns:
-            Workspace: The updated domain object.
+            Domain: The updated domain object.
 
         Raises:
             ValueError: If both display_name and description are left blank.
