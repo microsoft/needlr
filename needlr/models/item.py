@@ -38,7 +38,7 @@ class ItemType(str, Enum):
 
 class Item(BaseModel):
     id: uuid.UUID = None
-    type: ItemType | str = None  # In case new types how up, this will be None
+    type: ItemType | str = None  # In case new types show up, this will be None
     displayName: str
     description: str = None
     definition:dict = None
