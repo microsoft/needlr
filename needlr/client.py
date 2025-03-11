@@ -19,7 +19,7 @@ from needlr.realtimeintelligence.eventstream import _EvenstreamClient
 from needlr.realtimeintelligence.kqldatabase import _KQLDatabaseClient
 from needlr.realtimeintelligence.kqlqueryset import _KQLQuerySetClient
 from needlr.admin.domain import _DomainClient
-
+from needlr.admin.label import _LabelClient
 
 
 
@@ -48,4 +48,5 @@ class FabricClient():
         self.notebook = _NotebookClient(auth=auth, base_url=self._base_url)
         self.tenant = _TenantClient(auth=auth, base_url=self._base_url)
         self.domain = _DomainClient(auth=auth, base_url=self._base_url)
+        self.label = _LabelClient(auth=auth, base_url=self._base_url)
 
