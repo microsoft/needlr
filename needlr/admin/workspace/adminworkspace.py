@@ -107,8 +107,8 @@ class _AdminWorkspaceClient():
         kwargs: (URI Parameters)(https://learn.microsoft.com/en-us/rest/api/fabric/admin/workspaces/list-workspaces?tabs=HTTP#uri-parameters)
             capacityId: string - The capacity ID of the workspace. ex. capacityId=uuid.UUID('6bbf84a0-e6aa-4d32-a1f5-d20af7913348')
             name: string - The workspace name. ex. name='_needlr_8056469686'
-            state: string - The workspace state. Supported states are Active and Deleted. ex. state='Active'
-            type: string - The workspace type. Supported types are Personal, Workspace, AdminWorkspace. ex. type='Personal'
+            state: string - The workspace state. Supported states are active and deleted. ex. state='active'
+            type: string - The workspace type. Supported types are personal, workspace, adminWorkspace. ex. type='personal'
 
 
         [List[Workspace]](https://learn.microsoft.com/en-us/rest/api/fabric/admin/workspaces/list-workspaces?tabs=HTTP)

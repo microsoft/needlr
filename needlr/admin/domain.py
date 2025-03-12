@@ -5,7 +5,7 @@ from needlr import _http
 import uuid
 from needlr.auth.auth import _FabricAuthentication
 from needlr._http import FabricResponse
-from needlr.models.domain import Domain, AssignDomainWorkspacesByCapacitiesRequest
+from needlr.models.domain import Domain, AssignDomainWorkspacesByCapacitiesRequest, AssignDomainWorkspacesByIdsRequest, DomainWorkspace, DomainWorkspaces
 from needlr.models.item import Item
 
 class _DomainClient():
@@ -191,7 +191,7 @@ class _DomainClient():
         domain = Domain(**resp.body)
         return domain
           
-    def assign_workspaces_by_capacities( self, domain_id: uuid.UUID, capacities_ids: dict ) ->FabricResponse:
+    def assign_domain_workspaces_by_capacities( self, domain_id: uuid.UUID, capacities_ids: dict ) ->FabricResponse:
         """
         Assign all workspaces that reside on the specified capacities to the specified domain.
         Preexisting domain assignments will be overridden unless bulk reassignment is blocked by domain management tenant settings.
@@ -223,3 +223,67 @@ class _DomainClient():
             item=AssignDomainWorkspacesByCapacitiesRequest(**body)
         )
         return resp
+    
+
+    def assign_domain_workspaces_by_ids( self, domain_id: uuid.UUID, workspace_ids: dict ) ->FabricResponse:
+        """
+        Assign workspaces to the specified domain by workspace ID.
+        Preexisting domain assignments will be overridden unless bulk reassignment is blocked by domain management tenant settings.
+
+        Args:
+            domain_id (str): The ID of the domain to assign.
+
+        Returns:
+            FabricResponse
+
+        Raises:
+            ValueError: If workspace_ids is blank.           
+
+        Reference:
+        - [Assign Domain Workspaces By ids](https://learn.microsoft.com/en-us/rest/api/fabric/admin/domains/assign-domain-workspaces-by-ids?tabs=HTTP)
+        """
+
+        body = dict()
+
+        if workspace_ids is not None:
+            body["workspacesIds"] = workspace_ids
+        else:
+            raise ValueError("At least one workspace ID must be provided")
+
+
+        resp = _http._post_http_long_running(
+            url = f"{self._base_url}admin/domains/{domain_id}/assignWorkspaces",
+            auth=self._auth,
+            item=AssignDomainWorkspacesByIdsRequest(**body)
+        )
+        return resp
+    
+
+    def list_domain_workspaces(self, domain_id: uuid.UUID, **kwargs) -> Iterator[DomainWorkspaces]:
+        """
+        Returns a list of the workspaces assigned to the specified domain.
+
+        Args:
+
+        nonEmptyOnly (bool, optional): When true, only return domains that have at least one workspace containing an item. Default: false.
+        nonEmptyOnly=True
+
+        Returns:
+            Returns a list of the workspaces assigned to the specified domain.
+
+        Reference:
+        [List Domains](https://learn.microsoft.com/en-us/rest/api/fabric/admin/domains/list-domain-workspaces?tabs=HTTP)            
+
+        """
+        m_url = f"{self._base_url}admin/domains/{domain_id}/workspaces"
+
+        resp = _http._get_http_paged(
+                url = m_url,
+                auth= self._auth,
+                items_extract=lambda x:x["value"],
+            )
+
+        for page in resp:
+            for item in page.items:
+                yield DomainWorkspace(**item) 
+

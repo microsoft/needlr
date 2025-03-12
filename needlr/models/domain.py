@@ -65,3 +65,45 @@ class AssignDomainWorkspacesByCapacitiesRequest(BaseModel):
 
     """
     capacitiesIds: List[str] = None
+
+
+
+class AssignDomainWorkspacesByIdsRequest(BaseModel):
+    """
+
+    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/admin/domains/assign-domain-workspaces-by-ids?tabs=HTTP#assigndomainworkspacesbyidsrequest)
+
+    workspacesIds - The capacity IDs.
+
+    """
+    workspacesIds: List[str] = None
+
+
+class DomainWorkspace(BaseModel):
+    """
+    Represents a workspace in a domain.
+
+    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/admin/domains/list-domain-workspaces?tabs=HTTP#domainworkspace)
+
+    displayName	- string The name of the workspace.
+    id - string The workspace ID.
+
+    """
+    displayName: str = None
+    id: uuid.UUID = None
+
+class DomainWorkspaces(BaseModel):
+    """
+    A response wrapper for a list of all the workspaces assigned to a domain with a continuous token.
+
+    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/admin/domains/list-domain-workspaces?tabs=HTTP#domainworkspaces)
+
+    continuationToken - The token for the next result set batch. If there are no more records, it's removed from the response.
+    continuationUri - The URI of the next result set batch. If there are no more records, it's removed from the response.
+    value - The list of all the workspaces assigned to the domain.
+
+
+    """
+    continuationToken: str = None
+    continuationUri: str = None
+    value: List[DomainWorkspace] = None  

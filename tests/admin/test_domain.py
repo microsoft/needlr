@@ -1,9 +1,6 @@
 import pytest
-import random as r
-from typing import Generator
-from needlr import auth, FabricClient
+from needlr import FabricClient
 from needlr.models.domain import Domain
-from needlr.models.capacity import Capacity
 
 
 
@@ -43,11 +40,34 @@ class TestDomain:
              except StopIteration:
                  break
 
-        resp = fc.domain.assign_workspaces_by_capacities( domain_id, capList )    
+        resp = fc.domain.assign_domain_workspaces_by_capacities( domain_id, capList )    
         assert resp.is_successful is True     
 
-
     @pytest.mark.order(after="test_domain_assign_workspaces_by_capacities")
+    def test_domain_assign_workspaces_by_ids(self, fc: FabricClient, domain_test: Domain, testParameters: dict[str, str]):
+        domain_id = domain_test.id
+        workspaceList = []
+
+        wkspc = fc.admin_workspaceclient.ls(state='active', type='workspace')
+
+        while True:
+                try:
+                    resp = next(wkspc)
+                    workspaceList.append(str(resp.id))
+                except StopIteration:
+                    break
+
+        resp = fc.domain.assign_domain_workspaces_by_ids( domain_id, workspaceList )    
+        assert resp.is_successful is True
+
+    @pytest.mark.order(after="test_domain_assign_workspaces_by_ids")
+    def test_domain_list_domain_workspaces(self, fc: FabricClient, domain_test: Domain, testParameters: dict[str, str]):
+        domain_id = domain_test.id
+        resp = resp = fc.domain.list_domain_workspaces( domain_id )
+        assert len(list(resp)) > 0
+
+
+    @pytest.mark.order(after="test_domain_list_domain_workspaces")
     def test_domain_delete(self, fc: FabricClient, domain_test: Domain, testParameters: dict[str, str]):
         domain_id = domain_test.id
         resp = fc.domain.delete(domain_id)
