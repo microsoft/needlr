@@ -15,6 +15,9 @@ load_dotenv()
 def testParameters():
     new_number = str(random.randint(1000000000, 9999999999))
     ws_name = f'_needlr_{new_number}'
+    ranDomainNum = random.randint(1, 1000)
+    
+
     return {
         'workspace_name': ws_name,
         'capacity_id': os.getenv('CAPACITY_ID'),  # unique
@@ -45,6 +48,8 @@ def testParameters():
         'datapipeline_description': 'Test Datapipeline Description',
         'notebook_name': 'Test API Created Notebook',
         'notebook_description': 'This is an API Create Notebook from the REST API Test Harness.',
+        'domain_displayName' : 'APICreatedDomainName'+str(ranDomainNum),
+        'domain_description': 'This is an API Created Domain from PyTest.'
     }
 @pytest.fixture(scope='session')
 def fc() -> FabricClient:
@@ -68,7 +73,8 @@ def workspace_test(fc: FabricClient, testParameters) -> Generator[Workspace, Non
     
 @pytest.fixture(scope='session')
 def domain_test(fc: FabricClient, testParameters) -> Generator[Domain, None, None]:
-    domain_info = fc.domain.create(display_name=testParameters['workspace_name'],
+    
+    domain_info = fc.domain.create(display_name=testParameters['domain_displayName'],
                              parentDomainId="", 
-                             description=testParameters['description'])
+                             description=testParameters['domain_description'])
     yield domain_info
