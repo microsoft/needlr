@@ -5,6 +5,7 @@ from typing import Generator
 from needlr import auth, FabricClient
 from needlr.models.workspace import Workspace
 from needlr.models.domain import Domain
+from needlr.models.mlmodel import MLModel
 import os
 
 # Loading an Environment Variable File with dotenv
@@ -50,6 +51,7 @@ def testParameters():
         'notebook_description': 'This is an API Create Notebook from the REST API Test Harness.',
         'domain_displayName' : 'APICreatedDomainName'+str(ranDomainNum),
         'domain_description': 'This is an API Created Domain from PyTest.'
+        # TODO: Add mlmodel stuff here
     }
 @pytest.fixture(scope='session')
 def fc() -> FabricClient:
@@ -78,3 +80,10 @@ def domain_test(fc: FabricClient, testParameters) -> Generator[Domain, None, Non
                              parentDomainId="", 
                              description=testParameters['domain_description'])
     yield domain_info
+
+@pytest.fixture(scope='session')
+def mlmodel_test(fc: FabricClient, testParameters) -> Generator[MLModel, None, None]:
+    mm = fc.mlmodel.create(workspace_id=testParameters['workspace_id'],
+                           display_name=testParameters['workspace_name'],
+                           description=testParameters['description'])
+    yield mm
