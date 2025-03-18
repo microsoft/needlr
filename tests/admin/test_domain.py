@@ -61,10 +61,31 @@ class TestDomain:
         assert resp.is_successful is True
 
     @pytest.mark.order(after="test_domain_assign_workspaces_by_ids")
+    def test_domain_unassign_workspaces_by_ids(self, fc: FabricClient, domain_test: Domain, testParameters: dict[str, str]):
+        domain_id = domain_test.id
+        workspaceList = []
+
+        wkspc = fc.admin_workspaceclient.ls(state='active', type='workspace')
+
+        while True:
+                try:
+                    resp = next(wkspc)
+                    workspaceList.append(str(resp.id))
+                except StopIteration:
+                    break
+
+        resp = fc.domain.unassign_domain_workspaces_by_ids( domain_id, workspaceList )    
+        assert resp.is_successful is True
+
+
+
+
+
+    @pytest.mark.order(after="test_domain_unassign_workspaces_by_ids")
     def test_domain_list_domain_workspaces(self, fc: FabricClient, domain_test: Domain, testParameters: dict[str, str]):
         domain_id = domain_test.id
         resp = resp = fc.domain.list_domain_workspaces( domain_id )
-        assert len(list(resp)) > 0
+        assert len(list(resp)) == 0
 
 
     @pytest.mark.order(after="test_domain_list_domain_workspaces")
