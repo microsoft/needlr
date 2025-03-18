@@ -73,7 +73,18 @@ class AssignDomainWorkspacesByIdsRequest(BaseModel):
 
     [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/admin/domains/assign-domain-workspaces-by-ids?tabs=HTTP#assigndomainworkspacesbyidsrequest)
 
-    workspacesIds - The capacity IDs.
+    workspacesIds - The workspace IDs.
+
+    """
+    workspacesIds: List[str] = None
+
+class UnassignDomainWorkspacesByIdsRequest(BaseModel):
+    """
+    The request payload for unassigning workspaces from a domain by workspace ID.
+
+    [Reference](https://learn.microsoft.com/en-us/rest/api/fabric/admin/domains/unassign-domain-workspaces-by-ids?tabs=HTTP#unassigndomainworkspacesbyidsrequest)
+
+    workspacesIds - The workspace IDs.
 
     """
     workspacesIds: List[str] = None

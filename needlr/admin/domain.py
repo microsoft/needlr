@@ -5,8 +5,14 @@ from needlr import _http
 import uuid
 from needlr.auth.auth import _FabricAuthentication
 from needlr._http import FabricResponse
-from needlr.models.domain import Domain, AssignDomainWorkspacesByCapacitiesRequest, AssignDomainWorkspacesByIdsRequest, DomainWorkspace, DomainWorkspaces
-from needlr.models.item import Item
+from needlr.models.domain import ( Domain, 
+                            AssignDomainWorkspacesByCapacitiesRequest, 
+                            UnassignDomainWorkspacesByIdsRequest,
+                            AssignDomainWorkspacesByIdsRequest, 
+                            DomainWorkspace, 
+                            DomainWorkspaces )
+
+#from needlr.models.item import Item
 
 class _DomainClient():
     """
@@ -20,7 +26,9 @@ class _DomainClient():
     * List Domains > ls()
     * Delete Domain > delete()
     * Update Domain > update()
-    * Assign Workspaces by Capacities > assign_workspaces_by_capacities()
+    * Assign Domain Workspaces by Capacities > assign_domain_workspaces_by_capacities()
+    * Assign Domain Workspaces by Id's > assign_domain_workspaces_by_ids()
+    * List Domain Workspaces > list_domain_workspaces()
     
 
     """
@@ -224,7 +232,6 @@ class _DomainClient():
         )
         return resp
     
-
     def assign_domain_workspaces_by_ids( self, domain_id: uuid.UUID, workspace_ids: dict ) ->FabricResponse:
         """
         Assign workspaces to the specified domain by workspace ID.
@@ -232,6 +239,7 @@ class _DomainClient():
 
         Args:
             domain_id (str): The ID of the domain to assign.
+            workspace_ids (dict): A list of workspace IDs to assign to the domain.
 
         Returns:
             FabricResponse
@@ -257,7 +265,40 @@ class _DomainClient():
             item=AssignDomainWorkspacesByIdsRequest(**body)
         )
         return resp
-    
+
+
+    def unassign_domain_workspaces_by_ids( self, domain_id: uuid.UUID, workspace_ids: dict ) ->FabricResponse:
+        """
+        Unassign workspaces from the specified domain by workspace ID.
+
+        Args:
+            domain_id (str): The ID of the domain to assign.
+            workspace_ids (dict): A list of workspace IDs to unassign from the domain.
+
+        Returns:
+            FabricResponse
+
+        Raises:
+            ValueError: If workspace_ids is blank.           
+
+        Reference:
+        - [UnAssign Domain Workspaces By ids](https://learn.microsoft.com/en-us/rest/api/fabric/admin/domains/unassign-domain-workspaces-by-ids?tabs=HTTP)
+        """
+
+        body = dict()
+
+        if workspace_ids is not None:
+            body["workspacesIds"] = workspace_ids
+        else:
+            raise ValueError("At least one workspace ID must be provided")
+
+
+        resp = _http._post_http(
+            url = f"{self._base_url}admin/domains/{domain_id}/unassignWorkspaces",
+            auth=self._auth,
+            json=body
+        )
+        return resp    
 
     def list_domain_workspaces(self, domain_id: uuid.UUID, **kwargs) -> Iterator[DomainWorkspaces]:
         """
