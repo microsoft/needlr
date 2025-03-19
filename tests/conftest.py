@@ -6,6 +6,7 @@ from needlr import auth, FabricClient
 from needlr.models.workspace import Workspace
 from needlr.models.domain import Domain
 from needlr.models.mlmodel import MLModel
+from needlr.models.mlexperiment import MLExperiment
 import os
 
 # Loading an Environment Variable File with dotenv
@@ -20,6 +21,7 @@ def testParameters():
     
 
     return {
+        'workspace_id': os.getenv('WORKSPACE_ID'), # unique
         'workspace_name': ws_name,
         'capacity_id': os.getenv('CAPACITY_ID'),  # unique
         'description': 'Workspace created by PyTest',
@@ -50,8 +52,15 @@ def testParameters():
         'notebook_name': 'Test API Created Notebook',
         'notebook_description': 'This is an API Create Notebook from the REST API Test Harness.',
         'domain_displayName' : 'APICreatedDomainName'+str(ranDomainNum),
-        'domain_description': 'This is an API Created Domain from PyTest.'
-        # TODO: Add mlmodel stuff here
+        'domain_description': 'This is an API Created Domain from PyTest.',
+        # TODO: Add mlmodel_displayName
+        # TODO: Add mlmodel_description
+        # TODO: Add mlmodel_id
+        # TODO: Add mlmodel_continuation_token
+        'mlexperiment_displayName' : 'ML Experiment Display Name',
+        'mlexperiment_description' : 'ML Experiment Description',
+        'mlexperiment_id' : 'The ML Experiment ID',
+        'mlexperiment_continuation_token' : 'Optional | A token for retrieving the next page of results'
     }
 @pytest.fixture(scope='session')
 def fc() -> FabricClient:
@@ -84,6 +93,13 @@ def domain_test(fc: FabricClient, testParameters) -> Generator[Domain, None, Non
 @pytest.fixture(scope='session')
 def mlmodel_test(fc: FabricClient, testParameters) -> Generator[MLModel, None, None]:
     mm = fc.mlmodel.create(workspace_id=testParameters['workspace_id'],
-                           display_name=testParameters['workspace_name'],
-                           description=testParameters['description'])
+                           display_name=testParameters['workspace_name'], # TODO: Replace with mlmodel_displayName
+                           description=testParameters['description']) # TODO: Replace with mlmodel_description
     yield mm
+
+@pytest.fixture(scope='session')
+def mlexperiment_test(fc: FabricClient, testParameters) -> Generator[MLExperiment, None, None]:
+    me = fc.mlexperiment.create(workspace_id=testParameters['workspace_id'],
+                                display_name=testParameters['mlexperiment_displayName'],
+                                description=testParameters['mlexperiment_description'])
+    yield me
