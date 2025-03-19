@@ -7,8 +7,8 @@ from needlr.models.mlexperiment import MLExperiment
 @pytest.fixture(scope='session')
 def mlmodel_test(fc: FabricClient, testParameters) -> Generator[MLModel, None, None]:
     mm = fc.mlmodel.create(workspace_id=testParameters['workspace_id'],
-                           display_name=testParameters['workspace_name'], # TODO: Replace with mlmodel_displayName
-                           description=testParameters['description']) # TODO: Replace with mlmodel_description
+                           display_name=testParameters['mlmodel_displayName'],
+                           description=testParameters['mlmodel_description'])
     yield mm
 
 @pytest.fixture(scope='session')

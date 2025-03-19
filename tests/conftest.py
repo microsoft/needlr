@@ -51,16 +51,16 @@ def testParameters():
         'datapipeline_description': 'Test Datapipeline Description',
         'notebook_name': 'Test API Created Notebook',
         'notebook_description': 'This is an API Create Notebook from the REST API Test Harness.',
-        'domain_displayName' : 'APICreatedDomainName'+str(ranDomainNum),
+        'domain_displayName': 'APICreatedDomainName'+str(ranDomainNum),
         'domain_description': 'This is an API Created Domain from PyTest.',
-        # TODO: Add mlmodel_displayName
-        # TODO: Add mlmodel_description
-        # TODO: Add mlmodel_id
-        # TODO: Add mlmodel_continuation_token
-        'mlexperiment_displayName' : 'ML Experiment Display Name',
-        'mlexperiment_description' : 'ML Experiment Description',
-        'mlexperiment_id' : 'The ML Experiment ID',
-        'mlexperiment_continuation_token' : 'Optional | A token for retrieving the next page of results'
+        'mlmodel_displayName': 'ML Model Display Name',
+        'mlmodel_description': 'ML Model Description',
+        'mlmodel_id': 'ML Model ID',
+        'mlmodel_continuation_token': 'ML Model Continuation Token',
+        'mlexperiment_displayName': 'ML Experiment Display Name',
+        'mlexperiment_description': 'ML Experiment Description',
+        'mlexperiment_id': 'The ML Experiment ID',
+        'mlexperiment_continuation_token': 'Optional | A token for retrieving the next page of results'
     }
 @pytest.fixture(scope='session')
 def fc() -> FabricClient:
@@ -93,8 +93,8 @@ def domain_test(fc: FabricClient, testParameters) -> Generator[Domain, None, Non
 @pytest.fixture(scope='session')
 def mlmodel_test(fc: FabricClient, testParameters) -> Generator[MLModel, None, None]:
     mm = fc.mlmodel.create(workspace_id=testParameters['workspace_id'],
-                           display_name=testParameters['workspace_name'], # TODO: Replace with mlmodel_displayName
-                           description=testParameters['description']) # TODO: Replace with mlmodel_description
+                           display_name=testParameters['mlmodel_displayName'],
+                           description=testParameters['mlmodel_description'])
     yield mm
 
 @pytest.fixture(scope='session')
