@@ -36,20 +36,20 @@ class _MLModelClient():
 
     def create(self, workspace_id:uuid.UUID, display_name:str, description:str=None) -> MLModel:
         """
-        Create MLModel
+        Create ML Model
 
-        This method creates an MLModel in the specified workspace.
+        This method creates an ML Model in the specified workspace.
 
         Args:
-            workspace_id (uuid.UUID): The ID of the workspace where the MLModel will be created.
-            display_name (str): The display name of the MLModel.
-            description (str, optional): The description of the MLModel. Defaults to None.
+            workspace_id (uuid.UUID): The ID of the workspace where the ML Model will be created.
+            display_name (str): The display name of the ML Model.
+            description (str, optional): The description of the ML Model. Defaults to None.
 
         Returns:
-            MLModel: The created MLModel.
+            MLModel: The created ML Model.
 
         Reference:
-        [Create MLModel](https://learn.microsoft.com/en-us/rest/api/fabric/mlmodel/items/create-ml-model?tabs=HTTP&tryIt=true#createmlmodelrequest)
+        [Create ML Model](https://learn.microsoft.com/en-us/rest/api/fabric/mlmodel/items/create-ml-model?tabs=HTTP&tryIt=true#createmlmodelrequest)
         """
         body = {
             "displayName":display_name
@@ -67,19 +67,19 @@ class _MLModelClient():
     
     def delete(self, workspace_id:uuid.UUID, mlmodel_id:uuid.UUID) -> FabricResponse:
         """
-        Delete MLModel
+        Delete ML Model
 
-        Deletes an MLModel from a workspace.
+        Deletes an ML Model from a workspace.
 
         Args:
             workspace_id (uuid.UUID): The ID of the workspace.
-            mlmodel_id (uuid.UUID): The ID of the MLModel.
+            mlmodel_id (uuid.UUID): The ID of the ML Model.
 
         Returns:
             FabricResponse: The response from the delete request.
 
         Reference:
-            [Delete MLModel](DELETE https://learn.microsoft.com/en-us/rest/api/fabric/mlmodel/items/delete-ml-model?tabs=HTTP)
+            [Delete ML Model](DELETE https://learn.microsoft.com/en-us/rest/api/fabric/mlmodel/items/delete-ml-model?tabs=HTTP)
         """
         resp = _http._delete_http(
             url = f"{self._base_url}workspaces/{workspace_id}/mlModels/{mlmodel_id}",
@@ -89,9 +89,9 @@ class _MLModelClient():
     
     def get(self, workspace_id:uuid.UUID, mlmodel_id:uuid.UUID) -> MLModel:
         """
-        Get MLModel
+        Get ML Model
 
-        Retrieves a MLModel from the specified workspace.
+        Retrieves a ML Model from the specified workspace.
 
         Args:
             workspace_id (uuid.UUID): The ID of the workspace containing the ML Model.
@@ -127,7 +127,7 @@ class _MLModelClient():
                 [List ML Models](https://learn.microsoft.com/en-us/rest/api/fabric/mlmodel/items/list-ml-models?tabs=HTTP)
             """
             resp = _http._get_http_paged(
-                url = f"{self._base_url}workspaces/{workspace_id}/mlModel",
+                url = f"{self._base_url}workspaces/{workspace_id}/mlModels",
                 auth=self._auth,
                 items_extract=lambda x:x["value"]
             )
@@ -142,7 +142,7 @@ class _MLModelClient():
         This method updates the definition of an ML Model in Fabric.
 
         Args:
-            workspace_id (uuid.UUID): The ID of the workspace where the  Datapipeline is located.
+            workspace_id (uuid.UUID): The ID of the workspace where the ML Model is located.
             mlmodel_id (uuid.UUID): The ID of the ML Model to update.
 
         Returns:
@@ -154,13 +154,8 @@ class _MLModelClient():
         body = dict()
 
         resp = _http._patch_http(
-            url = f"{self._base_url}workspaces/{workspace_id}/mlModel/{mlmodel_id}",
+            url = f"{self._base_url}workspaces/{workspace_id}/mlModels/{mlmodel_id}",
             auth=self._auth,
             item=Item(**body)
         )
         return resp
-
-
-
-
-    
