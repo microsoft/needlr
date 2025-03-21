@@ -69,10 +69,10 @@ class _KQLDashboardClient():
             auth=self._auth,
             item=KQLDashboard(**body)
         )
-        kqldashboard = KQLDashboard(**resp.body)
-        return kqldashboard
+        kqlDashboard = KQLDashboard(**resp.body)
+        return kqlDashboard
     
-    def delete(self, workspace_id:uuid.UUID, kqldashboard_id:uuid.UUID) -> FabricResponse:
+    def delete(self, workspace_id:uuid.UUID, kqlDashboard_id:uuid.UUID) -> FabricResponse:
         """
         Delete KQL Dashboard
 
@@ -89,12 +89,12 @@ class _KQLDashboardClient():
             [Delete KQL Dashboard](https://learn.microsoft.com/en-us/rest/api/fabric/kqldashboard/items/delete-kql-dashboard?tabs=HTTP)
         """
         resp = _http._delete_http(
-            url = f"{self._base_url}workspaces/{workspace_id}/kqlDashboards/{kqldashboard_id}",
+            url = f"{self._base_url}workspaces/{workspace_id}/kqlDashboards/{kqlDashboard_id}",
             auth=self._auth
         )
         return resp
     
-    def get(self, workspace_id:uuid.UUID, kqldashboard_id:uuid.UUID) -> KQLDashboard:
+    def get(self, workspace_id:uuid.UUID, kqlDashboard_id:uuid.UUID) -> KQLDashboard:
         """
         Get KQL Dashboard
 
@@ -111,13 +111,13 @@ class _KQLDashboardClient():
             - [Get KQL Dashboard](https://learn.microsoft.com/en-us/rest/api/fabric/kqldashboard/items/get-kql-dashboard?tabs=HTTP)
         """
         resp = _http._get_http(
-            url = f"{self._base_url}workspaces/{workspace_id}/kqlDashboards/{kqldashboard_id}",
+            url = f"{self._base_url}workspaces/{workspace_id}/kqlDashboards/{kqlDashboard_id}",
             auth=self._auth
         )
-        kqldashboard = KQLDashboard(**resp.body)
-        return kqldashboard
+        kqlDashboard = KQLDashboard(**resp.body)
+        return kqlDashboard
 
-    def get_definition(self, workspace_id:uuid.UUID, kqldashboard_id:uuid.UUID, format: str=None) -> dict:
+    def get_definition(self, workspace_id:uuid.UUID, kqlDashboard_id:uuid.UUID, format: str=None) -> dict:
         """
         Get KQL Dashboard Definition
 
@@ -141,7 +141,7 @@ class _KQLDashboardClient():
         flag = f'?format={format}' if format else ''
         try:
             resp = _http._post_http_long_running(
-                url = f"{self._base_url}workspaces/{workspace_id}/kqlDashboards/{kqldashboard_id}/getDefinition{flag}",
+                url = f"{self._base_url}workspaces/{workspace_id}/kqlDashboards/{kqlDashboard_id}/getDefinition{flag}",
                 auth=self._auth
             )
             if resp.is_successful:
@@ -177,7 +177,7 @@ class _KQLDashboardClient():
                 for item in page.items:
                     yield KQLDashboard(**item)
 
-    def update(self, workspace_id:uuid.UUID, kqldashboard_id:uuid.UUID) -> KQLDashboard:
+    def update(self, workspace_id:uuid.UUID, kqlDashboard_id:uuid.UUID) -> KQLDashboard:
         """
         Update KQL Dashboard
 
@@ -196,13 +196,13 @@ class _KQLDashboardClient():
         body = dict()
 
         resp = _http._patch_http(
-            url = f"{self._base_url}workspaces/{workspace_id}/kqlDashboards/{kqldashboard_id}",
+            url = f"{self._base_url}workspaces/{workspace_id}/kqlDashboards/{kqlDashboard_id}",
             auth=self._auth,
             item=Item(**body)
         )
         return resp
     
-    def update_definition(self, workspace_id:uuid.UUID, kqldashboard_id:uuid.UUID, definition:dict, updateMetadata:bool = False) -> KQLDashboard:
+    def update_definition(self, workspace_id:uuid.UUID, kqlDashboard_id:uuid.UUID, definition:dict, updateMetadata:bool = False) -> KQLDashboard:
             """
             Update KQL Dashboard Definition
             
@@ -227,12 +227,12 @@ class _KQLDashboardClient():
             flag = f'?updateMetadata={updateMetadata}' if updateMetadata else ''
             try:
                 resp = _http._post_http_long_running(
-                    url = f"{self._base_url}workspaces/{workspace_id}/kqlDashboards/{kqldashboard_id}/updateDefinition{flag}",
+                    url = f"{self._base_url}workspaces/{workspace_id}/kqlDashboards/{kqlDashboard_id}/updateDefinition{flag}",
                     auth=self._auth,
                     json_par=definition
                 )
                 if resp.is_successful:
-                    return self.get(workspace_id, kqldashboard_id, include_definition=True)
+                    return self.get(workspace_id, kqlDashboard_id, include_definition=True)
                 else:
                         return None
             except Exception:
