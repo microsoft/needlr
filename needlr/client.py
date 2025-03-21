@@ -22,6 +22,7 @@ from needlr.admin.domain import _DomainClient
 from needlr.datascience.mlmodel import _MLModelClient
 from needlr.datascience.mlexperiment import _MLExperimentClient
 from needlr.dataactivator.reflex.reflex import _ReflexClient
+from needlr.realtimeintelligence.kqldashboard import _KQLDashboardClient
 
 
 
@@ -53,4 +54,5 @@ class FabricClient():
         self.mlmodel = _MLModelClient(auth=auth, base_url=self._base_url)
         self.mlexperiment = _MLExperimentClient(auth=auth, base_url=self._base_url)
         self.reflex = _ReflexClient(auth=auth, base_url=self._base_url)
+        self.kqldashboard = _KQLDashboardClient(auth=auth, base_url=self._base_url)
 
