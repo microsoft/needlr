@@ -5,6 +5,7 @@ from needlr.models.eventstream import Eventstream
 from needlr.models.kqldatabase import KQLDatabase
 from needlr.models.eventhouse import Eventhouse
 from needlr.models.workspace import Workspace
+from needlr.models.kqldashboard import KQLDashboard
 import pickle
 
 @pytest.fixture(scope='session')
@@ -29,3 +30,11 @@ def test_kqlDatabase(fc: FabricClient, workspace_test: Workspace, testParameters
                                                      display_name=testParameters['kqlDatabase_name'], 
                                                      description=testParameters['kqlDatabase_description'])
     yield kqldb
+
+@pytest.fixture(scope='session')
+def test_kqlDashboard(fc: FabricClient, workspace_test: Workspace, testParameters: dict[str, str], test_kqlDashboard: KQLDashboard) -> Generator[KQLDashboard, None, None]:
+    kqlDashboard = fc.kqldashboard.create(workspace_id=workspace_test.id,
+                                         display_name=testParameters['kqlDashboard_displayName'],
+                                         definition=testParameters['kqlDashboard_definition'],
+                                         description=testParameters['kqlDashboard_description'])
+    yield kqlDashboard
