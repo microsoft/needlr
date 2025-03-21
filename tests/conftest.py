@@ -7,6 +7,7 @@ from needlr.models.workspace import Workspace
 from needlr.models.domain import Domain
 from needlr.models.mlmodel import MLModel
 from needlr.models.mlexperiment import MLExperiment
+from needlr.models.reflex import Reflex
 import os
 
 # Loading an Environment Variable File with dotenv
@@ -60,7 +61,13 @@ def testParameters():
         'mlexperiment_displayName': 'ML Experiment Display Name',
         'mlexperiment_description': 'ML Experiment Description',
         'mlexperiment_id': 'The ML Experiment ID',
-        'mlexperiment_continuation_token': 'Optional | A token for retrieving the next page of results'
+        'mlexperiment_continuation_token': 'Optional | A token for retrieving the next page of results',
+        'reflex_displayName': 'Reflex Display Name',
+        'reflex_definition': 'Reflex Public Definition',
+        'reflex_description': 'Reflex Description',
+        'reflex_format': 'Format of the Reflex public definition',
+        'reflex_continuation_token': 'Optional | A token for retrieving the next page of results',
+        'reflex_updateMetadata': 'Optional | Boolean | Update Item Metadata'
     }
 @pytest.fixture(scope='session')
 def fc() -> FabricClient:
@@ -103,3 +110,11 @@ def mlexperiment_test(fc: FabricClient, testParameters) -> Generator[MLExperimen
                                 display_name=testParameters['mlexperiment_displayName'],
                                 description=testParameters['mlexperiment_description'])
     yield me
+
+@pytest.fixture(scope='session')
+def reflex_test(fc: FabricClient, testParameters) -> Generator[Reflex, None, None]:
+    r = fc.mlexperiment.create(workspace_id=testParameters['workspace_id'],
+                                display_name=testParameters['reflex_displayName'],
+                                definition=testParameters['reflex_definition'],
+                                description=testParameters['reflex_description'])
+    yield r
