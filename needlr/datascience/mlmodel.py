@@ -110,7 +110,7 @@ class _MLModelClient():
         mlmodel = MLModel(**resp.body)
         return mlmodel
     
-    def ls(self, workspace_id:uuid.UUID, continuation_token: str) -> Iterator[MLModel]:
+    def ls(self, workspace_id:uuid.UUID, continuation_token: str=None) -> Iterator[MLModel]:
             """
             List ML Models
 
@@ -126,8 +126,9 @@ class _MLModelClient():
             Reference:
                 [List ML Models](https://learn.microsoft.com/en-us/rest/api/fabric/mlmodel/items/list-ml-models?tabs=HTTP)
             """
+            flag = f'?continuationToken={continuation_token}' if continuation_token else ''
             resp = _http._get_http_paged(
-                url = f"{self._base_url}workspaces/{workspace_id}/mlModels",
+                url = f"{self._base_url}workspaces/{workspace_id}/mlModels{flag}",
                 auth=self._auth,
                 items_extract=lambda x:x["value"]
             )
