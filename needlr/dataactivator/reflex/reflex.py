@@ -151,7 +151,7 @@ class _ReflexClient():
         except Exception:
              raise Exception("Error getting reflex definition")
 
-    def ls(self, workspace_id:uuid.UUID, continuation_token: str) -> Iterator[Reflex]:
+    def ls(self, workspace_id:uuid.UUID, continuation_token: str=None) -> Iterator[Reflex]:
             """
             List Reflex
 
@@ -167,8 +167,9 @@ class _ReflexClient():
             Reference:
                 [List Reflexes](https://learn.microsoft.com/en-us/rest/api/fabric/reflex/items/list-reflexes?tabs=HTTP)
             """
+            flag = f'?continuationToken={continuation_token}' if continuation_token else ''
             resp = _http._get_http_paged(
-                url = f"{self._base_url}workspaces/{workspace_id}/reflexes",
+                url = f"{self._base_url}workspaces/{workspace_id}/reflexes{flag}",
                 auth=self._auth,
                 items_extract=lambda x:x["value"]
             )
