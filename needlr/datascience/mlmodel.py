@@ -110,7 +110,7 @@ class _MLModelClient():
         mlmodel = MLModel(**resp.body)
         return mlmodel
     
-    def ls(self, workspace_id:uuid.UUID, continuation_token: str) -> Iterator[MLModel]:
+    def ls(self, workspace_id:uuid.UUID, continuation_token: str=None) -> Iterator[MLModel]:
             """
             List ML Models
 
@@ -126,8 +126,9 @@ class _MLModelClient():
             Reference:
                 [List ML Models](https://learn.microsoft.com/en-us/rest/api/fabric/mlmodel/items/list-ml-models?tabs=HTTP)
             """
+            flag = f'?continuationToken={continuation_token}' if continuation_token else ''
             resp = _http._get_http_paged(
-                url = f"{self._base_url}workspaces/{workspace_id}/mlModels",
+                url = f"{self._base_url}workspaces/{workspace_id}/mlModels{flag}",
                 auth=self._auth,
                 items_extract=lambda x:x["value"]
             )
@@ -135,7 +136,7 @@ class _MLModelClient():
                 for item in page.items:
                     yield MLModel(**item)
 
-    def update(self, workspace_id:uuid.UUID, mlmodel_id:uuid.UUID) -> MLModel:
+    def update(self, workspace_id:uuid.UUID, mlmodel_id:uuid.UUID, description: str) -> MLModel:
         """
         Update ML Model
 
@@ -144,6 +145,7 @@ class _MLModelClient():
         Args:
             workspace_id (uuid.UUID): The ID of the workspace where the ML Model is located.
             mlmodel_id (uuid.UUID): The ID of the ML Model to update.
+            description (str): The ML Model description.
 
         Returns:
             MLModel: The updated ML Model object.
@@ -151,11 +153,17 @@ class _MLModelClient():
         Reference:
         - [Update ML Model Definition](https://learn.microsoft.com/en-us/rest/api/fabric/mlmodel/items/update-ml-model?tabs=HTTP)
         """
+        if (description is None):
+            raise ValueError("The description must be provided.")
+
         body = dict()
+        if description:
+            body["description"] = description
 
         resp = _http._patch_http(
             url = f"{self._base_url}workspaces/{workspace_id}/mlModels/{mlmodel_id}",
             auth=self._auth,
-            item=Item(**body)
+            json=body
         )
-        return resp
+        mlModel = MLModel(**resp.body)
+        return mlModel
