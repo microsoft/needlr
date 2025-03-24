@@ -177,7 +177,7 @@ class _ReflexClient():
                 for item in page.items:
                     yield Reflex(**item)
 
-    def update(self, workspace_id:uuid.UUID, reflex_id:uuid.UUID, display_name: str=None, description: str=None) -> Reflex:
+    def update(self, workspace_id:uuid.UUID, reflex_id:uuid.UUID, display_name: str, description: str) -> Reflex:
         """
         Update Reflex
 
@@ -186,8 +186,8 @@ class _ReflexClient():
         Args:
             workspace_id (uuid.UUID): The ID of the workspace where the Reflex is located.
             reflex_id (uuid.UUID): The ID of the Reflex to update.
-            display_name (str, optional): The Reflex display name.
-            description (str, optional): The Reflex description.
+            display_name (str): The Reflex display name.
+            description (str): The Reflex description.
 
         Returns:
             Reflex: The updated Reflex object.
