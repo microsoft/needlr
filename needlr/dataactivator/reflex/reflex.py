@@ -206,18 +206,19 @@ class _ReflexClient():
             """
             Update Reflex Definition
             
-            This method updates the definition of a reflex for a given workspace and reflex ID.
+            This method updates the definition of a Reflex for a given workspace and Reflex ID.
             
             Args:
                 workspace_id (uuid.UUID): The ID of the workspace.
-                reflex_id (uuid.UUID): The ID of the reflex.
-                definition (dict): The new definition for the reflex.
+                reflex_id (uuid.UUID): The ID of the Reflex.
+                definition (dict): The new definition for the Reflex.
+                updateMetadata (boolean, optional): Updates the item's metadata.
 
             Returns:
-                Reflex: The updated reflex object.
+                Reflex: The updated Reflex object.
 
             Raises:
-                SomeException: If there is an error updating the reflex definition. 
+                SomeException: If there is an error updating the Reflex definition. 
 
             Reference:
             - [Update Reflex Definition](https://learn.microsoft.com/en-us/rest/api/fabric/reflex/items/update-reflex-definition?tabs=HTTP)
