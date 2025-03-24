@@ -177,7 +177,7 @@ class _ReflexClient():
                 for item in page.items:
                     yield Reflex(**item)
 
-    def update(self, workspace_id:uuid.UUID, reflex_id:uuid.UUID) -> Reflex:
+    def update(self, workspace_id:uuid.UUID, reflex_id:uuid.UUID, display_name: str=None, description: str=None) -> Reflex:
         """
         Update Reflex
 
@@ -186,6 +186,8 @@ class _ReflexClient():
         Args:
             workspace_id (uuid.UUID): The ID of the workspace where the Reflex is located.
             reflex_id (uuid.UUID): The ID of the Reflex to update.
+            display_name (str, optional): The Reflex display name.
+            description (str, optional): The Reflex description.
 
         Returns:
             Reflex: The updated Reflex object.
@@ -193,14 +195,22 @@ class _ReflexClient():
         Reference:
         - [Update Reflex](https://learn.microsoft.com/en-us/rest/api/fabric/reflex/items/update-reflex?tabs=HTTP)
         """
+        if ((display_name is None) and (description is None)):
+            raise ValueError("display_name or description must be provided")
+
         body = dict()
+        if display_name:
+            body["displayName"] = display_name
+        if description:
+            body["description"] = description
 
         resp = _http._patch_http(
             url = f"{self._base_url}workspaces/{workspace_id}/reflexes/{reflex_id}",
             auth=self._auth,
-            item=Item(**body)
+            json=body
         )
-        return resp
+        reflex = Reflex(**resp.body)
+        return reflex
 
     def update_definition(self, workspace_id:uuid.UUID, reflex_id:uuid.UUID, definition:dict, updateMetadata:bool = False) -> Reflex:
             """
