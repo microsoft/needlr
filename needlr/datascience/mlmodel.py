@@ -136,7 +136,7 @@ class _MLModelClient():
                 for item in page.items:
                     yield MLModel(**item)
 
-    def update(self, workspace_id:uuid.UUID, mlmodel_id:uuid.UUID) -> MLModel:
+    def update(self, workspace_id:uuid.UUID, mlmodel_id:uuid.UUID, description: str) -> MLModel:
         """
         Update ML Model
 
@@ -145,6 +145,7 @@ class _MLModelClient():
         Args:
             workspace_id (uuid.UUID): The ID of the workspace where the ML Model is located.
             mlmodel_id (uuid.UUID): The ID of the ML Model to update.
+            description (str): The ML Model description.
 
         Returns:
             MLModel: The updated ML Model object.
@@ -152,11 +153,17 @@ class _MLModelClient():
         Reference:
         - [Update ML Model Definition](https://learn.microsoft.com/en-us/rest/api/fabric/mlmodel/items/update-ml-model?tabs=HTTP)
         """
+        if (description is None):
+            raise ValueError("The description must be provided.")
+
         body = dict()
+        if description:
+            body["description"] = description
 
         resp = _http._patch_http(
             url = f"{self._base_url}workspaces/{workspace_id}/mlModels/{mlmodel_id}",
             auth=self._auth,
-            item=Item(**body)
+            json=body
         )
-        return resp
+        mlModel = MLModel(**resp.body)
+        return mlModel
