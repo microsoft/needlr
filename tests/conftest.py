@@ -8,6 +8,7 @@ from needlr.models.domain import Domain
 from needlr.models.mlmodel import MLModel
 from needlr.models.mlexperiment import MLExperiment
 from needlr.models.reflex import Reflex
+from needlr.models.kqldashboard import KQLDashboard
 import os
 
 # Loading an Environment Variable File with dotenv
@@ -67,7 +68,14 @@ def testParameters():
         'reflex_description': 'Reflex Description',
         'reflex_format': 'Format of the Reflex public definition',
         'reflex_continuation_token': 'Optional | A token for retrieving the next page of results',
-        'reflex_updateMetadata': 'Optional | Boolean | Update Item Metadata'
+        'reflex_updateMetadata': 'Optional | Boolean | Update Item Metadata',
+        'kqlDashboard_id': 'KQL Dashboard ID',
+        'kqlDashboard_displayName': 'KQL Dashboard Display Name',
+        'kqlDashboard_definition': 'KQL Dashboard Definition',
+        'kqlDashboard_description': 'KQL Dashboard Description',
+        'kqlDashboard_format': 'Format of the KQL Dashboard public definition',
+        'kqlDashboard_continuation_token': 'Optional | A token for retrieving the next page of results',
+        'kqlDashboard_updateMetadata': 'Optional | Boolean | Update Item Metadata'
     }
 @pytest.fixture(scope='session')
 def fc() -> FabricClient:
@@ -118,3 +126,11 @@ def reflex_test(fc: FabricClient, testParameters) -> Generator[Reflex, None, Non
                                 definition=testParameters['reflex_definition'],
                                 description=testParameters['reflex_description'])
     yield r
+
+@pytest.fixture(scope='session')
+def test_kqlDashboard(fc: FabricClient, testParameters) -> Generator[KQLDashboard, None, None]:
+    kqlDashboard = fc.kqldashboard.create(workspace_id=testParameters['workspace_id'],
+                                         display_name=testParameters['kqlDashboard_displayName'],
+                                         definition=testParameters['kqlDashboard_definition'],
+                                         description=testParameters['kqlDashboard_description'])
+    yield kqlDashboard
