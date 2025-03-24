@@ -45,6 +45,7 @@ class _ReflexClient():
         Args:
             workspace_id (uuid.UUID): The ID of the workspace where the Reflex will be created.
             display_name (str): The display name of the Reflex.
+            definition (str): The Reflex public definition.
             description (str, optional): The description of the Reflex. Defaults to None.
 
         Returns:
