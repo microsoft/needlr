@@ -110,7 +110,7 @@ class _MLExperimentClient():
         mlexperiment = MLExperiment(**resp.body)
         return mlexperiment
     
-    def ls(self, workspace_id:uuid.UUID, continuation_token: str) -> Iterator[MLExperiment]:
+    def ls(self, workspace_id:uuid.UUID, continuation_token: str=None) -> Iterator[MLExperiment]:
             """
             List ML Experiment
 
@@ -126,8 +126,9 @@ class _MLExperimentClient():
             Reference:
                 [List ML Experiment](https://learn.microsoft.com/en-us/rest/api/fabric/mlexperiment/items/list-ml-experiments?tabs=HTTP)
             """
+            flag = f'?continuationToken={continuation_token}' if continuation_token else ''
             resp = _http._get_http_paged(
-                url = f"{self._base_url}workspaces/{workspace_id}/mlExperiments",
+                url = f"{self._base_url}workspaces/{workspace_id}/mlExperiments{flag}",
                 auth=self._auth,
                 items_extract=lambda x:x["value"]
             )
