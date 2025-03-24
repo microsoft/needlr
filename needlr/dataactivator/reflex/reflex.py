@@ -117,21 +117,22 @@ class _ReflexClient():
         reflex = Reflex(**resp.body)
         return reflex
     
-    def get_definition(self, workspace_id:uuid.UUID, reflex_id:uuid.UUID, format: str) -> dict:
+    def get_definition(self, workspace_id:uuid.UUID, reflex_id:uuid.UUID, format: str=None) -> dict:
         """
         Get Reflex Definition
 
-        Retrieves the definition of a reflex for a given workspace and reflex ID.
+        Retrieves the definition of a Reflex for a given workspace and Reflex ID.
 
         Args:
             workspace_id (uuid.UUID): The ID of the workspace.
-            reflex_id (uuid.UUID): The ID of the reflex.
+            reflex_id (uuid.UUID): The ID of the Reflex.
+            format (str, optional): The format of the Reflex public definition.
 
         Returns:
-            dict: The definition of the reflex.
+            dict: The definition of the Reflex.
 
         Raises:
-            SomeException: If there is an error retrieving the reflex definition.
+            SomeException: If there is an error retrieving the Reflex definition.
 
         Reference:
         - [Get Reflex Definition](https://learn.microsoft.com/en-us/rest/api/fabric/reflex/items/get-reflex-definition?tabs=HTTP)
