@@ -45,6 +45,7 @@ class _ReflexClient():
         Args:
             workspace_id (uuid.UUID): The ID of the workspace where the Reflex will be created.
             display_name (str): The display name of the Reflex.
+            definition (str): The Reflex public definition.
             description (str, optional): The description of the Reflex. Defaults to None.
 
         Returns:
@@ -116,21 +117,22 @@ class _ReflexClient():
         reflex = Reflex(**resp.body)
         return reflex
     
-    def get_definition(self, workspace_id:uuid.UUID, reflex_id:uuid.UUID, format: str) -> dict:
+    def get_definition(self, workspace_id:uuid.UUID, reflex_id:uuid.UUID, format: str=None) -> dict:
         """
         Get Reflex Definition
 
-        Retrieves the definition of a reflex for a given workspace and reflex ID.
+        Retrieves the definition of a Reflex for a given workspace and Reflex ID.
 
         Args:
             workspace_id (uuid.UUID): The ID of the workspace.
-            reflex_id (uuid.UUID): The ID of the reflex.
+            reflex_id (uuid.UUID): The ID of the Reflex.
+            format (str, optional): The format of the Reflex public definition.
 
         Returns:
-            dict: The definition of the reflex.
+            dict: The definition of the Reflex.
 
         Raises:
-            SomeException: If there is an error retrieving the reflex definition.
+            SomeException: If there is an error retrieving the Reflex definition.
 
         Reference:
         - [Get Reflex Definition](https://learn.microsoft.com/en-us/rest/api/fabric/reflex/items/get-reflex-definition?tabs=HTTP)
@@ -149,7 +151,7 @@ class _ReflexClient():
         except Exception:
              raise Exception("Error getting reflex definition")
 
-    def ls(self, workspace_id:uuid.UUID, continuation_token: str) -> Iterator[Reflex]:
+    def ls(self, workspace_id:uuid.UUID, continuation_token: str=None) -> Iterator[Reflex]:
             """
             List Reflex
 
@@ -165,8 +167,9 @@ class _ReflexClient():
             Reference:
                 [List Reflexes](https://learn.microsoft.com/en-us/rest/api/fabric/reflex/items/list-reflexes?tabs=HTTP)
             """
+            flag = f'?continuationToken={continuation_token}' if continuation_token else ''
             resp = _http._get_http_paged(
-                url = f"{self._base_url}workspaces/{workspace_id}/reflexes",
+                url = f"{self._base_url}workspaces/{workspace_id}/reflexes{flag}",
                 auth=self._auth,
                 items_extract=lambda x:x["value"]
             )
@@ -174,7 +177,7 @@ class _ReflexClient():
                 for item in page.items:
                     yield Reflex(**item)
 
-    def update(self, workspace_id:uuid.UUID, reflex_id:uuid.UUID) -> Reflex:
+    def update(self, workspace_id:uuid.UUID, reflex_id:uuid.UUID, display_name: str, description: str) -> Reflex:
         """
         Update Reflex
 
@@ -183,6 +186,8 @@ class _ReflexClient():
         Args:
             workspace_id (uuid.UUID): The ID of the workspace where the Reflex is located.
             reflex_id (uuid.UUID): The ID of the Reflex to update.
+            display_name (str): The Reflex display name.
+            description (str): The Reflex description.
 
         Returns:
             Reflex: The updated Reflex object.
@@ -190,31 +195,40 @@ class _ReflexClient():
         Reference:
         - [Update Reflex](https://learn.microsoft.com/en-us/rest/api/fabric/reflex/items/update-reflex?tabs=HTTP)
         """
+        if ((display_name is None) and (description is None)):
+            raise ValueError("display_name or description must be provided")
+
         body = dict()
+        if display_name:
+            body["displayName"] = display_name
+        if description:
+            body["description"] = description
 
         resp = _http._patch_http(
             url = f"{self._base_url}workspaces/{workspace_id}/reflexes/{reflex_id}",
             auth=self._auth,
-            item=Item(**body)
+            json=body
         )
-        return resp
+        reflex = Reflex(**resp.body)
+        return reflex
 
     def update_definition(self, workspace_id:uuid.UUID, reflex_id:uuid.UUID, definition:dict, updateMetadata:bool = False) -> Reflex:
             """
             Update Reflex Definition
             
-            This method updates the definition of a reflex for a given workspace and reflex ID.
+            This method updates the definition of a Reflex for a given workspace and Reflex ID.
             
             Args:
                 workspace_id (uuid.UUID): The ID of the workspace.
-                reflex_id (uuid.UUID): The ID of the reflex.
-                definition (dict): The new definition for the reflex.
+                reflex_id (uuid.UUID): The ID of the Reflex.
+                definition (dict): The new definition for the Reflex.
+                updateMetadata (boolean, optional): Updates the item's metadata.
 
             Returns:
-                Reflex: The updated reflex object.
+                Reflex: The updated Reflex object.
 
             Raises:
-                SomeException: If there is an error updating the reflex definition. 
+                SomeException: If there is an error updating the Reflex definition. 
 
             Reference:
             - [Update Reflex Definition](https://learn.microsoft.com/en-us/rest/api/fabric/reflex/items/update-reflex-definition?tabs=HTTP)
